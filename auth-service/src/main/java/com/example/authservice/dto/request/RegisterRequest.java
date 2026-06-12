@@ -1,0 +1,34 @@
+package com.example.authservice.dto.request;
+
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class RegisterRequest {
+    @NotBlank(message = "Tên người dùng không được để trống")
+    @Size(min = 2, max = 50, message = "Tên người dùng phải từ 2 đến 50 ký tự")
+    private String username;
+
+    @Email(message = "Email không hợp lệ")
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$", message = "Email phải đúng định dạng ví dụ: example@gmail.com")
+    private String email;
+
+    @NotBlank(message = "Mật khẩu không được để trống")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "Mật khẩu phải có chữ hoa, chữ thường, số và ký tự đặc biệt")
+    private String password;
+
+    private boolean verified;
+
+    @NotEmpty(message = "role không được để trống")
+    private List<String> roles;
+
+    private boolean hide;
+}

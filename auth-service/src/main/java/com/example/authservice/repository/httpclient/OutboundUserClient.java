@@ -1,0 +1,14 @@
+package com.example.authservice.repository.httpclient;
+
+import com.example.authservice.dto.response.OutboudUserResponse;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+
+@FeignClient(name = "outbound-user-client", url = "https://www.googleapis.com")
+public interface OutboundUserClient {
+
+    @GetMapping("/oauth2/v2/userinfo")
+    OutboudUserResponse getUserDetails(@RequestHeader("Authorization") String authorization);
+}

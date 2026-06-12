@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: profile-service
+
+  datasource:
+    url: ${MySQL_URL}
+    username: root
+    password: ${MySQL_PASSWORD}
+
+  main:
+    banner-mode: off
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8081
+
+logging:
+  level:
+    root: warn
