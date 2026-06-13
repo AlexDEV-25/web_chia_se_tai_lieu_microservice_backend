@@ -1,10 +1,7 @@
 package com.example.authservice.service;
 
 import com.example.authservice.constant.AppError;
-import com.example.authservice.dto.request.ChangeEmailRequest;
-import com.example.authservice.dto.request.ChangePasswordRequest;
-import com.example.authservice.dto.request.DisplayRequest;
-import com.example.authservice.dto.request.RegisterRequest;
+import com.example.authservice.dto.request.*;
 import com.example.authservice.dto.response.UserResponse;
 import com.example.authservice.exception.AppException;
 import com.example.authservice.helper.GetUserByToken;
@@ -13,6 +10,7 @@ import com.example.authservice.model.Role;
 import com.example.authservice.model.User;
 import com.example.authservice.repository.RoleRepository;
 import com.example.authservice.repository.UserRepository;
+import com.example.authservice.repository.httpclient.ProfileClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +27,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final GetUserByToken getUserByToken;
+    private final ProfileClient profileClient;
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAllUsers() {
@@ -52,6 +51,14 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User saved = userRepository.save(user);
+
+        try {
+            profileClient.createUserDetail(UserDetailRequest.builder().userId(saved.getId()).build());
+        } catch (Exception e) {
+            userRepository.delete(saved);
+            throw AppException.builder().appError(AppError.CREATE_PROFILE_FAILED).build();
+        }
+        
         return userMapper.userToResponse(saved);
 
     }

@@ -1,6 +1,6 @@
-package com.example.authservice.configuration;
+package com.example.profileservice.configuration;
 
-import com.example.authservice.dto.response.APIResponse;
+import com.example.profileservice.dto.response.APIResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,12 +1,9 @@
-package com.example.authservice.configuration;
+package com.example.profileservice.configuration;
 
 
-import com.example.authservice.constant.AppError;
-import com.example.authservice.exception.AppException;
-import com.example.authservice.helper.JwtHelper;
+import com.example.profileservice.constant.AppError;
+import com.example.profileservice.exception.AppException;
 import com.nimbusds.jwt.SignedJWT;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
@@ -15,11 +12,7 @@ import org.springframework.stereotype.Component;
 import java.text.ParseException;
 
 @Component
-@RequiredArgsConstructor
 public class CustomJwtDecoder implements JwtDecoder {
-    private final JwtHelper jwtHelper;
-    @Value("${jwt.secretKey}")
-    private String signerKey;
 
     @Override
     public Jwt decode(String token) throws JwtException {

@@ -1,18 +1,12 @@
 package com.example.authservice.controller;
 
 
-import com.example.authservice.constant.AppError;
-import com.example.authservice.dto.request.ActiveAccountRequest;
-import com.example.authservice.dto.request.AuthenticationRequest;
-import com.example.authservice.dto.request.ForgotPasswordRequest;
-import com.example.authservice.dto.request.RegisterRequest;
+import com.example.authservice.dto.request.*;
 import com.example.authservice.dto.response.APIResponse;
 import com.example.authservice.dto.response.AuthenticationResponse;
 import com.example.authservice.dto.response.IntrospectResponse;
 import com.example.authservice.dto.response.UserResponse;
-import com.example.authservice.exception.AppException;
 import com.example.authservice.service.AuthenticationService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -66,28 +60,16 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh-token")
-    APIResponse<AuthenticationResponse> refreshToken(HttpServletRequest dto) {
-        String oldToken = this.extractTokenFromHeader(dto);
+    APIResponse<AuthenticationResponse> refreshToken(@RequestBody TokenRequest dto) {
         APIResponse<AuthenticationResponse> apiResponse = new APIResponse<AuthenticationResponse>();
-        apiResponse.setResult(authenticationService.refreshToken(oldToken));
+        apiResponse.setResult(authenticationService.refreshToken(dto.getToken()));
         return apiResponse;
     }
 
     @PostMapping("/introspect")
-    APIResponse<IntrospectResponse> introspect(HttpServletRequest dto) {
-        String token = this.extractTokenFromHeader(dto);
+    APIResponse<IntrospectResponse> introspect(@RequestBody TokenRequest dto) {
         APIResponse<IntrospectResponse> apiResponse = new APIResponse<IntrospectResponse>();
-        apiResponse.setResult(authenticationService.introspect(token));
+        apiResponse.setResult(authenticationService.introspect(dto.getToken()));
         return apiResponse;
-    }
-
-    private String extractTokenFromHeader(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw AppException.builder().appError(AppError.MISSING_TOKEN).build();
-        }
-
-        return authHeader.substring(7).trim();
     }
 }

@@ -1,10 +1,12 @@
 package com.example.authservice.exception;
 
+import com.example.authservice.constant.AppError;
 import com.example.authservice.dto.response.APIResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -27,6 +29,17 @@ public class GlobalException {
         error.setCode(9999);
         error.setMessage(message);
         return ResponseEntity.status(400).body(error);
+    }
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    ResponseEntity<APIResponse<Void>> handlingAccessDeniedException(AccessDeniedException exception) {
+        AppError errorCode = AppError.ACCESS_DENIED;
+
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(APIResponse.<Void>builder()
+                        .code(errorCode.getCode())
+                        .message(errorCode.getMessage())
+                        .build());
     }
 
     @ExceptionHandler(Exception.class)
