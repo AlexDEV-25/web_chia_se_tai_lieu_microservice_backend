@@ -2,14 +2,12 @@ package com.example.profileservice.controller;
 
 import com.example.profileservice.dto.request.UserDetailRequest;
 import com.example.profileservice.dto.response.APIResponse;
+import com.example.profileservice.dto.response.DisplayRequest;
 import com.example.profileservice.dto.response.UserDetailResponse;
 import com.example.profileservice.service.UserDetailService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/internal/users-detail")
@@ -17,10 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class InternalUserDetailController {
     private final UserDetailService userService;
 
-    @PostMapping(value = "/my-info")
+    @PostMapping(value = "/my-detail-info")
     public APIResponse<UserDetailResponse> createUserDetail(@RequestBody @Valid UserDetailRequest dto) {
         APIResponse<UserDetailResponse> apiResponse = new APIResponse<UserDetailResponse>();
-        apiResponse.setResult(userService.save(dto));
+        apiResponse.setResult(userService.createUserDetail(dto));
+        return apiResponse;
+    }
+
+    @PutMapping(value = "/my-detail-info/{userId}")
+    public APIResponse<UserDetailResponse> hideUserDetail(@PathVariable Long userId, @RequestBody @Valid DisplayRequest dto) {
+        APIResponse<UserDetailResponse> apiResponse = new APIResponse<UserDetailResponse>();
+        apiResponse.setResult(userService.hideUserDetail(userId, dto));
         return apiResponse;
     }
 

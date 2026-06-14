@@ -47,7 +47,7 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "hide")
+    @Column(name = "hide", nullable = false)
     private boolean hide;
 
     @ManyToMany(fetch = FetchType.LAZY)

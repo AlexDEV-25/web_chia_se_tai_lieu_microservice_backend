@@ -16,23 +16,23 @@ public class AdminUserController {
     private final UserService userService;
 
     @PutMapping("hide/{id}")
-    public APIResponse<UserResponse> hide(@PathVariable Long id, @RequestBody @Valid DisplayRequest dto) {
+    public APIResponse<UserResponse> hideUser(@PathVariable Long id, @RequestBody @Valid DisplayRequest dto) {
         APIResponse<UserResponse> apiResponse = new APIResponse<UserResponse>();
-        apiResponse.setResult(userService.hide(id, dto));
+        apiResponse.setResult(userService.hideUser(id, dto));
         return apiResponse;
     }
 
     @GetMapping
-    public APIResponse<UserResponse> getAll() {
+    public APIResponse<UserResponse> getAllUsers() {
         APIResponse<UserResponse> apiResponse = new APIResponse<UserResponse>();
         apiResponse.setResultList(userService.getAllUsers());
         return apiResponse;
     }
 
     @PostMapping
-    public APIResponse<UserResponse> create(@RequestBody @Valid RegisterRequest dto) {
+    public APIResponse<UserResponse> createUser(@RequestBody @Valid RegisterRequest dto) {
         APIResponse<UserResponse> apiResponse = new APIResponse<UserResponse>();
-        apiResponse.setResult(userService.save(dto));
+        apiResponse.setResult(userService.createUser(dto));
         return apiResponse;
     }
 

@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.*;
 public class ExternalUserDetailController {
     private final UserDetailService userService;
 
-    @GetMapping("/info/{userId}")
+    @GetMapping("/bio-info/{userId}")
     public APIResponse<UserBioResponse> getInfo(@PathVariable Long userId) {
         APIResponse<UserBioResponse> apiResponse = new APIResponse<UserBioResponse>();
         apiResponse.setResult(userService.getBioUser(userId));
         return apiResponse;
     }
-
-    @GetMapping("/my-info/{userId}")
-    public APIResponse<UserDetailResponse> getMyInfo(@PathVariable Long id) {
+    
+    @GetMapping("/my-detail-info/{userId}")
+    public APIResponse<UserDetailResponse> getDetailUser(@PathVariable Long id) {
         APIResponse<UserDetailResponse> apiResponse = new APIResponse<UserDetailResponse>();
         apiResponse.setResult(userService.getDetailUser(id));
         return apiResponse;

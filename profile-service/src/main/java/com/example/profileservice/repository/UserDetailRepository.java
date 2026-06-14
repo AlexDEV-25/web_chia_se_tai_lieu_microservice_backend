@@ -15,6 +15,8 @@ import java.util.Optional;
 public interface UserDetailRepository extends JpaRepository<UserDetail, Long> {
 
 
+    Optional<UserDetail> findByUserIdAndHideFalse(Long userId);
+
     Optional<UserDetail> findByUserId(Long userId);
 
     boolean existsByUserId(Long userId);
@@ -28,7 +30,8 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Long> {
                     u.status
                 )
                 FROM UserDetail u
-                WHERE u.fullName LIKE CONCAT('%', :keyword, '%')
+                WHERE (u.hide = false) AND
+                      (u.fullName LIKE CONCAT('%', :keyword, '%'))
             """)
     List<UserBioResponse> search(@Param("keyword") String keyword);
 }

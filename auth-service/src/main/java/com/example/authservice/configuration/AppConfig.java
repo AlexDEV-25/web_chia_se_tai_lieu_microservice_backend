@@ -52,28 +52,14 @@ public class AppConfig {
         checkPermissionAndSave(permissionRepository, "DOWNLOAD_FILE", "tải tài liệu");
         checkPermissionAndSave(permissionRepository, "INCREASE_DOWNLOAD", "tăng lượt tải tài liệu");
         checkPermissionAndSave(permissionRepository, "ADD_FAVORITE", "thêm vào kho yêu thích");
-        checkPermissionAndSave(permissionRepository, "GET_DOCUMENT_FAVORITE", "lấy danh sách nhưng tài liệu trong kho");
-        checkPermissionAndSave(permissionRepository, "GET_LESSON_FAVORITE", "lấy danh sách nhưng bài giảng trong kho");
-        checkPermissionAndSave(permissionRepository, "REMOVE_DOCUMENT_FAVORITE", "xóa tài liệu khỏi kho");
-        checkPermissionAndSave(permissionRepository, "REMOVE_LESSON_FAVORITE", "xóa bài giảng khỏi kho");
-        checkPermissionAndSave(permissionRepository, "CHECK_DOCUMENT_FAVORITE",
-                "kiểm tra xem lưu tài liệu vào kho chưa");
-        checkPermissionAndSave(permissionRepository, "CHECK_LESSON_FAVORITE",
-                "kiểm tra xem lưu bài giảng vào kho chưa");
-        checkPermissionAndSave(permissionRepository, "GET_MY_LESSON", "lấy bài giảng mình đăng");
-        checkPermissionAndSave(permissionRepository, "GET_MY_LESSON_DETAIL", "lấy chi tiết bài giảng mình đăng");
-        checkPermissionAndSave(permissionRepository, "UPDATE_MY_LESSON", "sửa bài giảng của mình");
-        checkPermissionAndSave(permissionRepository, "DELETE_MY_LESSON", "xóa bài giảng của mình");
-        checkPermissionAndSave(permissionRepository, "COUNT_MY_LESSON", "đếm số bài giảng của mình");
-        checkPermissionAndSave(permissionRepository, "UPLOAD_LESSON", "đăng bài giảng");
-        checkPermissionAndSave(permissionRepository, "DOWNLOAD_LESSON_DOCUMENT", "tải tài liệu bài giảng");
-        checkPermissionAndSave(permissionRepository, "DOWNLOAD_LESSON_SUBFILE", "tải file phụ bài giảng");
+        checkPermissionAndSave(permissionRepository, "GET_FAVORITE", "lấy danh sách nhưng tài liệu trong kho");
+        checkPermissionAndSave(permissionRepository, "REMOVE_FAVORITE", "xóa tài liệu khỏi kho");
+        checkPermissionAndSave(permissionRepository, "CHECK_FAVORITE", "kiểm tra xem lưu tài liệu vào kho chưa");
         checkPermissionAndSave(permissionRepository, "UPDATE_LAST_SEEN", "cập nhật lần cuối đăng nhập");
         checkPermissionAndSave(permissionRepository, "ADD_MEMBER", "thêm thành viên vào nhóm chat");
         checkPermissionAndSave(permissionRepository, "DELETE_MEMBER", "xóa thành viên khỏi nhóm chat");
         checkPermissionAndSave(permissionRepository, "CHANGE_ROLE", "thay đổi vai trò thành viên nhóm chat");
-        checkPermissionAndSave(permissionRepository, "GET_MY_DOCUMENT_RATING", "lấy đánh giá tài liệu của mình");
-        checkPermissionAndSave(permissionRepository, "GET_MY_LESSON_RATING", "lấy đánh giá bài giảng của mình");
+        checkPermissionAndSave(permissionRepository, "GET_MY_RATING", "lấy đánh giá tài liệu của mình");
         checkPermissionAndSave(permissionRepository, "POST_RATING", "đánh giá");
         checkPermissionAndSave(permissionRepository, "REPORT", "báo cáo");
         checkPermissionAndSave(permissionRepository, "FOLLOW", "kết bạn");
@@ -89,6 +75,7 @@ public class AppConfig {
         checkPermissionAndSave(permissionRepository, "READ_NOTIFICATION", "xác nhận đọc thông báo");
         checkPermissionAndSave(permissionRepository, "READ_ALL_NOTIFICATION", "xác nhận đọc tất cả thông báo");
         checkPermissionAndSave(permissionRepository, "GET_MY_INFO", "lấy thông tin của mình");
+        checkPermissionAndSave(permissionRepository, "GET_MY_DETAIL_INFO", "lấy thông tin chi tiết của mình");
         checkPermissionAndSave(permissionRepository, "UPDATE_MY_INFO", "thay đổi thông tin của mình");
         checkPermissionAndSave(permissionRepository, "SEARCH_USER", "tìm kiếm người dùng");
         checkPermissionAndSave(permissionRepository, "CHANGE_PASSWORD", "thay đổi password");

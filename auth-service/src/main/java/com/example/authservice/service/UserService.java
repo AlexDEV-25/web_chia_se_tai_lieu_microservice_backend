@@ -36,7 +36,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse save(RegisterRequest dto) {
+    public UserResponse createUser(RegisterRequest dto) {
         User user = userMapper.requestToUser(dto);
 
         List<Role> roles = roleRepository.findAllById(dto.getRoles());
@@ -58,18 +58,26 @@ public class UserService {
             userRepository.delete(saved);
             throw AppException.builder().appError(AppError.CREATE_PROFILE_FAILED).build();
         }
-        
+
         return userMapper.userToResponse(saved);
 
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse hide(Long id, DisplayRequest request) {
+    public UserResponse hideUser(Long id, DisplayRequest request) {
         User entity = userRepository.findById(id)
                 .orElseThrow(() -> AppException.builder().appError(AppError.USER_NOT_FOUND).build());
         entity.setHide(request.isHide());
         entity.setUpdatedAt(LocalDateTime.now());
         User saved = userRepository.save(entity);
+
+        try {
+            profileClient.hideUserDetail(id, request);
+        } catch (Exception e) {
+            userRepository.delete(saved);
+            throw AppException.builder().appError(AppError.CREATE_PROFILE_FAILED).build();
+        }
+
         return userMapper.userToResponse(saved);
     }
 

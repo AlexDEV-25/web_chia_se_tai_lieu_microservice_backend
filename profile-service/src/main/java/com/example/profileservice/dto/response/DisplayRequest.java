@@ -1,4 +1,4 @@
-package com.example.profileservice.dto.request;
+package com.example.profileservice.dto.response;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,15 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDetailRequest {
+public class DisplayRequest {
 
-    private String fullName;
-
-    @NotNull(message = "userId không được để trống")
-    private Long userId;
-
-    private String bio;
-
+    @NotNull(message = "hide không được để trống")
     private boolean hide;
-
 }

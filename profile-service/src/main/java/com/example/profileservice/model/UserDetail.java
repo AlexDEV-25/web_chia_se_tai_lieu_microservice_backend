@@ -45,4 +45,7 @@ public class UserDetail {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private ConnectionStatus status;
+
+    @Column(name = "hide", nullable = false)
+    private boolean hide;
 }
