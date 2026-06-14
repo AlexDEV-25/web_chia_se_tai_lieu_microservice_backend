@@ -43,7 +43,8 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
     @NonFinal
     private String[] publicGetEndpoints = {
-//            "/api/users/info/{id}",
+            "/api/external/users-detail/bio-info/{userId}",
+            "/api/follows/follow-count/{userId}",
     };
 
     @Value("${app.api-prefix}")

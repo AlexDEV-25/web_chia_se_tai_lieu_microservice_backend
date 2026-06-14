@@ -25,6 +25,7 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
             "/api/external/users-detail/bio-info/{userId}",
+            "/api/follows/follow-count/{userId}",
     };
 
     private final CustomJwtDecoder customJwtDecoder;

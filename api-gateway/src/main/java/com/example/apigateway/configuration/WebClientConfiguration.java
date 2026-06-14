@@ -13,14 +13,10 @@ public class WebClientConfiguration {
 //    @Value("${app.domain.frontend}")
 //    private String frontendDomain;
 
-    @Bean
-    WebClient webClient() {
-        return WebClient.builder().baseUrl("http://localhost:8080").build();
-    }
-
     // Tạo đối tượng AuthClient để gọi API của AuthService thông qua WebClient
     @Bean
-    AuthClient authClient(WebClient webClient) {
+    AuthClient authClient() {
+        WebClient webClient = WebClient.builder().baseUrl("http://localhost:8080").build();
         HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory
                 .builderFor(WebClientAdapter.create(webClient)).build();
 

@@ -66,6 +66,7 @@ public class JwtHelper {
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()//
                 .subject(user.getUsername())//
                 .issuer("moimoi.com")//
+                .claim("userId", user.getId())
                 .claim("scope", buildScope(user))//
                 .jwtID(UUID.randomUUID().toString())//
                 .issueTime(new Date())//
