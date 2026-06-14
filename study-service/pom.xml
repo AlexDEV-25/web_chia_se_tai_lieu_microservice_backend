@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>profile-service</artifactId>
+    <artifactId>study-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>profile-service</name>
-    <description>profile-service</description>
+    <name>study-service</name>
+    <description>study-service</description>
     <url/>
     <licenses>
         <license/>
@@ -87,6 +87,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.29</version>
         </dependency>
     </dependencies>
 
