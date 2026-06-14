@@ -1,4 +1,4 @@
-package com.example.profileservice.helper;
+package com.example.studyservice.helper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;

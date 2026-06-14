@@ -1,4 +1,4 @@
-package com.example.profileservice.configuration;
+package com.example.studyservice.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,12 +20,13 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_POST = {
-            "/api/internal/users-detail/my-info",
+//			"/api/documents"
+            "/api/documents/view/{id}",
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
-            "/api/external/users-detail/bio-info/{userId}",
-            "/api/follows/follow-count/{userId}",
+            "/api/documents", "/api/documents/{id}", "/api/documents/user/{userId}",
+            "/api/documents/category/{categoryId}", "/api/documents/user/{userId}", "/api/documents/count/{userId}",
     };
 
     private final CustomJwtDecoder customJwtDecoder;

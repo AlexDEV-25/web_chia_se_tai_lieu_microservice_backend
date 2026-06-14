@@ -1,0 +1,20 @@
+package com.example.studyservice.dto.respone;
+
+
+import com.example.studyservice.constant.ContentStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class DocumentAdminResponse {
+    private Long id;
+    private String title;
+    private String description;
+    private String categoryName;
+    private ContentStatus status;
+}

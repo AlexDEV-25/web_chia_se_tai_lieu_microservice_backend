@@ -1,4 +1,4 @@
-package com.example.profileservice.configuration;
+package com.example.fileservice.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,12 +20,15 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_POST = {
-            "/api/internal/users-detail/my-info",
+            "/api/files/upload-file-pdf", "/api/files/upload-file-image",
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
-            "/api/external/users-detail/bio-info/{userId}",
-            "/api/follows/follow-count/{userId}",
+            "/api/files/{url}/thumbnail", "/api/files/{url}/download",
+    };
+
+    private final String[] PUBLIC_ENDPOINTS_DELETE = {
+            "/api/files/{url}",
     };
 
     private final CustomJwtDecoder customJwtDecoder;
@@ -36,6 +39,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request -> //
                 request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST).permitAll()//
                         .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()//
+                        .requestMatchers(HttpMethod.DELETE, PUBLIC_ENDPOINTS_DELETE).permitAll()//
                         .anyRequest().authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(customJwtDecoder)

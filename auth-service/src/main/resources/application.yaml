@@ -40,6 +40,8 @@ app:
   services:
     profile:
       url: ${PROFILE_SERVICE_URL}
+    file:
+      url: http://localhost:8082
 
 jwt:
   secretKey: dAt62ISlQNyyt4dDObsfXv93IJ4mOHIGyqf/ECLbPQD/gERJ8wBaPISQyZTTE2PMQtEdsxtcyOFPFKsUJrQZoQ==
@@ -51,3 +53,5 @@ outbound:
     client-secret: ${SECRET_KEY}
     redirect-uri: ${URL_REDIRECT}
     grant-types: authorization_code
+
+app:
