@@ -1,4 +1,4 @@
-package com.example.studyservice.dto.respone;
+package com.example.studyservice.dto.response;
 
 
 import com.example.studyservice.constant.ContentStatus;

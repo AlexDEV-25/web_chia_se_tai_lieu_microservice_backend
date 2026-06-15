@@ -1,0 +1,26 @@
+package com.example.interactionservice.dto.request;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class CommentRequest {
+
+    @NotBlank(message = "content không được để trống")
+    private String content;
+
+    private Long parentId;
+
+    private boolean hide;
+
+    @NotNull(message = "documentId không được để trống")
+    private Long documentId;
+
+}

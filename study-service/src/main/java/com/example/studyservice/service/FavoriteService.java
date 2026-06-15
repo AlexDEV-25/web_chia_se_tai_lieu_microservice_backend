@@ -4,7 +4,7 @@ package com.example.studyservice.service;
 import com.example.studyservice.constant.AppError;
 import com.example.studyservice.constant.ContentStatus;
 import com.example.studyservice.dto.request.FavoriteRequest;
-import com.example.studyservice.dto.respone.FavoriteResponse;
+import com.example.studyservice.dto.response.FavoriteResponse;
 import com.example.studyservice.exception.AppException;
 import com.example.studyservice.helper.GetUserIdByToken;
 import com.example.studyservice.mapper.FavoriteMapper;
@@ -46,7 +46,7 @@ public class FavoriteService {
                 ContentStatus.PUBLISHED);
         return favorites.stream().map(favoriteMapper::documentFavoriteToResponse).toList();
     }
-    
+
     @PreAuthorize("hasAuthority('REMOVE_DOCUMENT_FAVORITE')")
     public void removeDocumentFavorite(Long documentId) {
         Long userId = getUserIdByToken.get();

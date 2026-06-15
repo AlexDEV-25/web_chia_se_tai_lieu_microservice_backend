@@ -1,7 +1,7 @@
 package com.example.studyservice.dto.request;
 
-import com.example.app.constant.ContentStatus;
 
+import com.example.studyservice.constant.ContentStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

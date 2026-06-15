@@ -4,7 +4,7 @@ package com.example.studyservice.service;
 import com.example.studyservice.constant.AppError;
 import com.example.studyservice.constant.ContentStatus;
 import com.example.studyservice.dto.request.DocumentRequest;
-import com.example.studyservice.dto.respone.*;
+import com.example.studyservice.dto.response.*;
 import com.example.studyservice.exception.AppException;
 import com.example.studyservice.helper.GetUserIdByToken;
 import com.example.studyservice.mapper.DocumentMapper;

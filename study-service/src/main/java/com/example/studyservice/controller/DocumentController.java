@@ -3,7 +3,7 @@ package com.example.studyservice.controller;
 
 import com.example.studyservice.constant.AppError;
 import com.example.studyservice.dto.request.DocumentRequest;
-import com.example.studyservice.dto.respone.*;
+import com.example.studyservice.dto.response.*;
 import com.example.studyservice.exception.AppException;
 import com.example.studyservice.service.DocumentService;
 import com.fasterxml.jackson.databind.ObjectMapper;

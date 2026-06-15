@@ -1,4 +1,4 @@
-package com.example.studyservice.dto.respone;
+package com.example.studyservice.dto.response;
 
 public record CategoryCountResponse(Long categoryId, String categoryName, Long total) {
 }

@@ -1,5 +1,6 @@
-package com.example.studyservice.dto.respone;
+package com.example.studyservice.dto.response;
 
+import com.example.studyservice.constant.ContentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,14 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DocumentResponse {
+public class DocumentUserResponse {
     private Long id;
     private String title;
     private String description;
     private String thumbnailUrl;
-    private String userId;
-    private String username;
     private Long viewsCount;
     private Long downloadsCount;
-    private boolean favorite;
+    private ContentStatus status;
 }

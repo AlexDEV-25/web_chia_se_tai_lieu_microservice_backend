@@ -1,4 +1,4 @@
-package com.example.studyservice.dto.respone;
+package com.example.interactionservice.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CategoryResponse {
+public class ReportAdminResponse {
     private Long id;
-    private String name;
-    private String description;
-    private boolean hide;
+    private String documentTitle;
+    private Long total;
 }

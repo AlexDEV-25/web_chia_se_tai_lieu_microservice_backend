@@ -13,10 +13,10 @@ import java.util.Optional;
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     @Query("""
             SELECT f
-            	FROM DocumentFavorite f
+            	FROM Favorite f
             	JOIN f.document d
             	WHERE
-            		f.user_id = :userId
+            		f.userId = :userId
             		AND d.status = :status
             		AND d.hide = false
             """)

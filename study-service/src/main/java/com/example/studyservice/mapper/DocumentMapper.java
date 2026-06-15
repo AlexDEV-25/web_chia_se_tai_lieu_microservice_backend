@@ -1,9 +1,9 @@
 package com.example.studyservice.mapper;
 
 import com.example.studyservice.dto.request.DocumentRequest;
-import com.example.studyservice.dto.respone.DocumentAdminResponse;
-import com.example.studyservice.dto.respone.DocumentDetailResponse;
-import com.example.studyservice.dto.respone.DocumentUserResponse;
+import com.example.studyservice.dto.response.DocumentAdminResponse;
+import com.example.studyservice.dto.response.DocumentDetailResponse;
+import com.example.studyservice.dto.response.DocumentUserResponse;
 import com.example.studyservice.model.Document;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

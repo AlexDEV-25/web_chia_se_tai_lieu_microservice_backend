@@ -1,9 +1,10 @@
 package com.example.studyservice.repository;
 
 import com.example.studyservice.constant.ContentStatus;
-import com.example.studyservice.dto.respone.CategoryCountResponse;
-import com.example.studyservice.dto.respone.DocumentResponse;
-import com.example.studyservice.dto.respone.DocumentStatsResponse;
+
+import com.example.studyservice.dto.response.CategoryCountResponse;
+import com.example.studyservice.dto.response.DocumentResponse;
+import com.example.studyservice.dto.response.DocumentStatsResponse;
 import com.example.studyservice.model.Category;
 import com.example.studyservice.model.Document;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -49,7 +50,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
     List<Object[]> countDocumentByDay(@Param("fromDate") LocalDateTime fromDate, @Param("status") ContentStatus status);
 
     @Query("""
-            	SELECT new com.example.app.dto.response.statistic.CategoryCountResponse(
+            	SELECT new com.example.studyservice.dto.response.CategoryCountResponse(
                 c.id,
                 c.name,
                 COUNT(d)
@@ -63,7 +64,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
     List<CategoryCountResponse> countDocumentByCategory(@Param("status") ContentStatus status);
 
     @Query("""
-                SELECT new com.example.app.dto.response.document.DocumentStatsResponse(
+                SELECT new com.example.studyservice.dto.response.DocumentStatsResponse(
                     COUNT(d),
                     COALESCE(SUM(d.downloadsCount), 0),
                     COALESCE(SUM(d.viewsCount), 0)
@@ -75,7 +76,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
     DocumentStatsResponse getStats(@Param("status") ContentStatus status);
 
     @Query("""
-                SELECT new com.example.app.dto.response.document.DocumentResponse(
+                SELECT new com.example.studyservice.dto.response.DocumentResponse(
                     d.id,
                     d.title,
                     d.description,
@@ -86,9 +87,9 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     CASE WHEN f IS NOT NULL THEN true ELSE false END
                 )
                 FROM Document d
-                LEFT JOIN DocumentFavorite f
+                LEFT JOIN Favorite f
                     ON  f.document.id = d.id
-                    AND f.user_id = :currentUserId
+                    AND f.userId = :currentUserId
                 WHERE d.hide = false
                   AND d.status = :status
                   AND (:categoryId IS NULL OR d.category.id = :categoryId)
@@ -102,7 +103,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                                            @Param("currentUserId") Long currentUserId, @Param("status") ContentStatus status);
 
     @Query("""
-              SELECT new com.example.app.dto.response.document.DocumentResponse(
+              SELECT new com.example.studyservice.dto.response.DocumentResponse(
                     d.id,
                     d.title,
                     d.description,
@@ -126,7 +127,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                                               @Param("status") ContentStatus status);
 
     @Query("""
-                SELECT new com.example.app.dto.response.document.DocumentResponse(
+                SELECT new com.example.studyservice.dto.response.DocumentResponse(
                     d.id,
                     d.title,
                     d.description,
@@ -137,10 +138,10 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     CASE WHEN f.id IS NOT NULL THEN true ELSE false END
                 )
                 FROM Document d
-                LEFT JOIN DocumentFavorite f
+                LEFT JOIN Favorite f
                     ON  f.document.id = d.id
-                    AND f.user_id = :currentUserId
-                WHERE d.user_id = :authorId
+                    AND f.userId = :currentUserId
+                WHERE d.userId = :authorId
                     AND d.id <> :currentDocumentId
                     AND d.status = :status
                     AND d.hide = false
@@ -151,7 +152,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                                                                          @Param("status") ContentStatus status);
 
     @Query("""
-                SELECT new com.example.app.dto.response.document.DocumentResponse(
+                SELECT new com.example.studyservice.dto.response.DocumentResponse(
                     d.id,
                     d.title,
                     d.description,
@@ -162,7 +163,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     false
                 )
                 FROM Document d
-                WHERE d.user_id = :authorId
+                WHERE d.userId = :authorId
                     AND d.id <> :currentDocumentId
                     AND d.status = :status
                     AND d.hide = false
@@ -172,7 +173,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                                                                             @Param("currentDocumentId") Long currentDocumentId, @Param("status") ContentStatus status);
 
     @Query("""
-                SELECT new com.example.app.dto.response.document.DocumentResponse(
+                SELECT new com.example.studyservice.dto.response.DocumentResponse(
                     d.id,
                     d.title,
                     d.description,
@@ -183,10 +184,10 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     CASE WHEN f.id IS NOT NULL THEN true ELSE false END
                 )
                 FROM Document d
-                 LEFT JOIN DocumentFavorite f
+                 LEFT JOIN Favorite f
                     ON  f.document.id = d.id
-                    AND f.user_id = :currentUserId
-                WHERE d.user_id = :authorId
+                    AND f.userId = :currentUserId
+                WHERE d.userId = :authorId
                     AND d.status = :status
                     AND d.hide = false
                 ORDER BY d.createdAt DESC
@@ -195,7 +196,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                                               @Param("currentUserId") Long currentUserId, @Param("status") ContentStatus status);
 
     @Query("""
-                SELECT new com.example.app.dto.response.document.DocumentResponse(
+                SELECT new com.example.studyservice.dto.response.DocumentResponse(
                     d.id,
                     d.title,
                     d.description,
@@ -206,7 +207,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     false
                 )
                 FROM Document d
-                WHERE d.user_id = :authorId
+                WHERE d.userId = :authorId
                     AND d.status = :status
                     AND d.hide = false
                 ORDER BY d.createdAt DESC
@@ -215,7 +216,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                                                  @Param("status") ContentStatus status);
 
     @Query("""
-                SELECT new com.example.app.dto.response.document.DocumentResponse(
+                SELECT new com.example.studyservice.dto.response.DocumentResponse(
                     d.id,
                     d.title,
                     d.description,
@@ -226,9 +227,9 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     CASE WHEN f.id IS NOT NULL THEN true ELSE false END
                 )
                 FROM Document d
-                LEFT JOIN DocumentFavorite f
+                LEFT JOIN Favorite f
                     ON  f.document.id = d.id
-                    AND f.user_id = :currentUserId
+                    AND f.userId = :currentUserId
                 WHERE d.category.id = :categoryId
                     AND d.id <> :currentDocumentId
                     AND d.status = :status
@@ -240,7 +241,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                                                                              @Param("status") ContentStatus status);
 
     @Query("""
-                SELECT new com.example.app.dto.response.document.DocumentResponse(
+                SELECT new com.example.studyservice.dto.response.DocumentResponse(
                     d.id,
                     d.title,
                     d.description,
@@ -261,7 +262,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                                                                                 @Param("currentDocumentId") Long currentDocumentId, @Param("status") ContentStatus status);
 
     @Query("""
-                SELECT new com.example.app.dto.response.document.DocumentResponse(
+                SELECT new com.example.studyservice.dto.response.DocumentResponse(
                     d.id,
                     d.title,
                     d.description,
@@ -272,9 +273,9 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     CASE WHEN f.id IS NOT NULL THEN true ELSE false END
                 )
                 FROM Document d
-                LEFT JOIN DocumentFavorite f
+                LEFT JOIN Favorite f
                     ON  f.document.id = d.id
-                    AND f.user_id = :currentUserId
+                    AND f.userId = :currentUserId
                 WHERE d.status = :status
                     AND d.hide = false
                 ORDER BY d.createdAt DESC
@@ -283,7 +284,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                                            @Param("status") ContentStatus status);
 
     @Query("""
-                SELECT new com.example.app.dto.response.document.DocumentResponse(
+                SELECT new com.example.studyservice.dto.response.DocumentResponse(
                     d.id,
                     d.title,
                     d.description,

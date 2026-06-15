@@ -2,9 +2,10 @@ package com.example.studyservice.controller;
 
 
 import com.example.studyservice.dto.request.DocumentRequest;
-import com.example.studyservice.dto.respone.APIResponse;
-import com.example.studyservice.dto.respone.DocumentAdminResponse;
-import com.example.studyservice.dto.respone.DocumentDetailResponse;
+
+import com.example.studyservice.dto.response.APIResponse;
+import com.example.studyservice.dto.response.DocumentAdminResponse;
+import com.example.studyservice.dto.response.DocumentDetailResponse;
 import com.example.studyservice.service.DocumentService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

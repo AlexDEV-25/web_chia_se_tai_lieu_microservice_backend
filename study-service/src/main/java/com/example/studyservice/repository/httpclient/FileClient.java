@@ -1,6 +1,6 @@
 package com.example.studyservice.repository.httpclient;
 
-import com.example.studyservice.dto.respone.FileResponse;
+import com.example.studyservice.dto.response.FileResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
