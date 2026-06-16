@@ -1,6 +1,8 @@
 package com.example.interactionservice.service;
 
 
+import com.example.constant.NotificationType;
+import com.example.event.SystemNotificationEvent;
 import com.example.interactionservice.constant.AppError;
 import com.example.interactionservice.dto.request.CommentRequest;
 import com.example.interactionservice.dto.request.DisplayRequest;
@@ -12,6 +14,8 @@ import com.example.interactionservice.mapper.CommentMapper;
 import com.example.interactionservice.model.Comment;
 import com.example.interactionservice.repository.CommentRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +32,10 @@ public class CommentService {
     private final CommentRepository documentRepo;
     private final CommentMapper mapper;
     private final GetUserIdByToken getUserIdByToken;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    @Value("${app.domain.frontend}")
+    private String frontendDomain;
 
     @PreAuthorize("hasAuthority('POST_COMMENT')")
     public CommentResponse saveMyComment(CommentRequest req) {
@@ -41,7 +49,20 @@ public class CommentService {
 
         Comment saved = documentRepo.save(comment);
 
-        // chưa gửi thông báo
+        if (parent != null) {
+            SystemNotificationEvent systemNotificationEvent = SystemNotificationEvent.builder()
+                    .channel("SYSTEM")
+                    .senderId(saved.getParent().getUserId())
+                    .senderName(saved.getParent().getUserName())
+                    .receiverId(saved.getUserId())
+                    .receiverName(saved.getUserName())
+                    .content("người dùng " + saved.getUserName() + " đã trả lời bình luận của bạn")
+                    .link(frontendDomain + "/document/" + saved.getDocumentId())
+                    .type(NotificationType.INFO)
+                    .build();
+            kafkaTemplate.send("reply-comment", systemNotificationEvent);
+        }
+
 
         return mapper.documentCommentToCommentResponse(saved);
     }
