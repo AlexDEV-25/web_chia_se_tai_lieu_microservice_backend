@@ -50,7 +50,6 @@ public class AppConfig {
         checkPermissionAndSave(permissionRepository, "COUNT_MY_DOCUMENT", "đếm số tài liệu của mình");
         checkPermissionAndSave(permissionRepository, "UPLOAD_FILE", "đăng tài liệu");
         checkPermissionAndSave(permissionRepository, "DOWNLOAD_FILE", "tải tài liệu");
-        checkPermissionAndSave(permissionRepository, "INCREASE_DOWNLOAD", "tăng lượt tải tài liệu");
         checkPermissionAndSave(permissionRepository, "ADD_FAVORITE", "thêm vào kho yêu thích");
         checkPermissionAndSave(permissionRepository, "GET_FAVORITE", "lấy danh sách nhưng tài liệu trong kho");
         checkPermissionAndSave(permissionRepository, "REMOVE_FAVORITE", "xóa tài liệu khỏi kho");
@@ -76,7 +75,7 @@ public class AppConfig {
         checkPermissionAndSave(permissionRepository, "READ_ALL_NOTIFICATION", "xác nhận đọc tất cả thông báo");
         checkPermissionAndSave(permissionRepository, "GET_MY_INFO", "lấy thông tin của mình");
         checkPermissionAndSave(permissionRepository, "GET_MY_DETAIL_INFO", "lấy thông tin chi tiết của mình");
-        checkPermissionAndSave(permissionRepository, "UPDATE_MY_INFO", "thay đổi thông tin của mình");
+        checkPermissionAndSave(permissionRepository, "UPDATE_EMAIL", "thay đổi email của mình");
         checkPermissionAndSave(permissionRepository, "SEARCH_USER", "tìm kiếm người dùng");
         checkPermissionAndSave(permissionRepository, "CHANGE_PASSWORD", "thay đổi password");
     }
