@@ -75,6 +75,7 @@ public class AppConfig {
         checkPermissionAndSave(permissionRepository, "READ_ALL_NOTIFICATION", "xác nhận đọc tất cả thông báo");
         checkPermissionAndSave(permissionRepository, "GET_MY_INFO", "lấy thông tin của mình");
         checkPermissionAndSave(permissionRepository, "GET_MY_DETAIL_INFO", "lấy thông tin chi tiết của mình");
+        checkPermissionAndSave(permissionRepository, "UPDATE_MY_DETAIL_INFO", "cập nhật thông tin chi tiết của mình");
         checkPermissionAndSave(permissionRepository, "UPDATE_EMAIL", "thay đổi email của mình");
         checkPermissionAndSave(permissionRepository, "SEARCH_USER", "tìm kiếm người dùng");
         checkPermissionAndSave(permissionRepository, "CHANGE_PASSWORD", "thay đổi password");

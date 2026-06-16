@@ -24,3 +24,5 @@ logging:
 app:
   domain:
     frontend: ${FRONTEND_DOMAIN}
+  services:
+    file: http://localhost:8083
