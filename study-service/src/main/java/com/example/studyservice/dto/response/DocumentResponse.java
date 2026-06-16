@@ -14,7 +14,7 @@ public class DocumentResponse {
     private String title;
     private String description;
     private String thumbnailUrl;
-    private String author_name;
+    private String authorName;
     private Long viewsCount;
     private Long downloadsCount;
     private boolean favorite;

@@ -1,7 +1,6 @@
-package com.example.studyservice.exception;
+package com.example.notificationservice.exception;
 
-
-import com.example.studyservice.constant.AppError;
+import com.example.notificationservice.constant.AppError;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

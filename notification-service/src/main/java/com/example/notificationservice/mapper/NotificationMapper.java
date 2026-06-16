@@ -1,16 +1,16 @@
-package com.example.app.mapper;
+package com.example.notificationservice.mapper;
 
+
+import com.example.notificationservice.dto.request.NotificationRequest;
+import com.example.notificationservice.dto.response.NotificationResponse;
+import com.example.notificationservice.model.Notification;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.example.app.dto.request.NotificationRequest;
-import com.example.app.dto.response.notification.NotificationResponse;
-import com.example.app.model.Notification;
-
 @Mapper(componentModel = "spring")
 public interface NotificationMapper {
-	@Mapping(target = "id", ignore = true)
-	Notification requestToNotification(NotificationRequest request);
+    @Mapping(target = "id", ignore = true)
+    Notification requestToNotification(NotificationRequest request);
 
-	NotificationResponse notificationToResponse(Notification entity);
+    NotificationResponse notificationToResponse(Notification entity);
 }

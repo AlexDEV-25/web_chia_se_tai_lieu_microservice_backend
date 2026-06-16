@@ -1,8 +1,11 @@
 package com.example.profileservice.service;
 
 
+import com.example.constant.NotificationType;
+import com.example.event.SystemNotificationEvent;
 import com.example.profileservice.constant.AppError;
 import com.example.profileservice.dto.response.FollowCountResponse;
+import com.example.profileservice.dto.response.UserFollowNotificationResponse;
 import com.example.profileservice.dto.response.UserFollowResponse;
 import com.example.profileservice.exception.AppException;
 import com.example.profileservice.helper.GetUserIdByToken;
@@ -12,6 +15,8 @@ import com.example.profileservice.repository.UserDetailRepository;
 import com.example.profileservice.repository.UserFollowRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +28,12 @@ import java.util.List;
 public class UserFollowService {
     private final UserFollowRepository userFollowRepository;
     private final UserDetailRepository userDetailRepository;
-    //    private final ApplicationEventPublisher eventPublisher;
     private final UserFollowMapper userFollowMapper;
     private final GetUserIdByToken getUserIdByToken;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    @Value("${app.domain.frontend}")
+    private String frontendDomain;
 
     @PreAuthorize("hasAuthority('FOLLOW')")
     @Transactional
@@ -47,12 +55,20 @@ public class UserFollowService {
 
         UserFollow saved = userFollowRepository.save(userFollow);
 
-        UserFollowResponse response = userFollowMapper.userFollowToResponse(saved);
+        SystemNotificationEvent systemNotificationEvent = SystemNotificationEvent.builder()
+                .channel("SYSTEM")
+                .senderId(saved.getFollowerId())
+                .senderName(saved.getFollowerName())
+                .receiverId(saved.getFollowingId())
+                .receiverName(saved.getFollowingName())
+                .content("người dùng " + saved.getFollowerName() + " đã theo dõi bạn")
 
-//        if (response != null) {
-//            eventPublisher.publishEvent(new UserFollowCreateEvent(follower, following));
-//        }
-        return response;
+                .link(frontendDomain + "/profile/" + saved.getFollowerId())
+                .type(NotificationType.INFO)
+                .build();
+        kafkaTemplate.send("follow-user", systemNotificationEvent);
+
+        return userFollowMapper.userFollowToResponse(saved);
     }
 
     @PreAuthorize("hasAuthority('UNFOLLOW')")
@@ -77,6 +93,13 @@ public class UserFollowService {
         Long followerId = getUserIdByToken.get();
         List<UserFollow> userFollows = userFollowRepository.findByFollowingId(followerId);
         return userFollows.stream().map(userFollowMapper::userFollowToResponse).toList();
+    }
+
+    // lấy danh sách người theo dõi của 1 người
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserFollowNotificationResponse> getFollowerByUserId(Long UserId) {
+        List<UserFollow> userFollows = userFollowRepository.findByFollowingId(UserId);
+        return userFollows.stream().map(userFollowMapper::userFollowToNotificationResponse).toList();
     }
 
     @PreAuthorize("hasAuthority('GET_MY_FOLLOW_COUNT')")

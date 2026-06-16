@@ -1,19 +1,19 @@
-package com.example.app.repository;
+package com.example.notificationservice.repository;
+
+
+import com.example.notificationservice.model.UserNotification;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-import com.example.app.model.UserNotification;
-
 @Repository
 public interface UserNotificationRepository extends JpaRepository<UserNotification, Long> {
 
-	List<UserNotification> findByReceiver_IdAndReadFalse(Long receiverId);
+    List<UserNotification> findByReceiverIdAndReadFalse(Long receiverId);
 
-	Optional<UserNotification> findByIdAndReceiver_IdAndReadFalse(Long Id, Long receiverId);
+    Optional<UserNotification> findByIdAndReceiverIdAndReadFalse(Long Id, Long receiverId);
 
-	List<UserNotification> findByReceiver_Id(Long receiverId);
+    List<UserNotification> findByReceiverId(Long receiverId);
 }

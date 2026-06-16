@@ -1,4 +1,4 @@
-package com.example.profileservice.dto.response;
+package com.example.notificationservice.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +12,4 @@ import lombok.NoArgsConstructor;
 public class UserFollowNotificationResponse {
     private Long followerId;
     private String followerName;
-    private Long followingId;
-    private String followingName;
 }

@@ -1,4 +1,53 @@
 package com.example.notificationservice.service;
 
+import com.example.notificationservice.constant.AppError;
+import com.example.notificationservice.dto.request.EmailRequest;
+import com.example.notificationservice.dto.request.SendEmailRequest;
+import com.example.notificationservice.dto.request.Sender;
+import com.example.notificationservice.dto.response.EmailResponse;
+import com.example.notificationservice.exception.AppException;
+import com.example.notificationservice.repository.httpclient.EmailClient;
+import feign.FeignException;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.NonFinal;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
 public class EmailService {
+    private final EmailClient emailClient;
+
+    @Value("${app.email.api-key}")
+    @NonFinal
+    String apiKey;
+
+    @Value("${app.email.sender-email}")
+    @NonFinal
+    String senderEmail;
+
+    @Value("${app.email.sender-name}")
+    @NonFinal
+    String senderName;
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public EmailResponse sendEmail(SendEmailRequest request) {
+        EmailRequest emailRequest = EmailRequest.builder()
+                .sender(Sender.builder()
+                        .name(senderName)
+                        .email(senderEmail)
+                        .build())
+                .to(List.of(request.getTo()))
+                .subject(request.getSubject())
+                .htmlContent(request.getHtmlContent())
+                .build();
+        try {
+            return emailClient.sendEmail(apiKey, emailRequest);
+        } catch (FeignException e) {
+            throw new AppException(AppError.CANNOT_SEND_EMAIL);
+        }
+    }
 }

@@ -37,6 +37,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
     @NonFinal
     private String[] publicPostEndpoints = {
+//			"/api/auth"
             "/api/auth/register", "/api/auth/log-in", "/api/auth/log-in-google", "/api/auth/introspect",
             "/api/auth/refresh-token", "/api/auth/activate", "/api/auth/forgot-password", "/api/auth/change-password",
 
@@ -52,6 +53,12 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 //			"/api/documents"
             "/api/documents", "/api/documents/{id}", "/api/documents/user/{userId}",
             "/api/documents/category/{categoryId}", "/api/documents/user/{userId}", "/api/documents/count/{userId}",
+
+//            "/api/comments"
+            "/api/comments/document/{docId}",
+
+//            "/api/ratings"
+            "/api/ratings/document-summary/{documentId}",
     };
 
     @Value("${app.api-prefix}")

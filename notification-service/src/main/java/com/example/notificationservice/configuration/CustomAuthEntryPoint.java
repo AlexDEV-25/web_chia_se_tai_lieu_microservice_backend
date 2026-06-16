@@ -1,6 +1,6 @@
-package com.example.studyservice.configuration;
+package com.example.notificationservice.configuration;
 
-import com.example.studyservice.dto.response.APIResponse;
+import com.example.notificationservice.dto.response.APIResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

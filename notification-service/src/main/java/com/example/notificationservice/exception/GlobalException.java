@@ -1,6 +1,7 @@
-package com.example.studyservice.exception;
+package com.example.notificationservice.exception;
 
-import com.example.studyservice.dto.response.APIResponse;
+
+import com.example.notificationservice.dto.response.APIResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;

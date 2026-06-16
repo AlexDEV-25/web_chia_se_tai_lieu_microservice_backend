@@ -1,7 +1,6 @@
-package com.example.app.dto.request;
+package com.example.notificationservice.dto.request;
 
-import com.example.app.constant.NotificationType;
-
+import com.example.constant.NotificationType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,11 +14,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class NotificationRequest {
 
-	@NotBlank(message = "content không được để trống")
-	private String content;
+    @NotBlank(message = "content không được để trống")
+    private String content;
 
-	private String link;
+    private String link;
 
-	@NotNull(message = "Type không được null")
-	private NotificationType type;
+    @NotNull(message = "Type không được null")
+    private NotificationType type;
 }

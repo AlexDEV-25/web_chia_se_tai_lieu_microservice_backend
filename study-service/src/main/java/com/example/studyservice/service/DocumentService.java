@@ -1,6 +1,8 @@
 package com.example.studyservice.service;
 
 
+import com.example.constant.NotificationType;
+import com.example.event.SystemNotificationEvent;
 import com.example.studyservice.constant.AppError;
 import com.example.studyservice.constant.ContentStatus;
 import com.example.studyservice.dto.request.DocumentRequest;
@@ -15,7 +17,9 @@ import com.example.studyservice.repository.DocumentRepository;
 import com.example.studyservice.repository.httpclient.FileClient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +37,10 @@ public class DocumentService {
     private final DocumentMapper documentMapper;
     private final GetUserIdByToken getUserIdByToken;
     private final FileClient fileClient;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    @Value("${app.domain.frontend}")
+    private String frontendDomain;
 
     @PreAuthorize("hasRole('ADMIN')")
     public DocumentDetailResponse findById(Long id) {
@@ -51,19 +59,21 @@ public class DocumentService {
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
     public void delete(Long id) {
+        Long adminId = getUserIdByToken.get();
         Document entity = documentRepository.findById(id)
                 .orElseThrow(() -> AppException.builder().appError(AppError.DOCUMENT_NOT_FOUND).build());
+        DocumentEventDTO dto = documentMapper.documentToDocumentDTO(entity);
 
-        fileClient.deleteFile(entity.getFileUrl());
-
+        deleteFile(entity);
         deleteByKey(id);
 
-        // gửi thông báo sau
+        adminDeleteEvent(dto, adminId);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public DocumentDetailResponse update(Long id, DocumentRequest request) {
+        Long adminId = getUserIdByToken.get();
         Document entity = documentRepository.findById(id)
                 .orElseThrow(() -> AppException.builder().appError(AppError.DOCUMENT_NOT_FOUND).build());
 
@@ -73,7 +83,7 @@ public class DocumentService {
         entity.setUpdatedAt(LocalDateTime.now());
         Document saved = documentRepository.save(entity);
 
-        // gửi thông báo sau
+        adminUpdateEvent(saved, initialStatus, adminId);
 
         return documentMapper.documentToDocumentDetailResponse(saved);
     }
@@ -105,7 +115,15 @@ public class DocumentService {
 
         Document saved = documentRepository.save(entity);
 
-        // gửi thông báo sau
+        if (!initialState && saved.isHide() && saved.getStatus() == ContentStatus.PUBLISHED) {
+
+            buildEvent(saved.getUserId(), saved.getAuthorName(),
+                    null, null,
+                    "Tác giả " + saved.getAuthorName() + " đã ẩn" + "Tài liệu: \"" + saved.getTitle() + "\"",
+                    null, NotificationType.INFO,
+                    "author-hide-document-to-follower");
+        }
+
 
         return documentMapper.documentToDocumentUserResponse(saved);
     }
@@ -115,11 +133,18 @@ public class DocumentService {
         Long userId = getUserIdByToken.get();
         Document entity = documentRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> AppException.builder().appError(AppError.DOCUMENT_NOT_FOUND).build());
+        DocumentEventDTO dto = documentMapper.documentToDocumentDTO(entity);
 
-        fileClient.deleteFile(entity.getFileUrl());
-
-        // gửi thông báo sau
+        deleteFile(entity);
         deleteByKey(id);
+
+        if (dto.getStatus() != ContentStatus.PENDING) {
+            buildEvent(dto.getUserId(), dto.getAuthorName(),
+                    null, null,
+                    "Tác giả " + dto.getAuthorName() + " đã xóa" + "Tài liệu: \"" + dto.getTitle() + "\"",
+                    null, NotificationType.INFO,
+                    "author-delete-document-to-follower");
+        }
     }
 
     @PreAuthorize("hasAuthority('COUNT_MY_DOCUMENT')")
@@ -245,5 +270,70 @@ public class DocumentService {
     private void deleteByKey(Long id) {
         // xóa nhưng thằng liên quan
         documentRepository.deleteById(id);
+    }
+
+    private void deleteFile(Document entity) {
+        fileClient.deleteFile(entity.getFileUrl());
+        fileClient.deleteFile(entity.getThumbnailUrl());
+    }
+
+    private void adminUpdateEvent(Document saved, ContentStatus initialStatus, Long adminId) {
+        if (initialStatus == ContentStatus.PENDING && saved.getStatus() == ContentStatus.PUBLISHED) {
+            buildEvent(adminId, "ADMIN",
+                    saved.getUserId(), saved.getAuthorName(),
+                    "Tài Liệu \" " + saved.getTitle() + "\" đã được duyệt",
+                    frontendDomain + "/document/" + saved.getId(), NotificationType.INFO,
+                    "admin-approve-document-to-author");
+            if (!saved.isHide()) {
+                buildEvent(saved.getUserId(), saved.getAuthorName(),
+                        null, null,
+                        "người dùng \" " + saved.getAuthorName() + "\" đã đăng tài liệu mới",
+                        frontendDomain + "/document/" + saved.getId(), NotificationType.INFO,
+                        "admin-approve-document-to-follower");
+            }
+        }
+        if (initialStatus == ContentStatus.PUBLISHED && saved.getStatus() == ContentStatus.HIDDEN) {
+            buildEvent(adminId, "ADMIN",
+                    saved.getUserId(), saved.getAuthorName(),
+                    "Tài Liệu \" " + saved.getTitle() + "\" của bạn tạm thời bị ẩn",
+                    null, NotificationType.WARNING,
+                    "admin-hide-document-to-author");
+
+            if (!saved.isHide()) {
+                buildEvent(saved.getUserId(), saved.getAuthorName(),
+                        null, null,
+                        "Tài liệu: \" " + saved.getTitle() + "\" của tác giả"
+                                + saved.getAuthorName() + " tạm thời bị ẩn",
+                        null, NotificationType.INFO,
+                        "admin-hide-document-to-follower");
+            }
+        }
+    }
+
+    private void adminDeleteEvent(DocumentEventDTO dto, Long adminId) {
+        buildEvent(adminId, "ADMIN",
+                dto.getUserId(), dto.getAuthorName(),
+                "Tài Liệu \" " + dto.getTitle() + "\" của bạn đã bị xóa",
+                null, NotificationType.WARNING,
+                "admin-delete-document-to-author");
+
+        if (dto.getStatus() != ContentStatus.PENDING) {
+            buildEvent(dto.getUserId(), dto.getAuthorName(),
+                    null, null,
+                    "Tài liệu: \" " + dto.getTitle() + "\" của tác giả" + dto.getAuthorName() + "  đã bị xóa",
+                    null, NotificationType.INFO,
+                    "admin-delete-document-to-follower");
+        }
+    }
+
+    private void buildEvent(Long senderId, String senderName, Long receiverId, String receiverName, String content, String link, NotificationType type, String topic) {
+        SystemNotificationEvent systemNotificationEvent = SystemNotificationEvent.builder()
+                .channel("SYSTEM")
+                .senderId(senderId).senderName(senderName)
+                .receiverId(receiverId).receiverName(receiverName)
+                .content(content)
+                .link(link).type(type)
+                .build();
+        kafkaTemplate.send(topic, systemNotificationEvent);
     }
 }

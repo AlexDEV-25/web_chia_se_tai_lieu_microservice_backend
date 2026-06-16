@@ -1,4 +1,4 @@
-package com.example.studyservice.configuration;
+package com.example.notificationservice.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,13 +20,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_POST = {
-//			"/api/documents"
-            "/api/documents/view/{id}",
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
-            "/api/documents", "/api/documents/{id}", "/api/documents/user/{userId}",
-            "/api/documents/category/{categoryId}", "/api/documents/user/{userId}", "/api/documents/count/{userId}",
     };
 
     private final CustomJwtDecoder customJwtDecoder;

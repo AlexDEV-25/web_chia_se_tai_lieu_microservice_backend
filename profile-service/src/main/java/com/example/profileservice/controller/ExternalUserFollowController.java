@@ -9,9 +9,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/follows")
+@RequestMapping("/api/external/follows")
 @AllArgsConstructor
-public class UserFollowController {
+public class ExternalUserFollowController {
     private final UserFollowService userFollowService;
 
     @PostMapping("/{followingId}")

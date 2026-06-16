@@ -1,5 +1,5 @@
-package com.example.app.constant;
+package com.example.notificationservice.constant;
 
 public enum NotificationContext {
-	DOCUMENT, LESSON, USER
+    DOCUMENT, LESSON, USER
 }

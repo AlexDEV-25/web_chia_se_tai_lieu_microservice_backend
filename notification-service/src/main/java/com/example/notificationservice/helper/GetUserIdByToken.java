@@ -1,4 +1,4 @@
-package com.example.interactionservice.helper;
+package com.example.notificationservice.helper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;

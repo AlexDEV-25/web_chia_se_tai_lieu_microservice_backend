@@ -1,20 +1,9 @@
-package com.example.app.model;
+package com.example.notificationservice.model;
+
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "user_notification")
@@ -24,24 +13,28 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class UserNotification {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "sender_id", nullable = false)
-	private User sender;
+    @Column(name = "sender_id", nullable = false)
+    private Long senderId;
 
-	@ManyToOne
-	@JoinColumn(name = "receiver_id", nullable = false)
-	private User receiver;
+    @Column(name = "sender_name", nullable = false)
+    private String senderName;
 
-	@ManyToOne
-	@JoinColumn(name = "notification_id")
-	private Notification notification;
+    @Column(name = "receiver_id", nullable = false)
+    private Long receiverId;
 
-	@Column(name = "is_read")
-	private boolean read;
+    @Column(name = "receiver_name", nullable = false)
+    private Long receiverName;
 
-	private LocalDateTime createdAt;
+    @ManyToOne
+    @JoinColumn(name = "notification_id")
+    private Notification notification;
+
+    @Column(name = "is_read")
+    private boolean read;
+
+    private LocalDateTime createdAt;
 }

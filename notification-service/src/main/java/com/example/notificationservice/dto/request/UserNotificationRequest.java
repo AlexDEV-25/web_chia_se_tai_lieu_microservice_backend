@@ -1,8 +1,7 @@
-package com.example.app.dto.request;
+package com.example.notificationservice.dto.request;
 
-import com.example.app.model.Notification;
-import com.example.app.model.User;
-
+import com.example.notificationservice.model.Notification;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,14 +14,20 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserNotificationRequest {
 
-	@NotNull(message = "senderId không được để trống")
-	private User sender;
+    @NotNull(message = "senderId không được để trống")
+    private Long senderId;
 
-	@NotNull(message = "receiverId không được để trống")
-	private User receiver;
+    @NotBlank(message = "senderName không được để trống")
+    private String senderName;
 
-	@NotNull(message = "notificationId không được để trống")
-	private Notification notification;
+    @NotNull(message = "receiverId không được để trống")
+    private Long receiverId;
 
-	private boolean read;
+    @NotBlank(message = "receiverName không được để trống")
+    private String receiverName;
+
+    @NotNull(message = "notificationId không được để trống")
+    private Notification notification;
+
+    private boolean read;
 }

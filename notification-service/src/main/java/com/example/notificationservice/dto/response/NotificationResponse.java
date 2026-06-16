@@ -1,7 +1,6 @@
-package com.example.app.dto.response.notification;
+package com.example.notificationservice.dto.response;
 
-import com.example.app.constant.NotificationType;
-
+import com.example.constant.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class NotificationResponse {
-	private Long id;
-	private String content;
-	private String link;
-	private NotificationType type;
+    private Long id;
+    private String content;
+    private String link;
+    private NotificationType type;
 }

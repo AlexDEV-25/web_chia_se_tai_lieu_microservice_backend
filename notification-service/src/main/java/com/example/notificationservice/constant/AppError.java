@@ -1,4 +1,4 @@
-package com.example.studyservice.constant;
+package com.example.notificationservice.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -101,7 +101,8 @@ public enum AppError {
 
     INVALID_JSON_FORMAT(1046, "Dữ liệu JSON không hợp lệ", HttpStatus.BAD_REQUEST),
 
-    MESSAGE_SEND_FAILED(1048, "Gửi tin nhắn thất bại", HttpStatus.BAD_REQUEST);
+    MESSAGE_SEND_FAILED(1048, "Gửi tin nhắn thất bại", HttpStatus.BAD_REQUEST),
+    CANNOT_SEND_EMAIL(1049, "Gửi email thất bại", HttpStatus.BAD_REQUEST);
 
     private final int code;
     private final String message;

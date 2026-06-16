@@ -27,8 +27,14 @@ public class UserFollow {
     @Column(name = "follower_id", nullable = false)
     private Long followerId;
 
+    @Column(name = "follower_name", nullable = false)
+    private String followerName;
+
     @Column(name = "following_id", nullable = false)
     private Long followingId;
+
+    @Column(name = "following_name", nullable = false)
+    private String followingName;
 
     private LocalDateTime createdAt;
 }

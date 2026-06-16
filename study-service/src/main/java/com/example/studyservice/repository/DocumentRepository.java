@@ -81,7 +81,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     d.title,
                     d.description,
                     d.thumbnailUrl,
-                    d.author_name,
+                    d.authorName,
                     d.viewsCount,
                     d.downloadsCount,
                     CASE WHEN f IS NOT NULL THEN true ELSE false END
@@ -108,7 +108,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     d.title,
                     d.description,
                     d.thumbnailUrl,
-                    d.author_name,
+                    d.authorName,
                     d.viewsCount,
                     d.downloadsCount,
                     false
@@ -132,7 +132,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     d.title,
                     d.description,
                     d.thumbnailUrl,
-                    d.author_name,
+                    d.authorName,
                     d.viewsCount,
                     d.downloadsCount,
                     CASE WHEN f.id IS NOT NULL THEN true ELSE false END
@@ -157,7 +157,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     d.title,
                     d.description,
                     d.thumbnailUrl,
-                    d.author_name,
+                    d.authorName,
                     d.viewsCount,
                     d.downloadsCount,
                     false
@@ -178,7 +178,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     d.title,
                     d.description,
                     d.thumbnailUrl,
-                    d.author_name,
+                    d.authorName,
                     d.viewsCount,
                     d.downloadsCount,
                     CASE WHEN f.id IS NOT NULL THEN true ELSE false END
@@ -201,7 +201,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     d.title,
                     d.description,
                     d.thumbnailUrl,
-                    d.author_name,
+                    d.authorName,
                     d.viewsCount,
                     d.downloadsCount,
                     false
@@ -221,7 +221,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     d.title,
                     d.description,
                     d.thumbnailUrl,
-                    d.author_name,
+                    d.authorName,
                     d.viewsCount,
                     d.downloadsCount,
                     CASE WHEN f.id IS NOT NULL THEN true ELSE false END
@@ -246,7 +246,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     d.title,
                     d.description,
                     d.thumbnailUrl,
-                    d.author_name,
+                    d.authorName,
                     d.viewsCount,
                     d.downloadsCount,
                     false
@@ -267,7 +267,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     d.title,
                     d.description,
                     d.thumbnailUrl,
-                    d.author_name,
+                    d.authorName,
                     d.viewsCount,
                     d.downloadsCount,
                     CASE WHEN f.id IS NOT NULL THEN true ELSE false END
@@ -289,7 +289,7 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     d.title,
                     d.description,
                     d.thumbnailUrl,
-                    d.author_name,
+                    d.authorName,
                     d.viewsCount,
                     d.downloadsCount,
                     false

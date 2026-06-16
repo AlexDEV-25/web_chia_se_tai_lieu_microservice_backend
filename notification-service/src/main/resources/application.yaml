@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: notification-service
+
+  datasource:
+    url: ${MySQL_URL}
+    username: root
+    password: ${MySQL_PASSWORD}
+
+  main:
+    banner-mode: off
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  Kafka:
+    bootstrap-servers: localhost:9094
+    consumer:
+      group-id: notification-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+server:
+  port: 8085
+
+logging:
+  level:
+    root: warn
+
+app:
+  email:
+    url: ${EMAIL_URL}
+    api-key: ${EMAIL_KEY}
+    sender-email: ${SENDER_EMAIL}
+    sender-name: ${SENDER_NAME}

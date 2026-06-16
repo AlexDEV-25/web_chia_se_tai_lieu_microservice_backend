@@ -1,4 +1,4 @@
-package com.example.studyservice.dto.response;
+package com.example.notificationservice.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

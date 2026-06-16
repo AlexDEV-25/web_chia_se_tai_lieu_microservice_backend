@@ -53,7 +53,7 @@ public class Document {
     private Long userId;
 
     @Column(name = "author_name", nullable = false)
-    private String author_name;
+    private String authorName;
 
     @Column(name = "file_url", nullable = false)
     private String fileUrl;

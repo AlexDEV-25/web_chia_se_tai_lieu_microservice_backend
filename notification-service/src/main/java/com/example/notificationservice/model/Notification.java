@@ -1,20 +1,8 @@
-package com.example.app.model;
+package com.example.notificationservice.model;
 
-import com.example.app.constant.NotificationType;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.example.constant.NotificationType;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "notifications")
@@ -24,19 +12,19 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Notification {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-	@Column(name = "content", nullable = false)
-	private String content;
+    @Column(name = "content", nullable = false)
+    private String content;
 
-	@Column(name = "link")
-	private String link;
+    @Column(name = "link")
+    private String link;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "type", nullable = false)
-	private NotificationType type;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private NotificationType type;
 
 }
