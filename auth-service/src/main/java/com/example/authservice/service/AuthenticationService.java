@@ -4,8 +4,8 @@ import com.example.authservice.constant.AppError;
 import com.example.authservice.dto.request.*;
 import com.example.authservice.dto.response.*;
 import com.example.authservice.exception.AppException;
+import com.example.authservice.helper.CreateBodyEmail;
 import com.example.authservice.helper.JwtHelper;
-import com.example.authservice.helper.SendMail;
 import com.example.authservice.mapper.UserMapper;
 import com.example.authservice.model.Role;
 import com.example.authservice.model.User;
@@ -14,10 +14,12 @@ import com.example.authservice.repository.UserRepository;
 import com.example.authservice.repository.httpclient.OutboundIdentityClient;
 import com.example.authservice.repository.httpclient.OutboundUserClient;
 import com.example.authservice.repository.httpclient.ProfileClient;
+import com.example.event.EmailNotificationEvent;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +38,10 @@ public class AuthenticationService {
     private final OutboundUserClient outboundUserClient;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
-    private final SendMail sendMail;
+    private final CreateBodyEmail createBodyEmail;
     private final JwtHelper jwtHelper;
     private final ProfileClient profileClient;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Value("${outbound.identity.client-id}")
     protected String CLIENT_ID;
@@ -134,7 +137,14 @@ public class AuthenticationService {
             throw AppException.builder().appError(AppError.CREATE_PROFILE_FAILED).build();
         }
 
-        sendMail.sendEmailActivateAccount(saved.getEmail(), activationCode);
+        EmailNotificationEvent emailNotificationEvent = EmailNotificationEvent.builder()
+                .channel("EMAIL")
+                .recipient(request.getEmail())
+                .subject("Kích hoạt tài khoản của bạn")
+                .body(createBodyEmail.bodyActivateAccount(saved.getEmail(), saved.getActivationCode()))
+                .build();
+
+        kafkaTemplate.send("activate-account", emailNotificationEvent);
         return userMapper.userToResponse(saved);
     }
 
@@ -161,7 +171,16 @@ public class AuthenticationService {
             String forgotPassWordCode = this.generateActivationCode();
             user.setForgotPasswordCode(forgotPassWordCode);
             userRepository.save(user);
-            sendMail.sendEmailChangePassword(email, forgotPassWordCode);
+
+            EmailNotificationEvent emailNotificationEvent = EmailNotificationEvent.builder()
+                    .channel("EMAIL")
+                    .recipient(user.getEmail())
+                    .subject("Đổi mật khẩu tài khoản của bạn")
+                    .body(createBodyEmail.bodyActivateAccount(user.getEmail(), user.getForgotPasswordCode()))
+                    .build();
+
+            kafkaTemplate.send("change-password", emailNotificationEvent);
+
         } else {
             throw AppException.builder().appError(AppError.EMAIL_NOT_FOUND).build();
         }

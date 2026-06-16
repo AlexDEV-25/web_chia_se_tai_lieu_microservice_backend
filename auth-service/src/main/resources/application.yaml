@@ -14,6 +14,12 @@ spring:
     hibernate:
       ddl-auto: update
 
+  Kafka:
+    bootstrap-servers: localhost:9094
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
   mail:
     host: smtp.gmail.com
     port: 587
@@ -54,4 +60,3 @@ outbound:
     redirect-uri: ${URL_REDIRECT}
     grant-types: authorization_code
 
-app:

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CreateMail {
+public class CreateBodyEmail {
 
     @Value("${app.domain.frontend}")
     private String frontendDomain;
@@ -36,7 +36,7 @@ public class CreateMail {
 
     }
 
-    public String bodyLockAccount(String email) {
+    public String bodyLockAccount() {
 
         return "<html><body>"
                 + "<h2 style='color:#D0021B'>Thông báo khóa tài khoản</h2>"

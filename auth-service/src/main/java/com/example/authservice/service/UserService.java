@@ -4,6 +4,7 @@ import com.example.authservice.constant.AppError;
 import com.example.authservice.dto.request.*;
 import com.example.authservice.dto.response.UserResponse;
 import com.example.authservice.exception.AppException;
+import com.example.authservice.helper.CreateBodyEmail;
 import com.example.authservice.helper.GetUserByToken;
 import com.example.authservice.mapper.UserMapper;
 import com.example.authservice.model.Role;
@@ -11,7 +12,9 @@ import com.example.authservice.model.User;
 import com.example.authservice.repository.RoleRepository;
 import com.example.authservice.repository.UserRepository;
 import com.example.authservice.repository.httpclient.ProfileClient;
+import com.example.event.EmailNotificationEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final GetUserByToken getUserByToken;
     private final ProfileClient profileClient;
+    private final CreateBodyEmail createBodyEmail;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAllUsers() {
@@ -77,6 +82,15 @@ public class UserService {
             userRepository.delete(saved);
             throw AppException.builder().appError(AppError.CREATE_PROFILE_FAILED).build();
         }
+
+        EmailNotificationEvent emailNotificationEvent = EmailNotificationEvent.builder()
+                .channel("EMAIL")
+                .recipient(saved.getEmail())
+                .subject("Tài khoản của bạn tạm thời bị khóa")
+                .body(createBodyEmail.bodyLockAccount())
+                .build();
+
+        kafkaTemplate.send("lock-account", emailNotificationEvent);
 
         return userMapper.userToResponse(saved);
     }
