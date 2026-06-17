@@ -27,6 +27,7 @@ public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS_GET = {
             "/api/documents", "/api/documents/{id}", "/api/documents/user/{userId}",
             "/api/documents/category/{categoryId}", "/api/documents/user/{userId}", "/api/documents/count/{userId}",
+            "/api/documents/internal/ai", "/api/documents/internal/info/{documentId}",
     };
 
     private final CustomJwtDecoder customJwtDecoder;

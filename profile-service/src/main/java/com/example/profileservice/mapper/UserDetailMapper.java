@@ -3,6 +3,7 @@ package com.example.profileservice.mapper;
 
 import com.example.profileservice.dto.request.UserDetailRequest;
 import com.example.profileservice.dto.response.UserBioResponse;
+import com.example.profileservice.dto.response.UserDetailInfoResponse;
 import com.example.profileservice.dto.response.UserDetailResponse;
 import com.example.profileservice.model.UserDetail;
 import org.mapstruct.Mapper;
@@ -17,10 +18,11 @@ public interface UserDetailMapper {
     @Mapping(target = "status", ignore = true)
     UserDetail requestToUser(UserDetailRequest request);
 
-
     UserDetailResponse userToResponse(UserDetail entity);
 
     UserBioResponse userToUserBioResponse(UserDetail entity);
+
+    UserDetailInfoResponse userToInfoResponse(UserDetail entity);
 
 
 }

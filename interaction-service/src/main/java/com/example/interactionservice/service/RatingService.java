@@ -3,15 +3,13 @@ package com.example.interactionservice.service;
 
 import com.example.interactionservice.constant.AppError;
 import com.example.interactionservice.dto.request.RatingRequest;
-import com.example.interactionservice.dto.response.RatingAdminResponse;
-import com.example.interactionservice.dto.response.RatingDetailAdminResponse;
-import com.example.interactionservice.dto.response.RatingSummaryResponse;
-import com.example.interactionservice.dto.response.RatingUserResponse;
+import com.example.interactionservice.dto.response.*;
 import com.example.interactionservice.exception.AppException;
 import com.example.interactionservice.helper.GetUserIdByToken;
 import com.example.interactionservice.mapper.RatingMapper;
 import com.example.interactionservice.model.Rating;
 import com.example.interactionservice.repository.RatingRepository;
+import com.example.interactionservice.repository.httpclient.StudyClient;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -25,6 +23,7 @@ public class RatingService {
     private final RatingRepository documentRatingRepository;
     private final RatingMapper ratingMapper;
     private final GetUserIdByToken getUserIdByToken;
+    private final StudyClient studyClient;
 
     @PreAuthorize("hasRole('ADMIN')")
     public RatingDetailAdminResponse getByDocument(Long docId) {
@@ -45,8 +44,10 @@ public class RatingService {
     @PreAuthorize("hasAuthority('POST_RATING')")
     public RatingUserResponse saveRating(RatingRequest request) {
         Long userId = getUserIdByToken.get();
+        DocumentInfoResponse doc = studyClient.getAllPublicDocumentsForInteraction(request.getDocumentId()).getResult();
 
-        Rating rating = Rating.builder().rating(request.getRating())
+
+        Rating rating = Rating.builder().rating(request.getRating()).documentId(request.getDocumentId()).documentTitle(doc.getTitle())
                 .createdAt(LocalDateTime.now()).build();
         if (documentRatingRepository.existsByUserIdAndDocumentId(userId, request.getDocumentId())) {
             throw AppException.builder().appError(AppError.ALREADY_RATED).build();
@@ -59,5 +60,5 @@ public class RatingService {
     public RatingSummaryResponse getRatingSummaryDocument(Long docId) {
         return documentRatingRepository.getDocumentRatingSummary(docId);
     }
-	
+
 }

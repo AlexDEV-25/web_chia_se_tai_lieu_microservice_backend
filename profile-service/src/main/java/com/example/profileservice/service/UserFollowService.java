@@ -10,6 +10,7 @@ import com.example.profileservice.dto.response.UserFollowResponse;
 import com.example.profileservice.exception.AppException;
 import com.example.profileservice.helper.GetUserIdByToken;
 import com.example.profileservice.mapper.UserFollowMapper;
+import com.example.profileservice.model.UserDetail;
 import com.example.profileservice.model.UserFollow;
 import com.example.profileservice.repository.UserDetailRepository;
 import com.example.profileservice.repository.UserFollowRepository;
@@ -40,30 +41,33 @@ public class UserFollowService {
     public UserFollowResponse save(Long followingId) {
         Long followerId = getUserIdByToken.get();
 
-        if (!userDetailRepository.existsByUserId(followingId)) {
-            throw AppException.builder().appError(AppError.USER_NOT_FOUND).build();
-        }
-        if (userFollowRepository.existsByFollowerIdAndFollowingId(followerId, followingId)) {
+        if (userFollowRepository.existsByFollower_IdAndFollowing_Id(followerId, followingId)) {
             throw AppException.builder().appError(AppError.ALREADY_FRIEND).build();
         }
         if (followerId.equals(followingId)) {
             throw AppException.builder().appError(AppError.CANNOT_FOLLOW_YOURSELF).build();
         }
 
-        UserFollow userFollow = UserFollow.builder().followerId(followerId).followingId(followingId)
+        UserDetail follower = userDetailRepository.findByUserId(followerId).orElseThrow(
+                () -> AppException.builder().appError(AppError.USER_NOT_FOUND).build());
+
+        UserDetail following = userDetailRepository.findByUserId(followingId).orElseThrow(
+                () -> AppException.builder().appError(AppError.USER_NOT_FOUND).build());
+
+        UserFollow userFollow = UserFollow.builder().follower(follower).following(following)
                 .createdAt(LocalDateTime.now()).build();
 
         UserFollow saved = userFollowRepository.save(userFollow);
 
         SystemNotificationEvent systemNotificationEvent = SystemNotificationEvent.builder()
                 .channel("SYSTEM")
-                .senderId(saved.getFollowerId())
-                .senderName(saved.getFollowerName())
-                .receiverId(saved.getFollowingId())
-                .receiverName(saved.getFollowingName())
-                .content("người dùng " + saved.getFollowerName() + " đã theo dõi bạn")
+                .senderId(saved.getFollower().getId())
+                .senderName(saved.getFollower().getFullName())
+                .receiverId(saved.getFollowing().getId())
+                .receiverName(saved.getFollowing().getFullName())
+                .content("người dùng " + saved.getFollower().getFullName() + " đã theo dõi bạn")
 
-                .link(frontendDomain + "/profile/" + saved.getFollowerId())
+                .link(frontendDomain + "/profile/" + saved.getFollower().getFullName())
                 .type(NotificationType.INFO)
                 .build();
         kafkaTemplate.send("follow-user", systemNotificationEvent);
@@ -75,7 +79,7 @@ public class UserFollowService {
     @Transactional
     public void delete(Long followingId) {
         Long followerId = getUserIdByToken.get();
-        userFollowRepository.deleteByFollowerIdAndFollowingId(followerId, followingId);
+        userFollowRepository.deleteByFollower_IdAndFollowing_Id(followerId, followingId);
 
     }
 
@@ -83,7 +87,7 @@ public class UserFollowService {
     @PreAuthorize("hasAuthority('GET_LIST_FOLLOWING')")
     public List<UserFollowResponse> getFollowingByFollower() {
         Long followerId = getUserIdByToken.get();
-        List<UserFollow> userFollows = userFollowRepository.findByFollowerId(followerId);
+        List<UserFollow> userFollows = userFollowRepository.findByFollower_Id(followerId);
         return userFollows.stream().map(userFollowMapper::userFollowToResponse).toList();
     }
 
@@ -91,29 +95,29 @@ public class UserFollowService {
     @PreAuthorize("hasAuthority('GET_LIST_FOLLOWER')")
     public List<UserFollowResponse> getFollowerByFollowing() {
         Long followerId = getUserIdByToken.get();
-        List<UserFollow> userFollows = userFollowRepository.findByFollowingId(followerId);
+        List<UserFollow> userFollows = userFollowRepository.findByFollowing_Id(followerId);
         return userFollows.stream().map(userFollowMapper::userFollowToResponse).toList();
     }
 
     // lấy danh sách người theo dõi của 1 người
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserFollowNotificationResponse> getFollowerByUserId(Long UserId) {
-        List<UserFollow> userFollows = userFollowRepository.findByFollowingId(UserId);
+        List<UserFollow> userFollows = userFollowRepository.findByFollowing_Id(UserId);
         return userFollows.stream().map(userFollowMapper::userFollowToNotificationResponse).toList();
     }
 
     @PreAuthorize("hasAuthority('GET_MY_FOLLOW_COUNT')")
     public FollowCountResponse getMyFollowCount() {
         Long userId = getUserIdByToken.get();
-        Long follower = userFollowRepository.countByFollowingId(userId);
-        Long following = userFollowRepository.countByFollowerId(userId);
+        Long follower = userFollowRepository.countByFollowing_Id(userId);
+        Long following = userFollowRepository.countByFollower_Id(userId);
         return FollowCountResponse.builder().follower(follower).following(following).build();
     }
 
     @PreAuthorize("hasAuthority('CHECK_FOLLOWED')")
     public boolean checkFollowed(Long followingId) {
         Long userId = getUserIdByToken.get();
-        return userFollowRepository.existsByFollowerIdAndFollowingId(userId, followingId);
+        return userFollowRepository.existsByFollower_IdAndFollowing_Id(userId, followingId);
     }
 
     @PreAuthorize("hasAuthority('CHECK_IS_ME')")
@@ -123,8 +127,8 @@ public class UserFollowService {
     }
 
     public FollowCountResponse getFollowCount(Long userId) {
-        Long follower = userFollowRepository.countByFollowingId(userId);
-        Long following = userFollowRepository.countByFollowerId(userId);
+        Long follower = userFollowRepository.countByFollowing_Id(userId);
+        Long following = userFollowRepository.countByFollower_Id(userId);
         return FollowCountResponse.builder().follower(follower).following(following).build();
     }
 }

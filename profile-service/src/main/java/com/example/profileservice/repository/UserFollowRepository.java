@@ -9,17 +9,17 @@ import java.util.List;
 
 @Repository
 public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
-    boolean existsByFollowerIdAndFollowingId(Long followId, Long followingId);
+    boolean existsByFollower_IdAndFollowing_Id(Long followId, Long followingId);
 
-    List<UserFollow> findByFollowerId(Long followerId);
+    List<UserFollow> findByFollower_Id(Long followerId);
 
-    List<UserFollow> findByFollowingId(Long followingId);
+    List<UserFollow> findByFollowing_Id(Long followingId);
 
     // Đếm số người FOLLOW mình (follower)
-    long countByFollowingId(Long userId);
+    long countByFollowing_Id(Long userId);
 
     // Đếm số người mình FOLLOW (following)
-    long countByFollowerId(Long userId);
+    long countByFollower_Id(Long userId);
 
-    void deleteByFollowerIdAndFollowingId(Long followerId, Long followingId);
+    void deleteByFollower_IdAndFollowing_Id(Long followerId, Long followingId);
 }

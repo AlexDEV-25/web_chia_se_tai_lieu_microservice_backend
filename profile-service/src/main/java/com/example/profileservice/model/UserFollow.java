@@ -24,17 +24,13 @@ public class UserFollow {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "follower_id", nullable = false)
-    private Long followerId;
+    @ManyToOne
+    @JoinColumn(name = "follower_id", nullable = false)
+    private UserDetail follower;
 
-    @Column(name = "follower_name", nullable = false)
-    private String followerName;
-
-    @Column(name = "following_id", nullable = false)
-    private Long followingId;
-
-    @Column(name = "following_name", nullable = false)
-    private String followingName;
+    @ManyToOne
+    @JoinColumn(name = "following_id", nullable = false)
+    private UserDetail following;
 
     private LocalDateTime createdAt;
 }

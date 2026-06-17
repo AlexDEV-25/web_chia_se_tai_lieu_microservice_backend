@@ -6,6 +6,7 @@ import com.example.profileservice.constant.ConnectionStatus;
 import com.example.profileservice.dto.request.UserDetailRequest;
 import com.example.profileservice.dto.response.DisplayRequest;
 import com.example.profileservice.dto.response.UserBioResponse;
+import com.example.profileservice.dto.response.UserDetailInfoResponse;
 import com.example.profileservice.dto.response.UserDetailResponse;
 import com.example.profileservice.exception.AppException;
 import com.example.profileservice.helper.GetUserIdByToken;
@@ -78,7 +79,7 @@ public class UserDetailService {
                 throw AppException.builder().appError(AppError.UPDATE_PROFILE_FAILED).build();
             }
         }
-        
+
         find.setUpdatedAt(LocalDateTime.now());
         find.setFullName(dto.getFullName());
         find.setBio(dto.getBio());
@@ -108,4 +109,9 @@ public class UserDetailService {
         userDetailRepository.save(find);
     }
 
+    public UserDetailInfoResponse getUserDetailInfo(Long userId) {
+        UserDetail find = userDetailRepository.findByUserIdAndHideFalse(userId)
+                .orElseThrow(() -> AppException.builder().appError(AppError.USER_NOT_FOUND).build());
+        return userMapper.userToInfoResponse(find);
+    }
 }

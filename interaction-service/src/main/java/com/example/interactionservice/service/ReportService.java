@@ -3,6 +3,7 @@ package com.example.interactionservice.service;
 
 import com.example.interactionservice.constant.AppError;
 import com.example.interactionservice.dto.request.ReportRequest;
+import com.example.interactionservice.dto.response.DocumentInfoResponse;
 import com.example.interactionservice.dto.response.ReportAdminResponse;
 import com.example.interactionservice.dto.response.ReportDetailAdminResponse;
 import com.example.interactionservice.dto.response.ReportUserResponse;
@@ -11,6 +12,7 @@ import com.example.interactionservice.helper.GetUserIdByToken;
 import com.example.interactionservice.mapper.ReportMapper;
 import com.example.interactionservice.model.Report;
 import com.example.interactionservice.repository.ReportRepository;
+import com.example.interactionservice.repository.httpclient.StudyClient;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class ReportService {
     private final ReportRepository documentReportRepository;
     private final ReportMapper reportMapper;
     private final GetUserIdByToken getUserIdByToken;
+    private final StudyClient studyClient;
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<ReportDetailAdminResponse> findByDocumentId(Long documentId) {
@@ -39,8 +42,9 @@ public class ReportService {
     @PreAuthorize("hasAuthority('REPORT')")
     public ReportUserResponse report(ReportRequest request) {
         Long userId = getUserIdByToken.get();
+        DocumentInfoResponse doc = studyClient.getAllPublicDocumentsForInteraction(request.getDocumentId()).getResult();
 
-        Report report = Report.builder().reason(request.getReason())
+        Report report = Report.builder().reason(request.getReason()).documentId(request.getDocumentId()).documentTitle(doc.getTitle())
                 .createdAt(LocalDateTime.now()).build();
 
         if (documentReportRepository.existsByUserIdAndDocumentId(userId, request.getDocumentId())) {

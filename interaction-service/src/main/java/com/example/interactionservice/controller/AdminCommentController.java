@@ -2,7 +2,9 @@ package com.example.interactionservice.controller;
 
 import com.example.interactionservice.dto.request.DisplayRequest;
 import com.example.interactionservice.dto.response.APIResponse;
-import com.example.interactionservice.dto.response.CommentResponse;
+import com.example.interactionservice.dto.response.CommentAdminResponse;
+import com.example.interactionservice.dto.response.CommentDetailAdminResponse;
+import com.example.interactionservice.dto.response.CommentTotalAdminResponse;
 import com.example.interactionservice.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -12,26 +14,32 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/comments/admin")
 @AllArgsConstructor
 public class AdminCommentController {
-    //    private final ChatService chatService;
     private final CommentService commentService;
 
-//    @GetMapping("/filter-comment")
-//    APIResponse<CommentResponse> filterCommnent(@RequestParam String type) {
-//        APIResponse<CommentResponse> apiResponse = new APIResponse<CommentResponse>();
-//        apiResponse.setResultList(chatService.filterCommnent(type));
-//        return apiResponse;
-//    }
+    @GetMapping
+    public APIResponse<CommentTotalAdminResponse> getTotalCommentOfDocument() {
+        APIResponse<CommentTotalAdminResponse> apiResponse = new APIResponse<>();
+        apiResponse.setResultList(commentService.getTotalCommentOfDocument());
+        return apiResponse;
+    }
 
-    @GetMapping("/document")
-    public APIResponse<CommentResponse> getAllDocumentComments() {
-        APIResponse<CommentResponse> apiResponse = new APIResponse<CommentResponse>();
-        apiResponse.setResultList(commentService.getAllDocumentComments());
+    @GetMapping("/7-days")
+    public APIResponse<CommentAdminResponse> findDocumentCommentsLast7Days() {
+        APIResponse<CommentAdminResponse> apiResponse = new APIResponse<>();
+        apiResponse.setResultList(commentService.findDocumentCommentsLast7Days());
+        return apiResponse;
+    }
+
+    @GetMapping("/detail/{documentId}")
+    public APIResponse<CommentDetailAdminResponse> getDetailDocumentComments(@PathVariable Long documentId) {
+        APIResponse<CommentDetailAdminResponse> apiResponse = new APIResponse<>();
+        apiResponse.setResultList(commentService.getDetailDocumentComments(documentId));
         return apiResponse;
     }
 
     @PutMapping("/hide/{id}")
-    public APIResponse<CommentResponse> hide(@PathVariable Long id, @RequestBody @Valid DisplayRequest dto) {
-        APIResponse<CommentResponse> apiResponse = new APIResponse<CommentResponse>();
+    public APIResponse<CommentDetailAdminResponse> hide(@PathVariable Long id, @RequestBody @Valid DisplayRequest dto) {
+        APIResponse<CommentDetailAdminResponse> apiResponse = new APIResponse<>();
         apiResponse.setResult(commentService.hide(id, dto));
         return apiResponse;
     }

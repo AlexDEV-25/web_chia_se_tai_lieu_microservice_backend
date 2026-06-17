@@ -60,10 +60,10 @@ public class Comment {
     @Column(name = "document_title", nullable = false)
     private String documentTitle;
 
-    @Column(name = "user_name", nullable = false)
-    private String userName;
+    @Column(name = "full_name", nullable = false)
+    private String fullName;
 
-    @Column(name = "user_avatar", nullable = false)
-    private String userAvatar;
+    @Column(name = "avatar_url", nullable = false)
+    private String avatarUrl;
 
 }

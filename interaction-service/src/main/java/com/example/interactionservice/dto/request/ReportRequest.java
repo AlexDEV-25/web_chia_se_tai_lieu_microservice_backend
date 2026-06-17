@@ -18,7 +18,5 @@ public class ReportRequest {
 
     @NotBlank(message = "lý do không được để trống")
     private String reason;
-
-    @NotBlank(message = "contentTitle không được để trống")
-    private String contentTitle;
+    
 }

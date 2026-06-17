@@ -11,16 +11,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class CommentResponse {
+public class CommentDetailAdminResponse {
     private Long id;
     private String content;
     private LocalDateTime createdAt;
-    private Long parentId;
     private LocalDateTime updatedAt;
     private Long userId;
-    private String username;
-    private String userAvatar;
+    private String fullName;
     private Long documentId;
-    private Long level;
     private boolean hide;
 }

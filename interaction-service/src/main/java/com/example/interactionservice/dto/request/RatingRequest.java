@@ -2,7 +2,6 @@ package com.example.interactionservice.dto.request;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +21,5 @@ public class RatingRequest {
 
     @NotNull(message = "documentId không được để trống")
     private Long documentId;
-
-    @NotBlank(message = "contentTitle không được để trống")
-    private String contentTitle;
+    
 }

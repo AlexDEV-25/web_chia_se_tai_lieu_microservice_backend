@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class CommentTreeResponse extends CommentResponse {
+public class CommentTreeUserResponse extends CommentUserResponse {
     @Default
-    private List<CommentTreeResponse> children = new ArrayList<CommentTreeResponse>();
+    private List<CommentTreeUserResponse> children = new ArrayList<CommentTreeUserResponse>();
 }

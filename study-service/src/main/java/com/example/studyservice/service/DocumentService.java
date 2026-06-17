@@ -15,6 +15,7 @@ import com.example.studyservice.model.Document;
 import com.example.studyservice.repository.CategoryRepository;
 import com.example.studyservice.repository.DocumentRepository;
 import com.example.studyservice.repository.httpclient.FileClient;
+import com.example.studyservice.repository.httpclient.ProfileClient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +39,7 @@ public class DocumentService {
     private final GetUserIdByToken getUserIdByToken;
     private final FileClient fileClient;
     private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final ProfileClient profileClient;
 
     @Value("${app.domain.frontend}")
     private String frontendDomain;
@@ -156,9 +158,13 @@ public class DocumentService {
     @PreAuthorize("hasAuthority('UPLOAD_FILE')")
     @Transactional
     public DocumentDetailResponse uploadFile(MultipartFile fileToSave, DocumentRequest dto) {
+        Long userId = getUserIdByToken.get();
         Document document = documentMapper.requestToDocument(dto);
         document.setCreatedAt(LocalDateTime.now());
-
+        document.setUpdatedAt(LocalDateTime.now());
+        document.setViewsCount(0L);
+        document.setDownloadsCount(0L);
+        document.setAuthorName(profileClient.getUserDetail(userId).getResult().getFullName());
         try {
             Map<String, Object> handleDoc = fileClient.uploadPdf(fileToSave);
 
@@ -206,6 +212,17 @@ public class DocumentService {
         }
         return documentRepository.getAllWhenLogin(userId, ContentStatus.PUBLISHED);
 
+    }
+
+    public List<DocumentSearchAIResponse> getAllPublicDocumentsForAI() {
+        return documentRepository.findByStatusAndHideFalse(ContentStatus.PUBLISHED)
+                .stream().map(documentMapper::documentToDocumentSearchAIResponse).toList();
+    }
+
+    public DocumentInfoResponse getAllPublicDocumentsForInteraction(Long documentId) {
+        Document find = documentRepository.findByIdAndStatusAndHideFalse(documentId, ContentStatus.PUBLISHED)
+                .orElseThrow(() -> AppException.builder().appError(AppError.DOCUMENT_NOT_FOUND).build());
+        return documentMapper.documentToDocumentInfoResponse(find);
     }
 
     public List<DocumentResponse> getDocumentsByUser(Long authorId, Long currentDocumentId) {

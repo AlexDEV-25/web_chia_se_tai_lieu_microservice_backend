@@ -6,13 +6,13 @@ import com.example.event.SystemNotificationEvent;
 import com.example.interactionservice.constant.AppError;
 import com.example.interactionservice.dto.request.CommentRequest;
 import com.example.interactionservice.dto.request.DisplayRequest;
-import com.example.interactionservice.dto.response.CommentResponse;
-import com.example.interactionservice.dto.response.CommentTreeResponse;
+import com.example.interactionservice.dto.response.*;
 import com.example.interactionservice.exception.AppException;
 import com.example.interactionservice.helper.GetUserIdByToken;
 import com.example.interactionservice.mapper.CommentMapper;
 import com.example.interactionservice.model.Comment;
 import com.example.interactionservice.repository.CommentRepository;
+import com.example.interactionservice.repository.httpclient.StudyClient;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -33,19 +33,20 @@ public class CommentService {
     private final CommentMapper mapper;
     private final GetUserIdByToken getUserIdByToken;
     private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final StudyClient studyClient;
 
     @Value("${app.domain.frontend}")
     private String frontendDomain;
 
     @PreAuthorize("hasAuthority('POST_COMMENT')")
-    public CommentResponse saveMyComment(CommentRequest req) {
-
+    public CommentUserResponse saveMyComment(CommentRequest req) {
+        DocumentInfoResponse doc = studyClient.getAllPublicDocumentsForInteraction(req.getDocumentId()).getResult();
         Long userId = getUserIdByToken.get();
 
         Comment parent = getParentDocument(req.getParentId());
 
         Comment comment = Comment.builder().content(req.getContent()).userId(userId)
-                .parent(parent).level(calcLevel(parent)).createdAt(LocalDateTime.now()).hide(false).build();
+                .parent(parent).level(calcLevel(parent)).createdAt(LocalDateTime.now()).documentTitle(doc.getTitle()).hide(false).build();
 
         Comment saved = documentRepo.save(comment);
 
@@ -53,10 +54,10 @@ public class CommentService {
             SystemNotificationEvent systemNotificationEvent = SystemNotificationEvent.builder()
                     .channel("SYSTEM")
                     .senderId(saved.getParent().getUserId())
-                    .senderName(saved.getParent().getUserName())
+                    .senderName(saved.getParent().getFullName())
                     .receiverId(saved.getUserId())
-                    .receiverName(saved.getUserName())
-                    .content("người dùng " + saved.getUserName() + " đã trả lời bình luận của bạn")
+                    .receiverName(saved.getFullName())
+                    .content("người dùng " + saved.getFullName() + " đã trả lời bình luận của bạn")
                     .link(frontendDomain + "/document/" + saved.getDocumentId())
                     .type(NotificationType.INFO)
                     .build();
@@ -68,7 +69,7 @@ public class CommentService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_MY_COMMENT')")
-    public CommentResponse updateMyComment(Long id, CommentRequest req) {
+    public CommentUserResponse updateMyComment(Long id, CommentRequest req) {
         Long userId = getUserIdByToken.get();
         Comment c = documentRepo.findByIdAndUserIdAndHideFalse(id, userId)
                 .orElseThrow(() -> new AppException(AppError.CANNOT_UPDATE_COMMENT));
@@ -78,45 +79,55 @@ public class CommentService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public CommentResponse hide(Long id, DisplayRequest req) {
+    public CommentDetailAdminResponse hide(Long id, DisplayRequest req) {
         Comment c = documentRepo.findById(id).orElseThrow(() -> new RuntimeException("Không thấy comment"));
         c.setHide(req.isHide());
         c.setUpdatedAt(LocalDateTime.now());
-        return mapper.documentCommentToCommentResponse(c);
+        return mapper.documentCommentToCommentDetailAdminResponse(c);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public List<CommentResponse> getAllDocumentComments() {
-        return documentRepo.findAll().stream().map(mapper::documentCommentToCommentResponse).toList();
+    public List<CommentTotalAdminResponse> getTotalCommentOfDocument() {
+        return documentRepo.getTotalCommentOfDocument();
     }
 
-    public List<CommentTreeResponse> getDocumentTree(Long docId) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<CommentAdminResponse> findDocumentCommentsLast7Days() {
+        return documentRepo.findDocumentCommentsLast7Days(LocalDateTime.now());
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<CommentDetailAdminResponse> getDetailDocumentComments(Long documentId) {
+        return documentRepo.findByDocumentId(documentId).stream().map(mapper::documentCommentToCommentDetailAdminResponse).toList();
+    }
+
+    public List<CommentTreeUserResponse> getDocumentTree(Long docId) {
         List<Comment> list = documentRepo.findByDocumentIdAndHideFalseOrderByLevelAscCreatedAtAsc(docId);
         return buildTreeDocument(list);
     }
 
-    private List<CommentTreeResponse> buildTreeDocument(List<Comment> list) {
+    private List<CommentTreeUserResponse> buildTreeDocument(List<Comment> list) {
 
-        Map<Long, CommentTreeResponse> map = new HashMap<>();
+        Map<Long, CommentTreeUserResponse> map = new HashMap<>();
 
         for (Comment c : list) {
-            CommentTreeResponse dto = mapper.documentCommentToCommentTreeResponse(c);
+            CommentTreeUserResponse dto = mapper.documentCommentToCommentTreeResponse(c);
             map.put(dto.getId(), dto);
         }
 
         return buildTree(map);
     }
 
-    private List<CommentTreeResponse> buildTree(Map<Long, CommentTreeResponse> map) {
+    private List<CommentTreeUserResponse> buildTree(Map<Long, CommentTreeUserResponse> map) {
 
-        List<CommentTreeResponse> roots = new ArrayList<>();
+        List<CommentTreeUserResponse> roots = new ArrayList<>();
 
-        for (CommentTreeResponse dto : map.values()) {
+        for (CommentTreeUserResponse dto : map.values()) {
 
             if (dto.getParentId() == null) {
                 roots.add(dto);
             } else {
-                CommentTreeResponse parent = map.get(dto.getParentId());
+                CommentTreeUserResponse parent = map.get(dto.getParentId());
                 if (parent != null) {
                     parent.getChildren().add(dto);
                 }
