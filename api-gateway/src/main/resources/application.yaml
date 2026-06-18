@@ -17,37 +17,37 @@ spring:
     gateway:
       routes:
         - id: auth_service
-          uri: http://localhost:8080
+          uri: ${AUTH_SERVICE_URL}
           predicates:
             - Path=${app.api-prefix}/api/external/auth/**,${app.api-prefix}/api/external/users/**
           filters:
             - StripPrefix=1
         - id: profile_service
-          uri: http://localhost:8081
+          uri: ${PROFILE_SERVICE_URL}
           predicates:
             - Path=${app.api-prefix}/api/external/users-detail/**,${app.api-prefix}/api/external/follows/**
           filters:
             - StripPrefix=1
         - id: study_service
-          uri: http://localhost:8082
+          uri: ${STUDY_SERVICE_URL}
           predicates:
             - Path=${app.api-prefix}/api/external/categories/**,${app.api-prefix}/api/external/documents/**,${app.api-prefix}/api/external/favorites/**
           filters:
             - StripPrefix=1
         - id: interaction_service
-          uri: http://localhost:8084
+          uri: ${INTERACTION_SERVICE_URL}
           predicates:
             - Path=${app.api-prefix}/api/external/comments/**,${app.api-prefix}/api/external/external/ratings/**,${app.api-prefix}/api/external/reports/**
           filters:
             - StripPrefix=1
         - id: notification_service
-          uri: http://localhost:8085
+          uri: ${NOTIFICATION_SERVICE_URL}
           predicates:
             - Path=${app.api-prefix}/api/external/user-notifications/**
           filters:
             - StripPrefix=1
         - id: chat_service
-          uri: http://localhost:8086
+          uri: ${CHAT_SERVICE_URL}
           predicates:
             - Path=${app.api-prefix}/api/external/chats/**,${app.api-prefix}/api/external/chat-messages/**,${app.api-prefix}/api/external/conversations/**,${app.api-prefix}/api/external/participant-infos/**,/ws
           filters:
