@@ -11,9 +11,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api/external/categories")
 @AllArgsConstructor
-public class CategoryController {
+public class ExternalCategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
@@ -22,7 +22,7 @@ public class CategoryController {
         apiResponse.setResultList(categoryService.getAllPublicCategories());
         return apiResponse;
     }
-    
+
     @GetMapping("/admin/{id}")
     public APIResponse<CategoryResponse> getById(@PathVariable Long id) {
         APIResponse<CategoryResponse> apiResponse = new APIResponse<CategoryResponse>();

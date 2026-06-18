@@ -166,13 +166,13 @@ public class DocumentService {
         document.setDownloadsCount(0L);
         document.setAuthorName(profileClient.getUserDetail(userId).getResult().getFullName());
         try {
-            Map<String, Object> handleDoc = fileClient.uploadPdf(fileToSave);
+            Map<String, Object> handleDoc = fileClient.uploadPdf(fileToSave).getResult();
 
             String url = (String) handleDoc.get("secure_url");
             String publicId = (String) handleDoc.get("public_id");
             document.setFileUrl(url);
 
-            String thumbnailUrl = fileClient.getThumbnail(publicId);
+            String thumbnailUrl = fileClient.getThumbnail(publicId).getResult();
             document.setThumbnailUrl(thumbnailUrl);
         } catch (Exception e) {
             throw AppException.builder().appError(AppError.UPLOAD_DOCUMENT_FAILED).build();
@@ -192,7 +192,7 @@ public class DocumentService {
         Document doc = documentRepository.findByIdAndStatusAndHideFalse(id, ContentStatus.PUBLISHED)
                 .orElseThrow(() -> AppException.builder().appError(AppError.DOCUMENT_NOT_FOUND).build());
 
-        return fileClient.downloadFile(doc.getFileUrl());
+        return fileClient.downloadFile(doc.getFileUrl()).getResult();
 
     }
 

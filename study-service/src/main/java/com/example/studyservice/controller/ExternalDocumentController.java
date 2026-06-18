@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/documents")
+@RequestMapping("/api/external/documents")
 @AllArgsConstructor
-public class DocumentController {
+public class ExternalDocumentController {
     private final DocumentService documentService;
 
     @GetMapping("/stats")

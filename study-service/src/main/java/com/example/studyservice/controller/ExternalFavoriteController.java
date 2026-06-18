@@ -10,10 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/favorites")
+@RequestMapping("/api/external/favorites")
 @AllArgsConstructor
 @Slf4j
-public class FavoriteController {
+public class ExternalFavoriteController {
     private final FavoriteService favoriteService;
 
     @PostMapping

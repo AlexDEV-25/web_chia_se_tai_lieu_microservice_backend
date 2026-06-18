@@ -28,7 +28,11 @@ logging:
     root: warn
 
 app:
-  services:
-    file: http://localhost:8083
   domain:
     frontend: ${FRONTEND_DOMAIN}
+
+  services:
+    file:
+      url: ${FILE_SERVICE_URL}
+    profile:
+      url: ${PROFILE_SERVICE_URL}
