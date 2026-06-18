@@ -34,8 +34,6 @@ app:
   services:
     profile:
       url: ${PROFILE_SERVICE_URL}
-    file:
-      url: ${FILE_SERVICE_URL}
 
 jwt:
   secretKey: dAt62ISlQNyyt4dDObsfXv93IJ4mOHIGyqf/ECLbPQD/gERJ8wBaPISQyZTTE2PMQtEdsxtcyOFPFKsUJrQZoQ==
