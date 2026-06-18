@@ -11,9 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/files")
+@RequestMapping("/api/internal/files")
 @AllArgsConstructor
-public class FileController {
+public class InternalFileController {
     private final FileService fileService;
 
     @GetMapping("/{publicId}/thumbnail")
