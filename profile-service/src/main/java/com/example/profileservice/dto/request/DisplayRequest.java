@@ -1,4 +1,4 @@
-package com.example.profileservice.dto.response;
+package com.example.profileservice.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

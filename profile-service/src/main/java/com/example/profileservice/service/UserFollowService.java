@@ -100,7 +100,6 @@ public class UserFollowService {
     }
 
     // lấy danh sách người theo dõi của 1 người
-    @PreAuthorize("hasRole('ADMIN')")
     public List<UserFollowNotificationResponse> getFollowerByUserId(Long UserId) {
         List<UserFollow> userFollows = userFollowRepository.findByFollowing_Id(UserId);
         return userFollows.stream().map(userFollowMapper::userFollowToNotificationResponse).toList();

@@ -3,8 +3,8 @@ package com.example.profileservice.service;
 
 import com.example.profileservice.constant.AppError;
 import com.example.profileservice.constant.ConnectionStatus;
+import com.example.profileservice.dto.request.DisplayRequest;
 import com.example.profileservice.dto.request.UserDetailRequest;
-import com.example.profileservice.dto.response.DisplayRequest;
 import com.example.profileservice.dto.response.UserBioResponse;
 import com.example.profileservice.dto.response.UserDetailInfoResponse;
 import com.example.profileservice.dto.response.UserDetailResponse;
@@ -56,7 +56,6 @@ public class UserDetailService {
         return userMapper.userToResponse(saved);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public UserDetailResponse hideUserDetail(Long userId, DisplayRequest dto) {
         UserDetail find = userDetailRepository.findByUserId(userId).orElseThrow(
                 () -> AppException.builder().appError(AppError.USER_NOT_FOUND).build());
@@ -86,7 +85,7 @@ public class UserDetailService {
 
         if (avt != null) {
             try {
-                Map<String, Object> handleAvt = fileClient.uploadImage(avt);
+                Map<String, Object> handleAvt = fileClient.uploadImage(avt).getResult();
                 String avatarUrl = (String) handleAvt.get("secure_url");
                 find.setAvatarUrl(avatarUrl);
             } catch (Exception e) {
@@ -104,7 +103,8 @@ public class UserDetailService {
     }
 
     public void changeConnectStatus(Long userId, ConnectionStatus status) {
-        UserDetail find = userDetailRepository.findByUserIdAndHideFalse(userId).orElseThrow(() -> AppException.builder().appError(AppError.USER_NOT_FOUND).build());
+        UserDetail find = userDetailRepository.findByUserIdAndHideFalse(userId)
+                .orElseThrow(() -> AppException.builder().appError(AppError.USER_NOT_FOUND).build());
         find.setStatus(status);
         userDetailRepository.save(find);
     }
