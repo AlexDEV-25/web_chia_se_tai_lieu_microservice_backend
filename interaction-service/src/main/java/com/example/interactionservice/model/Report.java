@@ -32,8 +32,8 @@ public class Report {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "user_name", nullable = false)
-    private String userName;
+    @Column(name = "full_name", nullable = false)
+    private String fullName;
 
     @Column(name = "document_id", nullable = false)
     private Long documentId;

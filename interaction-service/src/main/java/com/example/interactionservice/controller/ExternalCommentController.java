@@ -10,9 +10,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/comments")
+@RequestMapping("/api/external/comments")
 @AllArgsConstructor
-public class CommentController {
+public class ExternalCommentController {
     private final CommentService commentService;
 
     @GetMapping("/document/{docId}")

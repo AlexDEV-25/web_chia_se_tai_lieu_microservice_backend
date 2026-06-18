@@ -15,8 +15,6 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     boolean existsByUserIdAndDocumentId(Long userId, Long documentId);
 
-    void deleteByDocumentId(Long documentId);
-
     @Query("""
                 SELECT new com.example.interactionservice.dto.response.ReportAdminResponse(
                     r.documentId,

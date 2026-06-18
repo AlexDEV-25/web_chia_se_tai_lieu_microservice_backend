@@ -30,3 +30,9 @@ logging:
 app:
   domain:
     frontend: ${FRONTEND_DOMAIN}
+
+  services:
+    study:
+      url: ${STUDY_SERVICE_URL}
+    profile:
+      url: ${PROFILE_SERVICE_URL}

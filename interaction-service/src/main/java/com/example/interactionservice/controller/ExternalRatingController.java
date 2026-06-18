@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/external/ratings")
 @AllArgsConstructor
-public class RatingController {
+public class ExternalRatingController {
     private final RatingService ratingService;
 
     @GetMapping("/document-summary/{documentId}")

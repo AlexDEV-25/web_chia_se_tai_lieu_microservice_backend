@@ -13,6 +13,6 @@ public class ReportDetailAdminResponse {
     private Long id;
     private Long documentId;
     private String documentTitle;
-    private String username;
+    private String fullName;
     private String reason;
 }

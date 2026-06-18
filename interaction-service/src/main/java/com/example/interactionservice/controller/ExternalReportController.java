@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/external/reports")
 @AllArgsConstructor
-public class ReportController {
+public class ExternalReportController {
     private final ReportService reportService;
 
     @PostMapping
@@ -29,7 +29,6 @@ public class ReportController {
         apiResponse.setResultList(reportService.findByDocumentId(documentId));
         return apiResponse;
     }
-
 
     @GetMapping("/admin/document")
     public APIResponse<ReportAdminResponse> getAllDocumentReportSummary() {

@@ -12,6 +12,7 @@ import com.example.interactionservice.helper.GetUserIdByToken;
 import com.example.interactionservice.mapper.CommentMapper;
 import com.example.interactionservice.model.Comment;
 import com.example.interactionservice.repository.CommentRepository;
+import com.example.interactionservice.repository.httpclient.ProfileClient;
 import com.example.interactionservice.repository.httpclient.StudyClient;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,19 +35,31 @@ public class CommentService {
     private final GetUserIdByToken getUserIdByToken;
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final StudyClient studyClient;
+    private final ProfileClient profileClient;
 
     @Value("${app.domain.frontend}")
     private String frontendDomain;
 
     @PreAuthorize("hasAuthority('POST_COMMENT')")
     public CommentUserResponse saveMyComment(CommentRequest req) {
-        DocumentInfoResponse doc = studyClient.getAllPublicDocumentsForInteraction(req.getDocumentId()).getResult();
         Long userId = getUserIdByToken.get();
+
+        DocumentInfoResponse doc = studyClient.getAllPublicDocumentsForInteraction(req.getDocumentId()).getResult();
+        UserDetailInfoResponse user = profileClient.getUserDetail(userId).getResult();
 
         Comment parent = getParentDocument(req.getParentId());
 
-        Comment comment = Comment.builder().content(req.getContent()).userId(userId)
-                .parent(parent).level(calcLevel(parent)).createdAt(LocalDateTime.now()).documentTitle(doc.getTitle()).hide(false).build();
+        Comment comment = Comment
+                .builder()
+                .content(req.getContent())
+                .userId(userId)
+                .fullName(user.getFullName())
+                .parent(parent)
+                .level(calcLevel(parent))
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .documentTitle(doc.getTitle())
+                .hide(false).build();
 
         Comment saved = documentRepo.save(comment);
 
@@ -91,9 +104,8 @@ public class CommentService {
         return documentRepo.getTotalCommentOfDocument();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public List<CommentAdminResponse> findDocumentCommentsLast7Days() {
-        return documentRepo.findDocumentCommentsLast7Days(LocalDateTime.now());
+        return documentRepo.findDocumentCommentsLast7Days(LocalDateTime.now().minusDays(7));
     }
 
     @PreAuthorize("hasRole('ADMIN')")

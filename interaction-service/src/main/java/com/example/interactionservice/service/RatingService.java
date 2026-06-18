@@ -46,9 +46,15 @@ public class RatingService {
         Long userId = getUserIdByToken.get();
         DocumentInfoResponse doc = studyClient.getAllPublicDocumentsForInteraction(request.getDocumentId()).getResult();
 
-
-        Rating rating = Rating.builder().rating(request.getRating()).documentId(request.getDocumentId()).documentTitle(doc.getTitle())
-                .createdAt(LocalDateTime.now()).build();
+        Rating rating = Rating
+                .builder()
+                .rating(request.getRating())
+                .userId(userId)
+                .documentId(request.getDocumentId())
+                .documentTitle(doc.getTitle())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now()).build();
+        
         if (documentRatingRepository.existsByUserIdAndDocumentId(userId, request.getDocumentId())) {
             throw AppException.builder().appError(AppError.ALREADY_RATED).build();
         }

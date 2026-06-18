@@ -14,11 +14,8 @@ import java.util.List;
 
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Long> {
-    List<Rating> findByDocumentId(Long documentId);
 
     boolean existsByUserIdAndDocumentId(Long userId, Long documentId);
-
-    void deleteByDocumentId(Long documentId);
 
     @Query("""
                 SELECT new com.example.interactionservice.dto.response.RatingSummaryResponse(
