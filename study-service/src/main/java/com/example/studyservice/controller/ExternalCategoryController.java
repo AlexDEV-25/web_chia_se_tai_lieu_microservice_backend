@@ -11,47 +11,54 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/categories/admin")
+@RequestMapping("/api/categories")
 @AllArgsConstructor
-public class AdminCategoryController {
+public class CategoryController {
     private final CategoryService categoryService;
 
-    @GetMapping("/{id}")
+    @GetMapping
+    public APIResponse<CategoryResponse> getAllPublicCategories() {
+        APIResponse<CategoryResponse> apiResponse = new APIResponse<CategoryResponse>();
+        apiResponse.setResultList(categoryService.getAllPublicCategories());
+        return apiResponse;
+    }
+    
+    @GetMapping("/admin/{id}")
     public APIResponse<CategoryResponse> getById(@PathVariable Long id) {
         APIResponse<CategoryResponse> apiResponse = new APIResponse<CategoryResponse>();
         apiResponse.setResult(categoryService.findById(id));
         return apiResponse;
     }
 
-    @GetMapping
+    @GetMapping("/admin")
     public APIResponse<CategoryResponse> getAllCategory() {
         APIResponse<CategoryResponse> apiResponse = new APIResponse<CategoryResponse>();
         apiResponse.setResultList(categoryService.getAllCategories());
         return apiResponse;
     }
 
-    @PostMapping
+    @PostMapping("/admin")
     public APIResponse<CategoryResponse> create(@RequestBody @Valid CategoryRequest dto) {
         APIResponse<CategoryResponse> apiResponse = new APIResponse<CategoryResponse>();
         apiResponse.setResult(categoryService.save(dto));
         return apiResponse;
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/{id}")
     public APIResponse<CategoryResponse> update(@PathVariable Long id, @RequestBody @Valid CategoryRequest dto) {
         APIResponse<CategoryResponse> apiResponse = new APIResponse<CategoryResponse>();
         apiResponse.setResult(categoryService.update(id, dto));
         return apiResponse;
     }
 
-    @PutMapping("/hide/{id}")
+    @PutMapping("/admin/hide/{id}")
     public APIResponse<CategoryResponse> hide(@PathVariable Long id, @RequestBody @Valid DisplayRequest dto) {
         APIResponse<CategoryResponse> apiResponse = new APIResponse<CategoryResponse>();
         apiResponse.setResult(categoryService.display(id, dto));
         return apiResponse;
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public APIResponse<Void> delete(@PathVariable Long id) {
         categoryService.delete(id);
         return APIResponse.<Void>builder().build();

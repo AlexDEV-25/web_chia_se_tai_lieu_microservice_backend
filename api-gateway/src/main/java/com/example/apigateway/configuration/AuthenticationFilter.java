@@ -47,8 +47,13 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
     @NonFinal
     private String[] publicGetEndpoints = {
+//			"/api/categories"
+            "/api/categories",
+
             "/api/external/users-detail/bio-info/{userId}",
-            "/api/follows/follow-count/{userId}",
+
+
+            "/api/external/follows/follow-count/{userId}",
 
 //			"/api/documents"
             "/api/documents", "/api/documents/{id}", "/api/documents/user/{userId}",

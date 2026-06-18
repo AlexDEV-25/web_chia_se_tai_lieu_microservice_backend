@@ -1,16 +1,14 @@
 package com.example.interactionservice.controller;
 
 import com.example.interactionservice.dto.request.RatingRequest;
-import com.example.interactionservice.dto.response.APIResponse;
-import com.example.interactionservice.dto.response.RatingSummaryResponse;
-import com.example.interactionservice.dto.response.RatingUserResponse;
+import com.example.interactionservice.dto.response.*;
 import com.example.interactionservice.service.RatingService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/ratings")
+@RequestMapping("/api/external/ratings")
 @AllArgsConstructor
 public class RatingController {
     private final RatingService ratingService;
@@ -33,6 +31,20 @@ public class RatingController {
     public APIResponse<RatingUserResponse> createRating(@RequestBody @Valid RatingRequest dto) {
         APIResponse<RatingUserResponse> apiResponse = new APIResponse<RatingUserResponse>();
         apiResponse.setResult(ratingService.saveRating(dto));
+        return apiResponse;
+    }
+
+    @GetMapping("/admin/document/{docId}")
+    public APIResponse<RatingDetailAdminResponse> getByDocument(@PathVariable Long docId) {
+        APIResponse<RatingDetailAdminResponse> apiResponse = new APIResponse<RatingDetailAdminResponse>();
+        apiResponse.setResult(ratingService.getByDocument(docId));
+        return apiResponse;
+    }
+
+    @GetMapping("/admin/document")
+    public APIResponse<RatingAdminResponse> getAllDocumentRatingSummary() {
+        APIResponse<RatingAdminResponse> apiResponse = new APIResponse<RatingAdminResponse>();
+        apiResponse.setResultList(ratingService.getAllDocumentRatingSummary());
         return apiResponse;
     }
 

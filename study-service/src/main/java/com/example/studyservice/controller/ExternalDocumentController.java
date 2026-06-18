@@ -153,4 +153,31 @@ public class DocumentController {
         return apiResponse;
     }
 
+    @GetMapping("/admin/{id}")
+    public APIResponse<DocumentDetailResponse> getById(@PathVariable Long id) {
+        APIResponse<DocumentDetailResponse> apiResponse = new APIResponse<DocumentDetailResponse>();
+        apiResponse.setResult(documentService.findById(id));
+        return apiResponse;
+    }
+
+    @GetMapping("/admin")
+    public APIResponse<DocumentAdminResponse> getAll() {
+        APIResponse<DocumentAdminResponse> apiResponse = new APIResponse<DocumentAdminResponse>();
+        apiResponse.setResultList(documentService.findAll());
+        return apiResponse;
+    }
+
+    @DeleteMapping("/admin/{id}")
+    public APIResponse<Void> delete(@PathVariable Long id) {
+        documentService.delete(id);
+        return new APIResponse<Void>();
+    }
+
+    @PutMapping("/admin/{id}")
+    public APIResponse<DocumentDetailResponse> update(@PathVariable Long id, @RequestBody DocumentRequest dto) {
+        APIResponse<DocumentDetailResponse> apiResponse = new APIResponse<DocumentDetailResponse>();
+        apiResponse.setResult(documentService.update(id, dto));
+        return apiResponse;
+    }
+
 }

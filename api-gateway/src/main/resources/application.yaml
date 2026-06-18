@@ -19,7 +19,7 @@ spring:
         - id: auth_service
           uri: http://localhost:8080
           predicates:
-            - Path=${app.api-prefix}/api/auth/**,${app.api-prefix}/api/users/**,${app.api-prefix}/api/users/admin/**
+            - Path=${app.api-prefix}/api/external/auth/**,${app.api-prefix}/api/external/users/**
           filters:
             - StripPrefix=1
         - id: profile_service
@@ -31,13 +31,25 @@ spring:
         - id: study_service
           uri: http://localhost:8082
           predicates:
-            - Path=${app.api-prefix}/api/categories/admin/**,${app.api-prefix}/api/categories/**,${app.api-prefix}/api/documents/admin/**,${app.api-prefix}/api/documents/**,${app.api-prefix}/api/favorites/**
+            - Path=${app.api-prefix}/api/external/categories/**,${app.api-prefix}/api/external/documents/**,${app.api-prefix}/api/external/favorites/**
           filters:
             - StripPrefix=1
         - id: interaction_service
           uri: http://localhost:8084
           predicates:
-            - Path=${app.api-prefix}/api/comments/admin/**,${app.api-prefix}/api/ratings/admin/**,${app.api-prefix}/api/reports/admin/**,${app.api-prefix}/api/comments/**,${app.api-prefix}/api/ratings/**,${app.api-prefix}/api/reports/**
+            - Path=${app.api-prefix}/api/external/comments/**,${app.api-prefix}/api/external/external/ratings/**,${app.api-prefix}/api/external/reports/**
+          filters:
+            - StripPrefix=1
+        - id: notification_service
+          uri: http://localhost:8085
+          predicates:
+            - Path=${app.api-prefix}/api/external/user-notifications/**
+          filters:
+            - StripPrefix=1
+        - id: chat_service
+          uri: http://localhost:8086
+          predicates:
+            - Path=${app.api-prefix}/api/external/chats/**,${app.api-prefix}/api/external/chat-messages/**,${app.api-prefix}/api/external/conversations/**,${app.api-prefix}/api/external/participant-infos/**,/ws
           filters:
             - StripPrefix=1
 
