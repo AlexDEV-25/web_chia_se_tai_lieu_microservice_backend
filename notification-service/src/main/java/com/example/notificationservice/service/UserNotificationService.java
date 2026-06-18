@@ -2,11 +2,9 @@ package com.example.notificationservice.service;
 
 
 import com.example.notificationservice.dto.request.UserNotificationRequest;
-import com.example.notificationservice.dto.response.UserFollowNotificationResponse;
 import com.example.notificationservice.dto.response.UserNotificationResponse;
 import com.example.notificationservice.helper.GetUserIdByToken;
 import com.example.notificationservice.mapper.UserNotificationMapper;
-import com.example.notificationservice.model.Notification;
 import com.example.notificationservice.model.UserNotification;
 import com.example.notificationservice.repository.UserNotificationRepository;
 import com.example.notificationservice.repository.httpclient.ProfileClient;
@@ -68,21 +66,10 @@ public class UserNotificationService {
         }
     }
 
-    public UserNotification saveUserNotification(UserNotificationRequest request) {
+    public void saveUserNotification(UserNotificationRequest request) {
         UserNotification userNotification = userNotificationMapper.requestToUserNotification(request);
         userNotification.setCreatedAt(LocalDateTime.now());
-        return userNotificationRepository.save(userNotification);
+        userNotificationRepository.save(userNotification);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    public void sendToFollower(Notification notificationToAudiences, Long authorId) {
-        List<UserFollowNotificationResponse> ListFollower = profileClient.getFollowerByUserId(authorId).getResultList();
-
-        for (UserFollowNotificationResponse uf : ListFollower) {
-            UserNotificationRequest userNotificationRequestToAudiences = new UserNotificationRequest(uf.getFollowingId(), uf.getFollowingName(),
-                    uf.getFollowerId(), uf.getFollowerName(), notificationToAudiences, false);
-            saveUserNotification(userNotificationRequestToAudiences);
-
-        }
-    }
 }

@@ -4,7 +4,6 @@ import com.example.notificationservice.constant.AppError;
 import com.example.notificationservice.dto.request.EmailRequest;
 import com.example.notificationservice.dto.request.SendEmailRequest;
 import com.example.notificationservice.dto.request.Sender;
-import com.example.notificationservice.dto.response.EmailResponse;
 import com.example.notificationservice.exception.AppException;
 import com.example.notificationservice.repository.httpclient.EmailClient;
 import feign.FeignException;
@@ -34,7 +33,7 @@ public class EmailService {
     String senderName;
 
     @PreAuthorize("hasRole('ADMIN')")
-    public EmailResponse sendEmail(SendEmailRequest request) {
+    public void sendEmail(SendEmailRequest request) {
         EmailRequest emailRequest = EmailRequest.builder()
                 .sender(Sender.builder()
                         .name(senderName)
@@ -45,7 +44,7 @@ public class EmailService {
                 .htmlContent(request.getHtmlContent())
                 .build();
         try {
-            return emailClient.sendEmail(apiKey, emailRequest);
+            emailClient.sendEmail(apiKey, emailRequest);
         } catch (FeignException e) {
             throw new AppException(AppError.CANNOT_SEND_EMAIL);
         }

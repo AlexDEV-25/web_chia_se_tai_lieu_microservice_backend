@@ -19,14 +19,12 @@ public class NotificationService {
     public NotificationResponse save(NotificationRequest request) {
         Notification notification = notificationMapper.requestToNotification(request);
         Notification saved = notificationRepository.save(notification);
-        NotificationResponse response = notificationMapper.notificationToResponse(saved);
-        return response;
+        return notificationMapper.notificationToResponse(saved);
     }
 
     public Notification saveNotification(NotificationRequest request) {
         Notification notification = notificationMapper.requestToNotification(request);
-        Notification saved = notificationRepository.save(notification);
-        return saved;
+        return notificationRepository.save(notification);
     }
 
 }

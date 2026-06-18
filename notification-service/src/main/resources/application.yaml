@@ -37,3 +37,6 @@ app:
     api-key: ${EMAIL_KEY}
     sender-email: ${SENDER_EMAIL}
     sender-name: ${SENDER_NAME}
+  services:
+    profile:
+      url: ${PROFILE_SERVICE_URL}
