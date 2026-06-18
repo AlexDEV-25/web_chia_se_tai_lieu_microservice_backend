@@ -79,6 +79,7 @@ public class AppConfig {
         checkPermissionAndSave(permissionRepository, "UPDATE_EMAIL", "thay đổi email của mình");
         checkPermissionAndSave(permissionRepository, "SEARCH_USER", "tìm kiếm người dùng");
         checkPermissionAndSave(permissionRepository, "CHANGE_PASSWORD", "thay đổi password");
+        checkPermissionAndSave(permissionRepository, "GET_FOLLOWER_FOR_NOTIFICATION", "lấy dánh sách follower của 1 người để gửi thông báo");
     }
 
     private void rolesSave(RoleRepository roleRepository, PermissionRepository permissionRepository) {

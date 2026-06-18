@@ -3,6 +3,8 @@ package com.example.authservice.controller;
 
 import com.example.authservice.dto.request.ChangeEmailRequest;
 import com.example.authservice.dto.request.ChangePasswordRequest;
+import com.example.authservice.dto.request.DisplayRequest;
+import com.example.authservice.dto.request.RegisterRequest;
 import com.example.authservice.dto.response.APIResponse;
 import com.example.authservice.dto.response.UserResponse;
 import com.example.authservice.service.UserService;
@@ -11,9 +13,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/external/users")
 @AllArgsConstructor
-public class UserController {
+public class ExternalUserController {
     private final UserService userService;
 
     @GetMapping("/my-info")
@@ -36,5 +38,25 @@ public class UserController {
         userService.changePassword(request);
         return apiResponse;
     }
+    
+    @PutMapping("/admin/hide/{id}")
+    public APIResponse<UserResponse> hideUser(@PathVariable Long id, @RequestBody @Valid DisplayRequest dto) {
+        APIResponse<UserResponse> apiResponse = new APIResponse<UserResponse>();
+        apiResponse.setResult(userService.hideUser(id, dto));
+        return apiResponse;
+    }
 
+    @GetMapping("/admin")
+    public APIResponse<UserResponse> getAllUsers() {
+        APIResponse<UserResponse> apiResponse = new APIResponse<UserResponse>();
+        apiResponse.setResultList(userService.getAllUsers());
+        return apiResponse;
+    }
+
+    @PostMapping("/admin")
+    public APIResponse<UserResponse> createUser(@RequestBody @Valid RegisterRequest dto) {
+        APIResponse<UserResponse> apiResponse = new APIResponse<UserResponse>();
+        apiResponse.setResult(userService.createUser(dto));
+        return apiResponse;
+    }
 }

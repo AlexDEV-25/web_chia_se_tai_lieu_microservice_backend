@@ -20,18 +20,6 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: hoangvanduc2504@gmail.com
-    password: ${MAIL_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-
 server:
   port: 8080
 
@@ -47,7 +35,7 @@ app:
     profile:
       url: ${PROFILE_SERVICE_URL}
     file:
-      url: http://localhost:8082
+      url: ${FILE_SERVICE_URL}
 
 jwt:
   secretKey: dAt62ISlQNyyt4dDObsfXv93IJ4mOHIGyqf/ECLbPQD/gERJ8wBaPISQyZTTE2PMQtEdsxtcyOFPFKsUJrQZoQ==

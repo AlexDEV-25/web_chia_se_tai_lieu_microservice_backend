@@ -12,9 +12,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/external/auth")
 @AllArgsConstructor
-public class AuthenticationController {
+public class ExternalAuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/log-in")
