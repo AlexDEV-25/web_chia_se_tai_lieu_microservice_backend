@@ -19,7 +19,7 @@ public class ChatMessageResponse {
     private String message;
     private Long userId;
     private String fullName;
-    private String avatar;
+    private String avatarUrl;
     private ConnectionStatus userStatus;
     private LocalDateTime createdAt;
 }

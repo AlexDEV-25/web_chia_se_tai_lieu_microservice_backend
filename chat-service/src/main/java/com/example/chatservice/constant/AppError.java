@@ -57,7 +57,10 @@ public enum AppError {
 
     TYPE_NOT_FOUND(1024, "Không tìm thấy type", HttpStatus.NOT_FOUND),
 
+
     CONVERSATION_NOT_FOUND(1025, "Không tìm thấy cuộc hội thoại", HttpStatus.NOT_FOUND),
+    
+    PARTNER_NOT_FOUND(102533, "Không tìm thấy đồng bọn", HttpStatus.NOT_FOUND),
 
     NOT_CONVERSATION_MEMBER(1026, "Bạn không thuộc cuộc hội thoại này", HttpStatus.FORBIDDEN),
 

@@ -2,7 +2,6 @@ package com.example.chatservice.dto.request;
 
 
 import com.example.chatservice.constant.ChatRole;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,12 +16,6 @@ public class ParticipantInfoRequest {
 
     @NotNull(message = "userId không được để trống")
     private Long userId;
-
-    @NotBlank(message = "fullName không được để trống")
-    private String userName;
-
-    @NotBlank(message = "avatar không được để trống")
-    private String avatar;
 
     @NotNull(message = "conversationId không được để trống")
     private Long conversationId;

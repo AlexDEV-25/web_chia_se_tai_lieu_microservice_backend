@@ -1,85 +1,83 @@
-package com.example.app.service;
+package com.example.chatservice.service;
 
-import java.time.LocalDateTime;
-import java.util.List;
 
+import com.example.chatservice.constant.AppError;
+import com.example.chatservice.dto.request.ChatMessageRequest;
+import com.example.chatservice.dto.response.ChatMessageResponse;
+import com.example.chatservice.event.MessageCreatedEvent;
+import com.example.chatservice.exception.AppException;
+import com.example.chatservice.helper.GetUserIdByToken;
+import com.example.chatservice.mapper.ChatMessageMapper;
+import com.example.chatservice.model.ChatMessage;
+import com.example.chatservice.model.Conversation;
+import com.example.chatservice.model.ParticipantInfo;
+import com.example.chatservice.repository.ChatMessageRepository;
+import com.example.chatservice.repository.ConversationRepository;
+import com.example.chatservice.repository.ParticipantInfoRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import com.example.app.constant.AppError;
-import com.example.app.dto.request.ChatMessageRequest;
-import com.example.app.dto.response.chatmessage.ChatMessageResponse;
-import com.example.app.event.MessageCreatedEvent;
-import com.example.app.exception.AppException;
-import com.example.app.helper.GetUserByToken;
-import com.example.app.mapper.ChatMessageMapper;
-import com.example.app.model.ChatMessage;
-import com.example.app.model.Conversation;
-import com.example.app.model.User;
-import com.example.app.repository.ChatMessageRepository;
-import com.example.app.repository.ConversationRepository;
-import com.example.app.repository.ParticipantInfoRepository;
-
-import lombok.AllArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class ChatMessageService {
 
-	private final ChatMessageRepository chatMessageRepository;
-	private final ConversationRepository conversationRepository;
-	private final ParticipantInfoRepository participantInfoRepository;
-	private final ApplicationEventPublisher publisher;
-	private final ChatMessageMapper chatMessageMapper;
-	private final GetUserByToken getUserByToken;
+    private final ChatMessageRepository chatMessageRepository;
+    private final ConversationRepository conversationRepository;
+    private final ParticipantInfoRepository participantInfoRepository;
+    private final ApplicationEventPublisher publisher;
+    private final ChatMessageMapper chatMessageMapper;
+    private final GetUserIdByToken getUserIdByToken;
 
-	@PreAuthorize("hasAuthority('GET_MESSAGE')")
-	public List<ChatMessageResponse> getMessages(Long conversationId) {
-		User me = getUserByToken.get();
+    @PreAuthorize("hasAuthority('GET_MESSAGE')")
+    public List<ChatMessageResponse> getMessages(Long conversationId) {
+        Long userId = getUserIdByToken.get();
 
-		if (me == null) {
-			throw AppException.builder().appError(AppError.USER_NOT_FOUND).build();
-		}
+        if (userId == 0L) {
+            throw AppException.builder().appError(AppError.USER_NOT_FOUND).build();
+        }
 
-		List<ChatMessage> messages = chatMessageRepository.findAllByConversation_IdOrderByCreatedAtAsc(conversationId);
-		return messages.stream().map((message) -> toChatMessageResponse(message, me)).toList();
-	}
+        List<ChatMessage> messages = chatMessageRepository.findAllByConversation_IdOrderByCreatedAtAsc(conversationId);
+        return messages.stream().map((message) -> toChatMessageResponse(message, userId)).toList();
+    }
 
-	@PreAuthorize("hasAuthority('CREATE_MESSAGE')")
-	public ChatMessageResponse createMessage(ChatMessageRequest request) {
-		User me = getUserByToken.get();
+    @PreAuthorize("hasAuthority('CREATE_MESSAGE')")
+    public void createMessage(ChatMessageRequest request) {
+        Long userId = getUserIdByToken.get();
 
-		if (me == null) {
-			throw AppException.builder().appError(AppError.USER_NOT_FOUND).build();
-		}
+        if (userId == 0L) {
+            throw AppException.builder().appError(AppError.USER_NOT_FOUND).build();
+        }
 
-		Conversation conversation = conversationRepository.findById(request.getConversationId())
-				.orElseThrow(() -> AppException.builder().appError(AppError.CONVERSATION_NOT_FOUND).build());
+        Conversation conversation = conversationRepository.findById(request.getConversationId())
+                .orElseThrow(() -> AppException.builder().appError(AppError.CONVERSATION_NOT_FOUND).build());
 
-		boolean isParticipant = participantInfoRepository.existsByConversation_IdAndUser_Id(conversation.getId(),
-				me.getId());
 
-		if (!isParticipant) {
-			throw AppException.builder().appError(AppError.NOT_CONVERSATION_MEMBER).build();
-		}
-		ChatMessage message = ChatMessage.builder().message(request.getMessage()).conversation(conversation).sender(me)
-				.createdAt(LocalDateTime.now()).build();
+        ParticipantInfo participantInfo = participantInfoRepository.findByConversation_IdAndUserId(conversation.getId(),
+                userId).orElseThrow(() -> AppException.builder().appError(AppError.NOT_CONVERSATION_MEMBER).build());
 
-		ChatMessage saved = chatMessageRepository.save(message);
+        ChatMessage message = ChatMessage.builder()
+                .message(request.getMessage())
+                .conversation(conversation)
+                .sender(participantInfo)
+                .createdAt(LocalDateTime.now()).build();
 
-		ChatMessageResponse response = toChatMessageResponse(saved, me);
+        ChatMessage saved = chatMessageRepository.save(message);
 
-		publisher.publishEvent(new MessageCreatedEvent(response));
+        ChatMessageResponse response = toChatMessageResponse(saved, userId);
 
-		return response;
+        publisher.publishEvent(new MessageCreatedEvent(response));
+         
+    }
 
-	}
-
-	private ChatMessageResponse toChatMessageResponse(ChatMessage chatMessage, User me) {
-		ChatMessageResponse chatMessageResponse = chatMessageMapper.chatMessagetoChatMessageResponse(chatMessage);
-		chatMessageResponse.setMe(me.getId().equals(chatMessage.getSender().getId()));
-		return chatMessageResponse;
-	}
+    private ChatMessageResponse toChatMessageResponse(ChatMessage chatMessage, Long userId) {
+        ChatMessageResponse chatMessageResponse = chatMessageMapper.chatMessagetoChatMessageResponse(chatMessage);
+        chatMessageResponse.setMe(userId.equals(chatMessage.getSender().getId()));
+        return chatMessageResponse;
+    }
 
 }

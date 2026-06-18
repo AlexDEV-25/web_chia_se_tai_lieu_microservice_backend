@@ -20,6 +20,6 @@ public class ConversationRequest {
 
     @Size(min = 1)
     @NotNull(message = "list không được null")
-    private List<Long> participantIds;
+    private List<Long> otherUserIds;
 
 }

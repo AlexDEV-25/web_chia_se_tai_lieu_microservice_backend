@@ -24,8 +24,8 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
                 SELECT c.* FROM conversation c
                 JOIN participant_info p ON c.id = p.conversation_id
                 GROUP BY c.id
-                HAVING COUNT(DISTINCT p.user_id) = :size
-                   AND COUNT(DISTINCT CASE WHEN p.user_id IN :userIds THEN p.user_id END) = :size
+                HAVING COUNT(DISTINCT p.userId) = :size
+                   AND COUNT(DISTINCT CASE WHEN p.userId IN :userIds THEN p.userId END) = :size
             """, nativeQuery = true)
     Optional<Conversation> findExactConversation(@Param("userIds") List<Long> userIds, @Param("size") long size);
 
@@ -42,5 +42,5 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
                 	)
             """)
     List<Conversation> search(Long myId, String keyword);
-    
+
 }

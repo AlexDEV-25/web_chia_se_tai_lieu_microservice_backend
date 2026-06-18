@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/chats")
+@RequestMapping("/api/external/chats")
 @AllArgsConstructor
-public class ChatController {
+public class ExternalChatController {
     private final ChatService chatService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

@@ -1,125 +1,127 @@
-package com.example.app.service;
+package com.example.chatservice.service;
 
-import java.time.LocalDateTime;
 
+import com.example.chatservice.constant.AppError;
+import com.example.chatservice.constant.ChatRole;
+import com.example.chatservice.constant.ConversationType;
+import com.example.chatservice.dto.request.ParticipantInfoRequest;
+import com.example.chatservice.dto.response.ParticipantInfoResponse;
+import com.example.chatservice.dto.response.UserDetailInfoResponse;
+import com.example.chatservice.exception.AppException;
+import com.example.chatservice.helper.GetUserIdByToken;
+import com.example.chatservice.mapper.ParticipantInfoMapper;
+import com.example.chatservice.model.Conversation;
+import com.example.chatservice.model.ParticipantInfo;
+import com.example.chatservice.repository.ParticipantInfoRepository;
+import com.example.chatservice.repository.httpclient.ProfileClient;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import com.example.app.constant.AppError;
-import com.example.app.constant.ChatRole;
-import com.example.app.constant.ConversationType;
-import com.example.app.dto.request.ParticipantInfoRequest;
-import com.example.app.dto.response.participantinfo.ParticipantInfoResponse;
-import com.example.app.exception.AppException;
-import com.example.app.helper.GetUserByToken;
-import com.example.app.mapper.ParticipantInfoMapper;
-import com.example.app.model.Conversation;
-import com.example.app.model.ParticipantInfo;
-import com.example.app.model.User;
-import com.example.app.repository.ParticipantInfoRepository;
-import com.example.app.repository.UserRepository;
-
-import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import java.time.LocalDateTime;
 
 @Service
 @AllArgsConstructor
 public class ParticipantInfoService {
-	private final ParticipantInfoRepository participantInfoRepository;
-	private final UserRepository userRepository;
-	private final ParticipantInfoMapper participantInfoMapper;
-	private final GetUserByToken getUserByToken;
+    private final ParticipantInfoRepository participantInfoRepository;
+    private final ParticipantInfoMapper participantInfoMapper;
+    private final GetUserIdByToken getUserIdByToken;
+    private final ProfileClient profileClient;
 
-	@PreAuthorize("hasAuthority('UPDATE_LAST_SEEN')")
-	public ParticipantInfoResponse updateLastSeen(Long id) {
-		User user = getUserByToken.get();
-		ParticipantInfo participantInfo = participantInfoRepository.findByIdAndUser_Id(id, user.getId())
-				.orElseThrow(() -> AppException.builder().appError(AppError.PARTICIPANT_INFO_NOT_FOUND).build());
-		participantInfo.setLastSeen(LocalDateTime.now());
-		ParticipantInfo saved = participantInfoRepository.save(participantInfo);
-		return participantInfoMapper.entityToResponse(saved);
-	}
+    @PreAuthorize("hasAuthority('UPDATE_LAST_SEEN')")
+    public ParticipantInfoResponse updateLastSeen(Long id) {
+        Long userId = getUserIdByToken.get();
+        ParticipantInfo participantInfo = participantInfoRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> AppException.builder().appError(AppError.PARTICIPANT_INFO_NOT_FOUND).build());
+        participantInfo.setLastSeen(LocalDateTime.now());
+        ParticipantInfo saved = participantInfoRepository.save(participantInfo);
+        return participantInfoMapper.entityToResponse(saved);
+    }
 
-	@PreAuthorize("hasAuthority('ADD_MEMBER')")
-	public ParticipantInfoResponse addMember(ParticipantInfoRequest request) {
-		User user = getUserByToken.get();
+    @PreAuthorize("hasAuthority('ADD_MEMBER')")
+    public ParticipantInfoResponse addMember(ParticipantInfoRequest request) {
+        Long userId = getUserIdByToken.get();
 
-		ParticipantInfo participantInfo = findByUserIdAndConversationId(user.getId(), request.getConversationId());
-		if (participantInfo.getChatRole() == ChatRole.MEMBER) {
-			throw AppException.builder().appError(AppError.ACCESS_DENIED).build();
-		}
-		Conversation conversation = participantInfo.getConversation();
+        ParticipantInfo participantInfo = findByUserIdAndConversationId(userId, request.getConversationId());
+        if (participantInfo.getChatRole() == ChatRole.MEMBER) {
+            throw AppException.builder().appError(AppError.ACCESS_DENIED).build();
+        }
+        Conversation conversation = participantInfo.getConversation();
 
-		if (conversation.getType() == ConversationType.DIRECT) {
-			throw AppException.builder().appError(AppError.CANNOT_ADD_MEMBER).build();
-		}
+        if (conversation.getType() == ConversationType.DIRECT) {
+            throw AppException.builder().appError(AppError.CANNOT_ADD_MEMBER).build();
+        }
 
-		User newMember = userRepository.findById(request.getUserId())
-				.orElseThrow(() -> AppException.builder().appError(AppError.USER_NOT_FOUND).build());
+        UserDetailInfoResponse newMember = profileClient.getUserDetail(request.getUserId()).getResult();
 
-		ParticipantInfo newParticipantInfo = ParticipantInfo.builder().user(newMember).conversation(conversation)
-				.chatRole(ChatRole.MEMBER).build();
+        ParticipantInfo newParticipantInfo = ParticipantInfo
+                .builder()
+                .userId(request.getUserId())
+                .avatarUrl(newMember.getAvatarUrl())
+                .fullName(newMember.getFullName())
+                .conversation(conversation)
+                .chatRole(ChatRole.MEMBER).build();
 
-		ParticipantInfo saved = participantInfoRepository.save(newParticipantInfo);
-		return participantInfoMapper.entityToResponse(saved);
-	}
+        ParticipantInfo saved = participantInfoRepository.save(newParticipantInfo);
+        return participantInfoMapper.entityToResponse(saved);
+    }
 
-	@PreAuthorize("hasAuthority('DELETE_MEMBER')")
-	public void deleteMember(Long userId, Long conversationId) {
-		User user = getUserByToken.get();
+    @PreAuthorize("hasAuthority('DELETE_MEMBER')")
+    public void deleteMember(Long deleteUserId, Long conversationId) {
+        Long userId = getUserIdByToken.get();
 
-		ParticipantInfo myParticipantInfo = findByUserIdAndConversationId(user.getId(), conversationId);
+        ParticipantInfo myParticipantInfo = findByUserIdAndConversationId(userId, conversationId);
 
-		ParticipantInfo userParticipantInfo = findByUserIdAndConversationId(userId, conversationId);
+        ParticipantInfo userParticipantInfo = findByUserIdAndConversationId(deleteUserId, conversationId);
 
-		if (myParticipantInfo.getConversation().getId() != userParticipantInfo.getConversation().getId()) {
-			throw AppException.builder().appError(AppError.NOT_CONVERSATION_MEMBER).build();
-		}
+        if (!myParticipantInfo.getConversation().getId().equals(userParticipantInfo.getConversation().getId())) {
+            throw AppException.builder().appError(AppError.NOT_CONVERSATION_MEMBER).build();
+        }
 
-		if (myParticipantInfo.getConversation().getType() == ConversationType.DIRECT) {
-			throw AppException.builder().appError(AppError.CANNOT_REMOVE_MEMBER).build();
-		}
+        if (myParticipantInfo.getConversation().getType() == ConversationType.DIRECT) {
+            throw AppException.builder().appError(AppError.CANNOT_REMOVE_MEMBER).build();
+        }
 
-		if (myParticipantInfo.getChatRole() == ChatRole.MEMBER
-				|| (userParticipantInfo.getChatRole() == myParticipantInfo.getChatRole())
-				|| (userParticipantInfo.getChatRole() == ChatRole.MANAGER)) {
-			throw AppException.builder().appError(AppError.ACCESS_DENIED).build();
-		}
-		participantInfoRepository.delete(userParticipantInfo);
-	}
+        if (myParticipantInfo.getChatRole() == ChatRole.MEMBER
+                || (userParticipantInfo.getChatRole() == myParticipantInfo.getChatRole())
+                || (userParticipantInfo.getChatRole() == ChatRole.MANAGER)) {
+            throw AppException.builder().appError(AppError.ACCESS_DENIED).build();
+        }
+        participantInfoRepository.delete(userParticipantInfo);
+    }
 
-	@PreAuthorize("hasAuthority('CHANGE_ROLE')")
-	public ParticipantInfoResponse changeRole(@Valid ParticipantInfoRequest dto) {
+    @PreAuthorize("hasAuthority('CHANGE_ROLE')")
+    public ParticipantInfoResponse changeRole(@Valid ParticipantInfoRequest dto) {
 
-		User user = getUserByToken.get();
+        Long userId = getUserIdByToken.get();
 
-		ParticipantInfo myParticipantInfo = findByUserIdAndConversationId(user.getId(), dto.getConversationId());
+        ParticipantInfo myParticipantInfo = findByUserIdAndConversationId(userId, dto.getConversationId());
 
-		ParticipantInfo userParticipantInfo = findByUserIdAndConversationId(dto.getUserId(), dto.getConversationId());
+        ParticipantInfo userParticipantInfo = findByUserIdAndConversationId(dto.getUserId(), dto.getConversationId());
 
-		if (myParticipantInfo.getChatRole() != ChatRole.MANAGER) {
-			throw AppException.builder().appError(AppError.ACCESS_DENIED).build();
-		}
+        if (myParticipantInfo.getChatRole() != ChatRole.MANAGER) {
+            throw AppException.builder().appError(AppError.ACCESS_DENIED).build();
+        }
 
-		if (myParticipantInfo.getConversation().getId() != userParticipantInfo.getConversation().getId()) {
-			throw AppException.builder().appError(AppError.NOT_CONVERSATION_MEMBER).build();
-		}
+        if (!myParticipantInfo.getConversation().getId().equals(userParticipantInfo.getConversation().getId())) {
+            throw AppException.builder().appError(AppError.NOT_CONVERSATION_MEMBER).build();
+        }
 
-		if (myParticipantInfo.getConversation().getType() == ConversationType.DIRECT) {
-			throw AppException.builder().appError(AppError.CANNOT_CHANGE_ROLE).build();
-		}
+        if (myParticipantInfo.getConversation().getType() == ConversationType.DIRECT) {
+            throw AppException.builder().appError(AppError.CANNOT_CHANGE_ROLE).build();
+        }
 
-		userParticipantInfo.setChatRole(dto.getChatRole());
+        userParticipantInfo.setChatRole(dto.getChatRole());
 
-		ParticipantInfo saved = participantInfoRepository.save(userParticipantInfo);
-		return participantInfoMapper.entityToResponse(saved);
-	}
+        ParticipantInfo saved = participantInfoRepository.save(userParticipantInfo);
+        return participantInfoMapper.entityToResponse(saved);
+    }
 
-	private ParticipantInfo findByUserIdAndConversationId(Long userId, Long conversationId) {
-		ParticipantInfo participantInfo = participantInfoRepository
-				.findByUser_IdAndConversation_Id(userId, conversationId)
-				.orElseThrow(() -> AppException.builder().appError(AppError.PARTICIPANT_INFO_NOT_FOUND).build());
-		return participantInfo;
-	}
+    private ParticipantInfo findByUserIdAndConversationId(Long userId, Long conversationId) {
+        return participantInfoRepository
+                .findByUserIdAndConversation_Id(userId, conversationId)
+                .orElseThrow(() -> AppException.builder().appError(AppError.PARTICIPANT_INFO_NOT_FOUND).build());
+    }
 
 }

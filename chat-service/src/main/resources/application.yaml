@@ -1,3 +1,30 @@
 spring:
   application:
     name: chat-service
+
+  datasource:
+    url: ${MySQL_URL}
+    username: root
+    password: ${MySQL_PASSWORD}
+
+  main:
+    banner-mode: off
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8086
+
+logging:
+  level:
+    root: warn
+
+app:
+  domain:
+    frontend: ${FRONTEND_DOMAIN}
+
+  services:
+    file:
+      url: ${FILE_SERVICE_URL}

@@ -11,7 +11,9 @@ import java.util.Optional;
 public interface ParticipantInfoRepository extends JpaRepository<ParticipantInfo, Long> {
     boolean existsByConversation_IdAndUserId(Long conversationId, Long UserId);
 
-    Optional<ParticipantInfo> findByIdAndUserId(Long id, Long userId);
+    Optional<ParticipantInfo> findByConversation_IdAndUserId(Long conversationId, Long userId);
+
+    Optional<ParticipantInfo> findByIdAndUserId(Long conversationId, Long userId);
 
     Optional<ParticipantInfo> findByUserIdAndConversation_Id(Long userId, Long conversationId);
 

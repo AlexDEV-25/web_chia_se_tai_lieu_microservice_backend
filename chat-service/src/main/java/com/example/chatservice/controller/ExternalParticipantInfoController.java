@@ -10,9 +10,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/participant-infos")
+@RequestMapping("/api/external/participant-infos")
 @AllArgsConstructor
-public class ParticipantInfoController {
+public class ExternalParticipantInfoController {
     private ParticipantInfoService participantInfoService;
 
     @PutMapping("/update-last-seen/{id}")

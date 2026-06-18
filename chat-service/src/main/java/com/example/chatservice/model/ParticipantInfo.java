@@ -27,8 +27,8 @@ public class ParticipantInfo {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(name = "avatar", nullable = false)
-    private String avatar;
+    @Column(name = "avatar_url", nullable = false)
+    private String avatarUrl;
 
     @ManyToOne
     @JoinColumn(name = "conversation_id", nullable = false)

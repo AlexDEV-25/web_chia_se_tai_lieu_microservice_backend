@@ -1,12 +1,12 @@
-package com.example.app.event;
+package com.example.chatservice.event;
 
-import com.example.app.dto.response.chatmessage.ChatMessageResponse;
 
+import com.example.chatservice.dto.response.ChatMessageResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class MessageCreatedEvent {
-	private ChatMessageResponse message;
+    private ChatMessageResponse message;
 }

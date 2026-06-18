@@ -1,6 +1,7 @@
-package com.example.profileservice.dto.request;
+package com.example.chatservice.dto.request;
 
-import com.example.profileservice.constant.ConnectionStatus;
+
+import com.example.chatservice.constant.ConnectionStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

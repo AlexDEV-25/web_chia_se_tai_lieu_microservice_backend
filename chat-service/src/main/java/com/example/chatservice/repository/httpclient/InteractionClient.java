@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "interaction-service", url = "${app.services.interaction.url}")
 public interface InteractionClient {
-    @GetMapping(value = "/api/comments/admin/7-days", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/internal/comments/admin/7-days", produces = MediaType.APPLICATION_JSON_VALUE)
     APIResponse<CommentAdminResponse> findDocumentCommentsLast7Days();
 
-    @PutMapping(value = "/api/comments/admin/hide/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/api/external/comments/admin/hide/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     APIResponse<CommentDetailAdminResponse> hide(@PathVariable Long id, @RequestBody @Valid DisplayRequest dto);
 
     @GetMapping(value = "/api/ratings/document-summary/{documentId}", produces = MediaType.APPLICATION_JSON_VALUE)

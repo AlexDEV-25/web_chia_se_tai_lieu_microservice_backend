@@ -17,7 +17,7 @@ public class CommentDetailAdminResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long userId;
-    private String username;
+    private String fullName;
     private Long documentId;
     private boolean hide;
 }

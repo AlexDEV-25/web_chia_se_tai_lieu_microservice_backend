@@ -1,7 +1,7 @@
 package com.example.chatservice.mapper;
 
-import com.example.app.dto.response.conversation.ConversationResponse;
-import com.example.app.model.Conversation;
+import com.example.chatservice.dto.response.ConversationResponse;
+import com.example.chatservice.model.Conversation;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

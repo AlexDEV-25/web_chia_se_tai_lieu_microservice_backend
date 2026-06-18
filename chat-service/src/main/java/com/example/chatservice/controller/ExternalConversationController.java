@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/external/conversations")
 @AllArgsConstructor
-public class ConversationController {
+public class ExternalConversationController {
     private final ConversationService conversationService;
 
     @PostMapping("/direct")

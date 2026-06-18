@@ -1,8 +1,10 @@
-package com.example.app.configuration;
+package com.example.chatservice.configuration;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.example.chatservice.dto.request.UserPrincipalRequest;
+import com.example.chatservice.helper.JwtHelper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.NonNull;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -15,57 +17,63 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Component;
 
-import com.example.app.helper.JwtHelper;
+import java.util.Arrays;
+import java.util.List;
 
-import lombok.RequiredArgsConstructor;
-
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class WebSocketAuthInterceptor implements ChannelInterceptor {
 
-	private final JwtHelper jwtHelper;
-	private final JwtDecoder jwtDecoder;
+    private final JwtHelper jwtHelper;
+    private final JwtDecoder jwtDecoder;
 
-	@Override
-	public Message<?> preSend(Message<?> message, MessageChannel channel) {
+    @Override
+    public Message<?> preSend(@NonNull Message<?> message, @NonNull MessageChannel channel) {
 
-		StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+        StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
-		if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+        if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
 
-			String authHeader = accessor.getFirstNativeHeader("Authorization");
+            String authHeader = accessor.getFirstNativeHeader("Authorization");
 
-			if (authHeader == null || authHeader.isBlank() || !authHeader.startsWith("Bearer ")) {
+            if (authHeader == null || authHeader.isBlank() || !authHeader.startsWith("Bearer ")) {
 
-				return message;
-			}
+                return message;
+            }
 
-			try {
-				String token = authHeader.replace("Bearer ", "");
-				if (jwtHelper.introspect(token).isValid() == false) {
-					return null;
-				}
+            try {
+                String token = authHeader.replace("Bearer ", "");
+                if (!jwtHelper.introspect(token).isValid()) {
+                    return null;
+                }
 
-				Jwt jwt = jwtDecoder.decode(token);
+                Jwt jwt = jwtDecoder.decode(token);
 
-				String username = jwt.getSubject();
-				String scope = jwt.getClaimAsString("scope");
+                String username = jwt.getSubject();
+                Long userId = jwt.getClaim("userId");
 
-				List<SimpleGrantedAuthority> authorities = Arrays.stream(scope.split(" "))
-						.map(SimpleGrantedAuthority::new).toList();
+                String scope = jwt.getClaimAsString("scope");
 
-				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null,
-						authorities);
+                UserPrincipalRequest principal =
+                        UserPrincipalRequest.builder().userId(userId).userName(username).build();
 
-				accessor.setUser(auth);
 
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
+                List<SimpleGrantedAuthority> authorities = Arrays.stream(scope.split(" "))
+                        .map(SimpleGrantedAuthority::new).toList();
 
-		return message;
-	}
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(principal, null,
+                        authorities);
+
+                accessor.setUser(auth);
+
+            } catch (Exception e) {
+                log.error("WebSocket authentication failed", e);
+                return null;
+            }
+        }
+
+        return message;
+    }
 
 }
