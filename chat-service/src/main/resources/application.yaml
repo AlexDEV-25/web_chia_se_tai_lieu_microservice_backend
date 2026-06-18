@@ -28,3 +28,9 @@ app:
   services:
     file:
       url: ${FILE_SERVICE_URL}
+    interaction:
+      url: ${INTERACTION_SERVICE_URL}
+    profile:
+      url: ${PROFILE_SERVICE_URL}
+    study:
+      url: ${STUDY_SERVICE_URL}
