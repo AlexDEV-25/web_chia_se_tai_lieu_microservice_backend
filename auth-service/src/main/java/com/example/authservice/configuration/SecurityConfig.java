@@ -23,12 +23,12 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_POST = {
 //			"/api/auth"
-            "/api/auth/register", "/api/auth/log-in", "/api/auth/log-in-google", "/api/auth/introspect",
-            "/api/auth/refresh-token", "/api/auth/activate", "/api/auth/forgot-password", "/api/auth/change-password",
+            "/api/external/auth/register", "/api/external/auth/log-in", "/api/external/auth/log-in-google", "/api/external/auth/introspect",
+            "/api/external/auth/refresh-token", "/api/external/auth/activate", "/api/external/auth/forgot-password", "/api/external/auth/change-password",
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
-          
+
     };
 
     private final CustomJwtDecoder customJwtDecoder;
