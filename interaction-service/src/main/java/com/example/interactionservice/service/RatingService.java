@@ -10,7 +10,7 @@ import com.example.interactionservice.mapper.RatingMapper;
 import com.example.interactionservice.model.Rating;
 import com.example.interactionservice.repository.RatingRepository;
 import com.example.interactionservice.repository.httpclient.StudyClient;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RatingService {
     private final RatingRepository documentRatingRepository;
     private final RatingMapper ratingMapper;
@@ -54,7 +54,7 @@ public class RatingService {
                 .documentTitle(doc.getTitle())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now()).build();
-        
+
         if (documentRatingRepository.existsByUserIdAndDocumentId(userId, request.getDocumentId())) {
             throw AppException.builder().appError(AppError.ALREADY_RATED).build();
         }

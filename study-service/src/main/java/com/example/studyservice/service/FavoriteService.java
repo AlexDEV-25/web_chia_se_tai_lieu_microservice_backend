@@ -12,7 +12,7 @@ import com.example.studyservice.model.Document;
 import com.example.studyservice.model.Favorite;
 import com.example.studyservice.repository.DocumentRepository;
 import com.example.studyservice.repository.FavoriteRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FavoriteService {
 
     private final FavoriteRepository favoriteDocumentRepository;

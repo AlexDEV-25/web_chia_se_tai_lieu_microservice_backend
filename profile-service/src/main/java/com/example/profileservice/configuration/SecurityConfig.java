@@ -19,7 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_POST = {
-            "/api/internal/users-detail/my-info",
+            "/api/internal/users-detail/my-detail-info",
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {

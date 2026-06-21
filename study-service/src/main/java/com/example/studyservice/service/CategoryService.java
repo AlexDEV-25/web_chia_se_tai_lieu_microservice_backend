@@ -9,14 +9,14 @@ import com.example.studyservice.exception.AppException;
 import com.example.studyservice.mapper.CategoryMapper;
 import com.example.studyservice.model.Category;
 import com.example.studyservice.repository.CategoryRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;

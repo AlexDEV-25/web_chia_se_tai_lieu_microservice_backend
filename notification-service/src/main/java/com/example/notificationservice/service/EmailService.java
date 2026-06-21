@@ -10,7 +10,6 @@ import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,8 +30,7 @@ public class EmailService {
     @Value("${app.email.sender-name}")
     @NonFinal
     String senderName;
-
-    @PreAuthorize("hasRole('ADMIN')")
+    
     public void sendEmail(SendEmailRequest request) {
         EmailRequest emailRequest = EmailRequest.builder()
                 .sender(Sender.builder()

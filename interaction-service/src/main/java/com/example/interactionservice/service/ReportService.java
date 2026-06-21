@@ -11,7 +11,7 @@ import com.example.interactionservice.model.Report;
 import com.example.interactionservice.repository.ReportRepository;
 import com.example.interactionservice.repository.httpclient.ProfileClient;
 import com.example.interactionservice.repository.httpclient.StudyClient;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ReportService {
     private final ReportRepository documentReportRepository;
     private final ReportMapper reportMapper;

@@ -15,7 +15,7 @@ import com.example.profileservice.model.UserFollow;
 import com.example.profileservice.repository.UserDetailRepository;
 import com.example.profileservice.repository.UserFollowRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserFollowService {
     private final UserFollowRepository userFollowRepository;
     private final UserDetailRepository userDetailRepository;
