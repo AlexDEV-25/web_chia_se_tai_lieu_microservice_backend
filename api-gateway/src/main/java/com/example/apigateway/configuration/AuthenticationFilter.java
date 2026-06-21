@@ -38,17 +38,17 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     @NonFinal
     private String[] publicPostEndpoints = {
 //			"/api/auth"
-            "/api/auth/register", "/api/auth/log-in", "/api/auth/log-in-google", "/api/auth/introspect",
-            "/api/auth/refresh-token", "/api/auth/activate", "/api/auth/forgot-password", "/api/auth/change-password",
+            "/api/external/auth/register", "/api/external/auth/log-in", "/api/external/auth/log-in-google", "/api/external/auth/introspect",
+            "/api/external/auth/refresh-token", "/api/external/auth/activate", "/api/external/auth/forgot-password", "/api/external/auth/change-password",
 
 //			"/api/documents"
-            "/api/documents/view/{id}",
+            "/api/external/documents/view/{id}",
     };
 
     @NonFinal
     private String[] publicGetEndpoints = {
 //			"/api/categories"
-            "/api/categories",
+            "/api/external/external",
 
             "/api/external/users-detail/bio-info/{userId}",
 
@@ -56,14 +56,14 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
             "/api/external/follows/follow-count/{userId}",
 
 //			"/api/documents"
-            "/api/documents", "/api/documents/{id}", "/api/documents/user/{userId}",
-            "/api/documents/category/{categoryId}", "/api/documents/user/{userId}", "/api/documents/count/{userId}",
+            "/api/external/documents", "/api/external/documents/{id}", "/api/external/documents/user/{userId}",
+            "/api/external/documents/category/{categoryId}", "/api/external/documents/user/{userId}", "/api/external/documents/count/{userId}",
 
 //            "/api/comments"
-            "/api/comments/document/{docId}",
+            "/api/external/comments/document/{docId}",
 
 //            "/api/ratings"
-            "/api/ratings/document-summary/{documentId}",
+            "/api/external/ratings/document-summary/{documentId}",
     };
 
     @Value("${app.api-prefix}")
