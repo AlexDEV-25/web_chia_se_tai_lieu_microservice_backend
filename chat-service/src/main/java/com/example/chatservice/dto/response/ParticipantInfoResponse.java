@@ -1,7 +1,6 @@
 package com.example.chatservice.dto.response;
 
 import com.example.chatservice.constant.ChatRole;
-import com.example.chatservice.constant.ConnectionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +18,4 @@ public class ParticipantInfoResponse {
     private String fullName;
     private LocalDateTime lastSeen;
     private ChatRole chatRole;
-    private ConnectionStatus userStatus;
 }

@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class LectureResponse {
-
     private Long id;
     private String title;
     private String description;
@@ -20,7 +19,6 @@ public class LectureResponse {
     private Long viewsCount;
     private Long downloadsCount;
     private String categoryName;
-
     private Double average;
     private Long total;
 }

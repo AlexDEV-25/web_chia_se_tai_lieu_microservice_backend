@@ -12,7 +12,7 @@ public interface ChatMessageMapper {
     @Mapping(target = "me", ignore = true)
     @Mapping(target = "conversationId", source = "conversation.id")
     @Mapping(target = "userId", source = "sender.userId")
-    @Mapping(target = "userName", source = "sender.fullName")
-    @Mapping(target = "userAvatar", source = "sender.avatarUrl")
+    @Mapping(target = "fullName", source = "sender.fullName")
+    @Mapping(target = "avatarUrl", source = "sender.avatarUrl")
     ChatMessageResponse chatMessagetoChatMessageResponse(ChatMessage entity);
 }

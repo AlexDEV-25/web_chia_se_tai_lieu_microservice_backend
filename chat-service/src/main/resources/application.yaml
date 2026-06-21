@@ -6,6 +6,24 @@ spring:
     url: ${MySQL_URL}
     username: root
     password: ${MySQL_PASSWORD}
+  ai:
+    openai:
+      api-key: ${API_KEY}
+      chat:
+        base-url: https://generativelanguage.googleapis.com
+        completions-path: /v1beta/openai/chat/completions
+        options:
+          model: gemini-2.5-flash
+    retry:
+      max-attempts: 3
+      backoff:
+        initial-interval: 30s
+        multiplier: 2
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
 
   main:
     banner-mode: off
@@ -20,6 +38,9 @@ server:
 logging:
   level:
     root: warn
+
+jwt:
+  secretKey: dAt62ISlQNyyt4dDObsfXv93IJ4mOHIGyqf/ECLbPQD/gERJ8wBaPISQyZTTE2PMQtEdsxtcyOFPFKsUJrQZoQ==
 
 app:
   domain:
