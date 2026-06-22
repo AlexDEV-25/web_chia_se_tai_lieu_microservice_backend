@@ -1,7 +1,8 @@
 package com.example.apigateway.configuration;
 
-import com.example.apigateway.dto.response.APIResponse;
+
 import com.example.apigateway.service.AuthService;
+import com.example.commondto.response.APIResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
@@ -21,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -42,7 +44,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
             "/api/external/auth/refresh-token", "/api/external/auth/activate", "/api/external/auth/forgot-password", "/api/external/auth/change-password",
 
 //			"/api/documents"
-            "/api/external/documents/view/{id}",
+            "/api/external/documents/view/*",
     };
 
     @NonFinal
@@ -50,20 +52,20 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 //			"/api/categories"
             "/api/external/external",
 
-            "/api/external/users-detail/bio-info/{userId}",
+            "/api/external/users-detail/bio-info/*",
 
 
-            "/api/external/follows/follow-count/{userId}",
+            "/api/external/follows/follow-count/*",
 
 //			"/api/documents"
-            "/api/external/documents", "/api/external/documents/{id}", "/api/external/documents/user/{userId}",
-            "/api/external/documents/category/{categoryId}", "/api/external/documents/user/{userId}", "/api/external/documents/count/{userId}",
+            "/api/external/documents", "/api/external/documents/*", "/api/external/documents/user/*",
+            "/api/external/documents/category/*", "/api/external/documents/user/*", "/api/external/documents/count/*",
 
 //            "/api/comments"
-            "/api/external/comments/document/{docId}",
+            "/api/external/comments/document/*",
 
 //            "/api/ratings"
-            "/api/external/ratings/document-summary/{documentId}",
+            "/api/external/ratings/document-summary/*",
     };
 
     @Value("${app.api-prefix}")
@@ -97,14 +99,21 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     }
 
     private boolean isPublicEndpoint(ServerHttpRequest request, HttpMethod method) {
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+        String path = request.getURI().getPath();
+
         if (method.equals(HttpMethod.GET)) {
             return Arrays.stream(publicGetEndpoints)
-                    .anyMatch(s -> request.getURI().getPath().matches(apiPrefix + s));
+                    .anyMatch(endpoint ->
+                            pathMatcher.match(apiPrefix + endpoint, path));
 
         } else if (method.equals(HttpMethod.POST)) {
             return Arrays.stream(publicPostEndpoints)
-                    .anyMatch(s -> request.getURI().getPath().matches(apiPrefix + s));
-        } else return false;
+                    .anyMatch(endpoint ->
+                            pathMatcher.match(apiPrefix + endpoint, path));
+        }
+
+        return false;
     }
 
     Mono<Void> unauthenticated(ServerHttpResponse response) {
