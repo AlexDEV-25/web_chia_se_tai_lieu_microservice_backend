@@ -2,7 +2,6 @@ package com.example.studyservice.controller;
 
 
 import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.FileResponse;
 import com.example.studyservice.dto.request.DocumentRequest;
 import com.example.studyservice.dto.response.*;
 import com.example.studyservice.service.DocumentService;

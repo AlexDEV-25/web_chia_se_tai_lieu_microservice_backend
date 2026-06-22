@@ -4,7 +4,6 @@ import com.example.AppError;
 import com.example.ContentStatus;
 import com.example.commondto.response.DocumentInfoResponse;
 import com.example.commondto.response.DocumentSearchAIResponse;
-import com.example.commondto.response.FileResponse;
 import com.example.commonexception.exception.AppException;
 import com.example.commonsecurity.helper.GetUserIdByToken;
 import com.example.constant.NotificationType;
