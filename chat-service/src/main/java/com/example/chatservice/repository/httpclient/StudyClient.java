@@ -1,8 +1,8 @@
 package com.example.chatservice.repository.httpclient;
 
-import com.example.chatservice.dto.response.APIResponse;
-import com.example.chatservice.dto.response.CategoryResponse;
-import com.example.chatservice.dto.response.DocumentSearchAIResponse;
+import com.example.commondto.response.APIResponse;
+import com.example.commondto.response.CategoryResponse;
+import com.example.commondto.response.DocumentSearchAIResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;

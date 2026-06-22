@@ -1,6 +1,6 @@
 package com.example.chatservice.model;
 
-import com.example.chatservice.constant.ChatRole;
+import com.example.ChatRole;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;

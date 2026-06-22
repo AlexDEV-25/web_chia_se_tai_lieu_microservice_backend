@@ -1,6 +1,6 @@
 package com.example.chatservice.dto.request;
 
-import com.example.chatservice.constant.ConversationType;
+import com.example.ConversationType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
 package com.example.chatservice.dto.request;
 
 
-import com.example.chatservice.constant.ChatRole;
+import com.example.ChatRole;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

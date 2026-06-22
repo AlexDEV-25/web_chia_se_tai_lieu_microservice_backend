@@ -1,8 +1,8 @@
 package com.example.chatservice.controller;
 
-import com.example.chatservice.dto.response.APIResponse;
 import com.example.chatservice.dto.response.ChatHistoryResponse;
 import com.example.chatservice.service.ChatService;
+import com.example.commondto.response.APIResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

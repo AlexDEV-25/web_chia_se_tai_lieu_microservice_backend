@@ -2,9 +2,9 @@ package com.example.chatservice.controller;
 
 
 import com.example.chatservice.dto.request.ParticipantInfoRequest;
-import com.example.chatservice.dto.response.APIResponse;
 import com.example.chatservice.dto.response.ParticipantInfoResponse;
 import com.example.chatservice.service.ParticipantInfoService;
+import com.example.commondto.response.APIResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

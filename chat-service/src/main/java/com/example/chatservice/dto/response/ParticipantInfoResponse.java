@@ -1,6 +1,6 @@
 package com.example.chatservice.dto.response;
 
-import com.example.chatservice.constant.ChatRole;
+import com.example.ChatRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

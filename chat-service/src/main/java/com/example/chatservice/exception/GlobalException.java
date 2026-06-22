@@ -1,6 +1,5 @@
 package com.example.chatservice.exception;
 
-import com.example.chatservice.dto.response.APIResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;

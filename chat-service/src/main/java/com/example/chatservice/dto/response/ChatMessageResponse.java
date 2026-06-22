@@ -1,6 +1,6 @@
 package com.example.chatservice.dto.response;
 
-import com.example.chatservice.constant.ConnectionStatus;
+import com.example.ConnectionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

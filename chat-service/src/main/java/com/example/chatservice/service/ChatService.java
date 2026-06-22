@@ -2,13 +2,17 @@ package com.example.chatservice.service;
 
 
 import com.example.chatservice.constant.AppError;
-import com.example.chatservice.dto.request.DisplayRequest;
-import com.example.chatservice.dto.response.*;
+import com.example.chatservice.dto.response.ChatHistoryResponse;
+import com.example.chatservice.dto.response.LectureResponse;
 import com.example.chatservice.exception.AppException;
-import com.example.chatservice.helper.GetUserIdByToken;
 import com.example.chatservice.mapper.ChatMapper;
 import com.example.chatservice.repository.httpclient.InteractionClient;
 import com.example.chatservice.repository.httpclient.StudyClient;
+import com.example.commondto.request.DisplayRequest;
+import com.example.commondto.response.CategoryResponse;
+import com.example.commondto.response.CommentAdminResponse;
+import com.example.commondto.response.RatingSummaryResponse;
+import com.example.commonsecurity.helper.GetUserIdByToken;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;

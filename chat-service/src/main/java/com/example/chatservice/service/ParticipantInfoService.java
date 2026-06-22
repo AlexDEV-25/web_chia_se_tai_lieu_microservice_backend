@@ -1,19 +1,19 @@
 package com.example.chatservice.service;
 
 
+import com.example.ChatRole;
+import com.example.ConversationType;
 import com.example.chatservice.constant.AppError;
-import com.example.chatservice.constant.ChatRole;
-import com.example.chatservice.constant.ConversationType;
 import com.example.chatservice.dto.request.ParticipantInfoRequest;
 import com.example.chatservice.dto.response.ParticipantInfoResponse;
-import com.example.chatservice.dto.response.UserDetailInfoResponse;
 import com.example.chatservice.exception.AppException;
-import com.example.chatservice.helper.GetUserIdByToken;
 import com.example.chatservice.mapper.ParticipantInfoMapper;
 import com.example.chatservice.model.Conversation;
 import com.example.chatservice.model.ParticipantInfo;
 import com.example.chatservice.repository.ParticipantInfoRepository;
 import com.example.chatservice.repository.httpclient.ProfileClient;
+import com.example.commondto.response.UserDetailInfoResponse;
+import com.example.commonsecurity.helper.GetUserIdByToken;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
