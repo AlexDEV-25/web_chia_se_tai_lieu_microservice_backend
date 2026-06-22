@@ -1,4 +1,4 @@
-package com.example.authservice.constant;
+package com.example;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +26,7 @@ public enum AppError {
     FAILED_TO_PARSE_DATA(1045, "Không thể phân tích dữ liệu", HttpStatus.BAD_REQUEST),
     INCORRECT_PASSWORD(1047, "Mật khẩu không đúng", HttpStatus.UNAUTHORIZED),
     CREATE_PROFILE_FAILED(1048, "đăng ký thất bại", HttpStatus.BAD_REQUEST);
-    
+
     private final int code;
     private final String message;
     private final HttpStatusCode statusCode;

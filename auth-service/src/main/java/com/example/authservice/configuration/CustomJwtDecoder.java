@@ -1,8 +1,8 @@
 package com.example.authservice.configuration;
 
 
-import com.example.authservice.constant.AppError;
-import com.example.authservice.exception.AppException;
+import com.example.AppError;
+import com.example.commonexception.exception.AppException;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.Jwt;

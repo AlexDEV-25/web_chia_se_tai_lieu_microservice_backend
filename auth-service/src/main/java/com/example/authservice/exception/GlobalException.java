@@ -1,6 +1,8 @@
 package com.example.authservice.exception;
 
-import com.example.authservice.constant.AppError;
+import com.example.AppError;
+import com.example.commondto.response.APIResponse;
+import com.example.commonexception.exception.AppException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,7 +26,7 @@ public class GlobalException {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<APIResponse<String>> handlingMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         APIResponse<String> error = new APIResponse<String>();
-        String message = e.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
+        String message = e.getBindingResult().getFieldErrors().getFirst().getDefaultMessage();
         error.setCode(9999);
         error.setMessage(message);
         return ResponseEntity.status(400).body(error);

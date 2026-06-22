@@ -1,12 +1,11 @@
 package com.example.authservice.helper;
 
-
-import com.example.authservice.constant.AppError;
-import com.example.authservice.exception.AppException;
+import com.example.AppError;
 import com.example.authservice.model.Permission;
 import com.example.authservice.model.Role;
 import com.example.authservice.model.User;
 import com.example.commondto.response.IntrospectResponse;
+import com.example.commonexception.exception.AppException;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;

@@ -1,12 +1,11 @@
 package com.example.authservice.service;
 
-import com.example.authservice.constant.AppError;
+import com.example.AppError;
 import com.example.authservice.dto.request.*;
 import com.example.authservice.dto.response.AuthenticationResponse;
 import com.example.authservice.dto.response.ExchangeTokenResponse;
 import com.example.authservice.dto.response.OutboundUserResponse;
 import com.example.authservice.dto.response.UserResponse;
-import com.example.authservice.exception.AppException;
 import com.example.authservice.helper.CreateBodyEmail;
 import com.example.authservice.helper.JwtHelper;
 import com.example.authservice.mapper.UserMapper;
@@ -19,6 +18,7 @@ import com.example.authservice.repository.httpclient.OutboundUserClient;
 import com.example.authservice.repository.httpclient.ProfileClient;
 import com.example.commondto.request.UserDetailRequest;
 import com.example.commondto.response.IntrospectResponse;
+import com.example.commonexception.exception.AppException;
 import com.example.event.EmailNotificationEvent;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
