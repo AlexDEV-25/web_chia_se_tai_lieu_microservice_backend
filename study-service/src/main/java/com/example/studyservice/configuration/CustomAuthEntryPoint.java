@@ -1,6 +1,6 @@
 package com.example.studyservice.configuration;
 
-import com.example.studyservice.dto.response.APIResponse;
+import com.example.commondto.response.APIResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

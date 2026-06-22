@@ -1,6 +1,6 @@
 package com.example.notificationservice.controller;
 
-import com.example.notificationservice.dto.response.APIResponse;
+import com.example.commondto.response.APIResponse;
 import com.example.notificationservice.dto.response.UserNotificationResponse;
 import com.example.notificationservice.service.UserNotificationService;
 import lombok.AllArgsConstructor;

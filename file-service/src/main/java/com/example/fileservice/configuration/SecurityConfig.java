@@ -19,11 +19,16 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_POST = {
+            "/api/internal/files/upload-file-pdf", "/api/internal/files/upload-file-image",
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
+            "/api/internal/files/{url}/download", "/api/internal/files/{publicId}/thumbnail"
     };
 
+    private final String[] PUBLIC_ENDPOINTS_DELETE = {
+            "/api/internal/files/{url}",
+    };
 
     private final CustomJwtDecoder customJwtDecoder;
 
@@ -32,6 +37,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request -> //
                 request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST).permitAll()//
                         .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()//
+                        .requestMatchers(HttpMethod.DELETE, PUBLIC_ENDPOINTS_DELETE).permitAll()//
                         .anyRequest().authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(customJwtDecoder)

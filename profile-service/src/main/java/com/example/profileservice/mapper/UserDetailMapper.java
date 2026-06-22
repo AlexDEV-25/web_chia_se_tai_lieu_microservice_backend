@@ -1,10 +1,10 @@
 package com.example.profileservice.mapper;
 
 
-import com.example.profileservice.dto.request.UserDetailRequest;
+import com.example.commondto.request.UserDetailRequest;
+import com.example.commondto.response.UserDetailInfoResponse;
+import com.example.commondto.response.UserDetailResponse;
 import com.example.profileservice.dto.response.UserBioResponse;
-import com.example.profileservice.dto.response.UserDetailInfoResponse;
-import com.example.profileservice.dto.response.UserDetailResponse;
 import com.example.profileservice.model.UserDetail;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

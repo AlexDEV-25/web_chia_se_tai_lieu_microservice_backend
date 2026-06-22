@@ -1,9 +1,13 @@
 package com.example.interactionservice.controller;
 
 
+import com.example.commondto.request.DisplayRequest;
+import com.example.commondto.response.APIResponse;
+import com.example.commondto.response.CommentDetailAdminResponse;
 import com.example.interactionservice.dto.request.CommentRequest;
-import com.example.interactionservice.dto.request.DisplayRequest;
-import com.example.interactionservice.dto.response.*;
+import com.example.interactionservice.dto.response.CommentTotalAdminResponse;
+import com.example.interactionservice.dto.response.CommentTreeUserResponse;
+import com.example.interactionservice.dto.response.CommentUserResponse;
 import com.example.interactionservice.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

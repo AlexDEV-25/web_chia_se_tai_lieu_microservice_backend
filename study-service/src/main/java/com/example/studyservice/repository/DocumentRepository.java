@@ -1,7 +1,6 @@
 package com.example.studyservice.repository;
 
-import com.example.studyservice.constant.ContentStatus;
-
+import com.example.ContentStatus;
 import com.example.studyservice.dto.response.CategoryCountResponse;
 import com.example.studyservice.dto.response.DocumentResponse;
 import com.example.studyservice.dto.response.DocumentStatsResponse;

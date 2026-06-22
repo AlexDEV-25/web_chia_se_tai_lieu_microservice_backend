@@ -1,6 +1,6 @@
 package com.example.profileservice.dto.response;
 
-import com.example.profileservice.constant.ConnectionStatus;
+import com.example.ConnectionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

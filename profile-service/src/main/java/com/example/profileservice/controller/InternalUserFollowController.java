@@ -1,6 +1,6 @@
 package com.example.profileservice.controller;
 
-import com.example.profileservice.dto.response.APIResponse;
+import com.example.commondto.response.APIResponse;
 import com.example.profileservice.dto.response.UserFollowNotificationResponse;
 import com.example.profileservice.service.UserFollowService;
 import lombok.AllArgsConstructor;

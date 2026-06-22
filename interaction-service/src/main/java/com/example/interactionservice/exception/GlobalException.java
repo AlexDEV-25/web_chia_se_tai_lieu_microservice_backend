@@ -1,7 +1,6 @@
 package com.example.interactionservice.exception;
 
 
-import com.example.interactionservice.dto.response.APIResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;

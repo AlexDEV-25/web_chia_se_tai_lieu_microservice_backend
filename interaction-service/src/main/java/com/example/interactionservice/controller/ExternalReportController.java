@@ -1,7 +1,7 @@
 package com.example.interactionservice.controller;
 
+import com.example.commondto.response.APIResponse;
 import com.example.interactionservice.dto.request.ReportRequest;
-import com.example.interactionservice.dto.response.APIResponse;
 import com.example.interactionservice.dto.response.ReportAdminResponse;
 import com.example.interactionservice.dto.response.ReportDetailAdminResponse;
 import com.example.interactionservice.dto.response.ReportUserResponse;

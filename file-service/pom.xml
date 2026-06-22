@@ -88,6 +88,11 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>common-dto</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 

@@ -1,13 +1,12 @@
 package com.example.notificationservice.service;
 
 
+import com.example.commonsecurity.helper.GetUserIdByToken;
 import com.example.notificationservice.dto.request.UserNotificationRequest;
 import com.example.notificationservice.dto.response.UserNotificationResponse;
-import com.example.notificationservice.helper.GetUserIdByToken;
 import com.example.notificationservice.mapper.UserNotificationMapper;
 import com.example.notificationservice.model.UserNotification;
 import com.example.notificationservice.repository.UserNotificationRepository;
-import com.example.notificationservice.repository.httpclient.ProfileClient;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,6 @@ public class UserNotificationService {
     private final UserNotificationRepository userNotificationRepository;
     private final UserNotificationMapper userNotificationMapper;
     private final GetUserIdByToken getUserIdByToken;
-    private final ProfileClient profileClient;
 
     @PreAuthorize("hasAuthority('GET_ALL_USER_NOTIFICATION')")
     public List<UserNotificationResponse> getByReceiver() {

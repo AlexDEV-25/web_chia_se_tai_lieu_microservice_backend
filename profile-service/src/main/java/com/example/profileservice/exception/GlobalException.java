@@ -1,7 +1,7 @@
 package com.example.profileservice.exception;
 
 
-import com.example.profileservice.dto.response.APIResponse;
+import com.example.commondto.response.APIResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;

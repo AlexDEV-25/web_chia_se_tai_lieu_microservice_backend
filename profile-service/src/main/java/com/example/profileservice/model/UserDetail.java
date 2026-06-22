@@ -1,6 +1,6 @@
 package com.example.profileservice.model;
 
-import com.example.profileservice.constant.ConnectionStatus;
+import com.example.ConnectionStatus;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;

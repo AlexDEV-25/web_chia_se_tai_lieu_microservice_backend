@@ -1,7 +1,7 @@
 package com.example.profileservice.controller;
 
 
-import com.example.profileservice.dto.response.APIResponse;
+import com.example.commondto.response.APIResponse;
 import com.example.profileservice.dto.response.FollowCountResponse;
 import com.example.profileservice.dto.response.UserFollowResponse;
 import com.example.profileservice.service.UserFollowService;

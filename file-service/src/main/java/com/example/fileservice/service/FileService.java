@@ -2,8 +2,8 @@ package com.example.fileservice.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.example.commondto.response.FileResponse;
 import com.example.fileservice.constant.AppError;
-import com.example.fileservice.dto.response.FileResponse;
 import com.example.fileservice.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -117,6 +117,7 @@ public class FileService {
                             "access_mode", "public"
                     )
             );
+            System.out.println(result);
             return result;
         } catch (Exception e) {
             throw new RuntimeException(e);

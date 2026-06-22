@@ -1,12 +1,11 @@
 package com.example.studyservice.controller;
 
 
-import com.example.studyservice.constant.AppError;
+import com.example.commondto.response.APIResponse;
+import com.example.commondto.response.FileResponse;
 import com.example.studyservice.dto.request.DocumentRequest;
 import com.example.studyservice.dto.response.*;
-import com.example.studyservice.exception.AppException;
 import com.example.studyservice.service.DocumentService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -95,17 +94,9 @@ public class ExternalDocumentController {
     @PostMapping(value = "/upload-file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public APIResponse<DocumentDetailResponse> create(@RequestPart("file") MultipartFile file,
                                                       @RequestPart("data") String dataJson) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            DocumentRequest dto = mapper.readValue(dataJson, DocumentRequest.class);
-
-            APIResponse<DocumentDetailResponse> apiResponse = new APIResponse<DocumentDetailResponse>();
-            apiResponse.setResult(documentService.uploadFile(file, dto));
-            return apiResponse;
-
-        } catch (Exception e) {
-            throw AppException.builder().appError(AppError.INVALID_JSON_FORMAT).build();
-        }
+        APIResponse<DocumentDetailResponse> apiResponse = new APIResponse<DocumentDetailResponse>();
+        apiResponse.setResult(documentService.uploadFile(file, dataJson));
+        return apiResponse;
     }
 
     @GetMapping("/{id}/download")

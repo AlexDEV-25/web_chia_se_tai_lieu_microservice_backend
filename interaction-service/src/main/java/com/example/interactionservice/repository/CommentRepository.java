@@ -1,6 +1,6 @@
 package com.example.interactionservice.repository;
 
-import com.example.interactionservice.dto.response.CommentAdminResponse;
+import com.example.commondto.response.CommentAdminResponse;
 import com.example.interactionservice.dto.response.CommentTotalAdminResponse;
 import com.example.interactionservice.model.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,7 +22,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 
     @Query("""
-            SELECT new com.example.interactionservice.dto.response.CommentAdminResponse(
+            SELECT new com.example.commondto.response.CommentAdminResponse(
             c.id,
             c.content
             )
@@ -34,7 +34,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<CommentAdminResponse> findDocumentCommentsLast7Days(@Param("fromDate") LocalDateTime fromDate);
 
     @Query("""
-            SELECT new com.example.interactionservice.dto.response.CommentTotalAdminResponse(
+            SELECT new com.example.commondto.response.CommentTotalAdminResponse(
             c.documentId,
             c.documentTitle,
             COUNT(c)

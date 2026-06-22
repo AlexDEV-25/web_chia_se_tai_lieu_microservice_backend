@@ -1,9 +1,9 @@
 package com.example.interactionservice.repository;
 
 
+import com.example.commondto.response.RatingSummaryResponse;
 import com.example.interactionservice.dto.response.RatingAdminResponse;
 import com.example.interactionservice.dto.response.RatingDetailAdminResponse;
-import com.example.interactionservice.dto.response.RatingSummaryResponse;
 import com.example.interactionservice.model.Rating;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,7 +18,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     boolean existsByUserIdAndDocumentId(Long userId, Long documentId);
 
     @Query("""
-                SELECT new com.example.interactionservice.dto.response.RatingSummaryResponse(
+                SELECT new com.example.commondto.response.RatingSummaryResponse(
                     AVG(r.rating),
                     COUNT(r.id)
                 )

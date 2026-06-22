@@ -1,6 +1,7 @@
 package com.example.profileservice.service;
 
 
+import com.example.commonsecurity.helper.GetUserIdByToken;
 import com.example.constant.NotificationType;
 import com.example.event.SystemNotificationEvent;
 import com.example.profileservice.constant.AppError;
@@ -8,7 +9,6 @@ import com.example.profileservice.dto.response.FollowCountResponse;
 import com.example.profileservice.dto.response.UserFollowNotificationResponse;
 import com.example.profileservice.dto.response.UserFollowResponse;
 import com.example.profileservice.exception.AppException;
-import com.example.profileservice.helper.GetUserIdByToken;
 import com.example.profileservice.mapper.UserFollowMapper;
 import com.example.profileservice.model.UserDetail;
 import com.example.profileservice.model.UserFollow;

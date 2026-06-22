@@ -1,7 +1,7 @@
 package com.example.interactionservice.mapper;
 
 
-import com.example.interactionservice.dto.response.CommentDetailAdminResponse;
+import com.example.commondto.response.CommentDetailAdminResponse;
 import com.example.interactionservice.dto.response.CommentTreeUserResponse;
 import com.example.interactionservice.dto.response.CommentUserResponse;
 import com.example.interactionservice.model.Comment;
@@ -19,5 +19,5 @@ public interface CommentMapper {
     CommentTreeUserResponse documentCommentToCommentTreeResponse(Comment entity);
 
     CommentDetailAdminResponse documentCommentToCommentDetailAdminResponse(Comment entity);
-    
+
 }

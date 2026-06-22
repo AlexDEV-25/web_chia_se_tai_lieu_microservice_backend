@@ -1,7 +1,7 @@
 package com.example.profileservice.repository.httpclient;
 
 
-import com.example.profileservice.dto.response.APIResponse;
+import com.example.commondto.response.APIResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;

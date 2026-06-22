@@ -1,6 +1,6 @@
 package com.example.notificationservice.configuration;
 
-import com.example.notificationservice.dto.response.APIResponse;
+import com.example.commondto.response.APIResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

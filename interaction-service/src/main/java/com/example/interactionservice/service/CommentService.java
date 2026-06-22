@@ -1,14 +1,20 @@
 package com.example.interactionservice.service;
 
 
+import com.example.commondto.request.DisplayRequest;
+import com.example.commondto.response.CommentAdminResponse;
+import com.example.commondto.response.CommentDetailAdminResponse;
+import com.example.commondto.response.DocumentInfoResponse;
+import com.example.commondto.response.UserDetailInfoResponse;
+import com.example.commonsecurity.helper.GetUserIdByToken;
 import com.example.constant.NotificationType;
 import com.example.event.SystemNotificationEvent;
 import com.example.interactionservice.constant.AppError;
 import com.example.interactionservice.dto.request.CommentRequest;
-import com.example.interactionservice.dto.request.DisplayRequest;
-import com.example.interactionservice.dto.response.*;
+import com.example.interactionservice.dto.response.CommentTotalAdminResponse;
+import com.example.interactionservice.dto.response.CommentTreeUserResponse;
+import com.example.interactionservice.dto.response.CommentUserResponse;
 import com.example.interactionservice.exception.AppException;
-import com.example.interactionservice.helper.GetUserIdByToken;
 import com.example.interactionservice.mapper.CommentMapper;
 import com.example.interactionservice.model.Comment;
 import com.example.interactionservice.repository.CommentRepository;

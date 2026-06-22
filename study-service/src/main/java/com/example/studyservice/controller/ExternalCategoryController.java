@@ -1,10 +1,10 @@
 package com.example.studyservice.controller;
 
 
+import com.example.commondto.request.DisplayRequest;
+import com.example.commondto.response.APIResponse;
+import com.example.commondto.response.CategoryResponse;
 import com.example.studyservice.dto.request.CategoryRequest;
-import com.example.studyservice.dto.request.DisplayRequest;
-import com.example.studyservice.dto.response.APIResponse;
-import com.example.studyservice.dto.response.CategoryResponse;
 import com.example.studyservice.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

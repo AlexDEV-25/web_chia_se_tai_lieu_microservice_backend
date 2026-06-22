@@ -1,7 +1,7 @@
 package com.example.studyservice.repository;
 
 
-import com.example.studyservice.constant.ContentStatus;
+import com.example.ContentStatus;
 import com.example.studyservice.model.Favorite;
 import feign.Param;
 import org.springframework.data.jpa.repository.JpaRepository;

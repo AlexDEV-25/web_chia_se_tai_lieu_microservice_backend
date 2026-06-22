@@ -1,7 +1,12 @@
 package com.example.studyservice.mapper;
 
+import com.example.commondto.response.DocumentInfoResponse;
+import com.example.commondto.response.DocumentSearchAIResponse;
 import com.example.studyservice.dto.request.DocumentRequest;
-import com.example.studyservice.dto.response.*;
+import com.example.studyservice.dto.response.DocumentAdminResponse;
+import com.example.studyservice.dto.response.DocumentDetailResponse;
+import com.example.studyservice.dto.response.DocumentEventDTO;
+import com.example.studyservice.dto.response.DocumentUserResponse;
 import com.example.studyservice.model.Document;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -41,7 +46,7 @@ public interface DocumentMapper {
 
     @Mapping(source = "category.name", target = "categoryName")
     DocumentSearchAIResponse documentToDocumentSearchAIResponse(Document entity);
-    
+
     DocumentInfoResponse documentToDocumentInfoResponse(Document entity);
 
     DocumentEventDTO documentToDocumentDTO(Document entity);

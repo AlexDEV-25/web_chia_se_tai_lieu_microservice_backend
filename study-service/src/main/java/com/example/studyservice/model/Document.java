@@ -1,6 +1,6 @@
 package com.example.studyservice.model;
 
-import com.example.studyservice.constant.ContentStatus;
+import com.example.ContentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

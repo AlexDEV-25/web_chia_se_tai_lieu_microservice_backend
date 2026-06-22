@@ -1,7 +1,7 @@
 package com.example.studyservice.dto.response;
 
 
-import com.example.studyservice.constant.ContentStatus;
+import com.example.ContentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

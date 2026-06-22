@@ -1,7 +1,7 @@
 package com.example.studyservice.mapper;
 
+import com.example.commondto.response.CategoryResponse;
 import com.example.studyservice.dto.request.CategoryRequest;
-import com.example.studyservice.dto.response.CategoryResponse;
 import com.example.studyservice.model.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

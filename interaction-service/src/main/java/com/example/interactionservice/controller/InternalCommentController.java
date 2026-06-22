@@ -1,7 +1,7 @@
 package com.example.interactionservice.controller;
 
-import com.example.interactionservice.dto.response.APIResponse;
-import com.example.interactionservice.dto.response.CommentAdminResponse;
+import com.example.commondto.response.APIResponse;
+import com.example.commondto.response.CommentAdminResponse;
 import com.example.interactionservice.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/internal/comments/")
+@RequestMapping("/api/internal/comments")
 @AllArgsConstructor
 public class InternalCommentController {
     private final CommentService commentService;

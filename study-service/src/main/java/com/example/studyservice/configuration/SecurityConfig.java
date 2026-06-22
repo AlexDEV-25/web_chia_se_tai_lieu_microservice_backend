@@ -20,14 +20,15 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_POST = {
 //			"/api/documents"
-            "/api/documents/view/{id}",
+            "/api/external/documents/view/{id}",
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
-            "/api/categories",
+            "/api/external/categories",
 
-            "/api/documents", "/api/documents/{id}", "/api/documents/user/{userId}",
-            "/api/documents/category/{categoryId}", "/api/documents/user/{userId}", "/api/documents/count/{userId}",
+            "/api/external/documents", "/api/external/documents/{id}", "/api/external/documents/user/{userId}",
+            "/api/external/documents/category/{categoryId}", "/api/external/documents/user/{userId}", "/api/external/documents/count/{userId}",
+            "/api/internal/documents/ai", "/api/internal/documents/info/{documentId}",
     };
 
     private final CustomJwtDecoder customJwtDecoder;

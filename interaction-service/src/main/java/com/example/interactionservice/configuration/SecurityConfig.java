@@ -24,9 +24,11 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
 //            "/api/comments"
-            "/api/comments/document/{docId}",
+            "/api/external/comments/document/{docId}",
+            "/api/internal/comments/admin/7-days",
+
 //            "/api/ratings"
-            "/api/ratings/document-summary/{documentId}",
+            "/api/external/ratings/document-summary/{documentId}",
     };
 
     private final CustomJwtDecoder customJwtDecoder;

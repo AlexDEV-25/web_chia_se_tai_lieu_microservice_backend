@@ -1,11 +1,15 @@
 package com.example.interactionservice.service;
 
 
+import com.example.commondto.response.DocumentInfoResponse;
+import com.example.commondto.response.UserDetailInfoResponse;
+import com.example.commonsecurity.helper.GetUserIdByToken;
 import com.example.interactionservice.constant.AppError;
 import com.example.interactionservice.dto.request.ReportRequest;
-import com.example.interactionservice.dto.response.*;
+import com.example.interactionservice.dto.response.ReportAdminResponse;
+import com.example.interactionservice.dto.response.ReportDetailAdminResponse;
+import com.example.interactionservice.dto.response.ReportUserResponse;
 import com.example.interactionservice.exception.AppException;
-import com.example.interactionservice.helper.GetUserIdByToken;
 import com.example.interactionservice.mapper.ReportMapper;
 import com.example.interactionservice.model.Report;
 import com.example.interactionservice.repository.ReportRepository;

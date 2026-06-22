@@ -1,7 +1,11 @@
 package com.example.interactionservice.controller;
 
+import com.example.commondto.response.APIResponse;
+import com.example.commondto.response.RatingSummaryResponse;
 import com.example.interactionservice.dto.request.RatingRequest;
-import com.example.interactionservice.dto.response.*;
+import com.example.interactionservice.dto.response.RatingAdminResponse;
+import com.example.interactionservice.dto.response.RatingDetailAdminResponse;
+import com.example.interactionservice.dto.response.RatingUserResponse;
 import com.example.interactionservice.service.RatingService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

@@ -1,8 +1,8 @@
 package com.example.studyservice.controller;
 
-import com.example.studyservice.dto.response.APIResponse;
-import com.example.studyservice.dto.response.DocumentInfoResponse;
-import com.example.studyservice.dto.response.DocumentSearchAIResponse;
+import com.example.commondto.response.APIResponse;
+import com.example.commondto.response.DocumentInfoResponse;
+import com.example.commondto.response.DocumentSearchAIResponse;
 import com.example.studyservice.service.DocumentService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

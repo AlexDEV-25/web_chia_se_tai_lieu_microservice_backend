@@ -25,7 +25,15 @@ public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS_GET = {
             "/api/external/users-detail/bio-info/{userId}",
             "/api/external/follows/follow-count/{userId}",
+
+            "/api/internal/users-detail/detail-info/{userId}",
+            "/api/internal/follows/follower/{userId}"
     };
+
+    private final String[] PUBLIC_ENDPOINTS_PUT = {
+            "/api/internal/users-detail/admin/detail-info/{userId}", "/api/internal/users-detail/detail-info/{userId}"
+    };
+
 
     private final CustomJwtDecoder customJwtDecoder;
 
@@ -34,6 +42,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request -> //
                 request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST).permitAll()//
                         .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()//
+                        .requestMatchers(HttpMethod.PUT, PUBLIC_ENDPOINTS_PUT).permitAll()//
                         .anyRequest().authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(customJwtDecoder)

@@ -1,16 +1,17 @@
 package com.example.studyservice.service;
 
-
+import com.example.ContentStatus;
+import com.example.commondto.response.DocumentInfoResponse;
+import com.example.commondto.response.DocumentSearchAIResponse;
+import com.example.commondto.response.FileResponse;
+import com.example.commonsecurity.helper.GetUserIdByToken;
 import com.example.constant.NotificationType;
 import com.example.event.SystemNotificationEvent;
 import com.example.studyservice.constant.AppError;
-import com.example.studyservice.constant.ContentStatus;
 import com.example.studyservice.dto.request.DocumentRequest;
 import com.example.studyservice.dto.response.*;
 import com.example.studyservice.exception.AppException;
-import com.example.studyservice.helper.GetUserIdByToken;
 import com.example.studyservice.mapper.DocumentMapper;
-import com.example.studyservice.model.Category;
 import com.example.studyservice.model.Document;
 import com.example.studyservice.repository.CategoryRepository;
 import com.example.studyservice.repository.DocumentRepository;
@@ -156,35 +157,40 @@ public class DocumentService {
     }
 
     @PreAuthorize("hasAuthority('UPLOAD_FILE')")
-    @Transactional
-    public DocumentDetailResponse uploadFile(MultipartFile fileToSave, DocumentRequest dto) {
+    public DocumentDetailResponse uploadFile(MultipartFile fileToSave, String dataJson) {
         Long userId = getUserIdByToken.get();
-        Document document = documentMapper.requestToDocument(dto);
+//        try {
+//            ObjectMapper mapper = new ObjectMapper();
+//            DocumentRequest dto = mapper.readValue(dataJson, DocumentRequest.class);
+
+//            Document document = documentMapper.requestToDocument(dto);
+        Document document = new Document();
         document.setCreatedAt(LocalDateTime.now());
         document.setUpdatedAt(LocalDateTime.now());
         document.setViewsCount(0L);
         document.setDownloadsCount(0L);
+
+
         document.setAuthorName(profileClient.getUserDetail(userId).getResult().getFullName());
-        try {
-            Map<String, Object> handleDoc = fileClient.uploadPdf(fileToSave).getResult();
+        Map<String, Object> handleDoc = fileClient.uploadPdf(fileToSave).getResult();
+        String url = (String) handleDoc.get("secure_url");
+        String publicId = (String) handleDoc.get("public_id");
+        document.setFileUrl(url);
 
-            String url = (String) handleDoc.get("secure_url");
-            String publicId = (String) handleDoc.get("public_id");
-            document.setFileUrl(url);
+        String thumbnailUrl = fileClient.getThumbnail(publicId).getResult();
+        document.setThumbnailUrl(thumbnailUrl);
 
-            String thumbnailUrl = fileClient.getThumbnail(publicId).getResult();
-            document.setThumbnailUrl(thumbnailUrl);
-        } catch (Exception e) {
-            throw AppException.builder().appError(AppError.UPLOAD_DOCUMENT_FAILED).build();
-        }
 
-        Category category = dto.getCategoryId() != null ?
-                categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> AppException.builder().appError(AppError.CATEGORY_NOT_FOUND).build())
-                : null;
-        document.setCategory(category);
+//        Category category = dto.getCategoryId() != null ?
+//                categoryRepository.findById(dto.getCategoryId())
+//                .orElseThrow(() -> AppException.builder().appError(AppError.CATEGORY_NOT_FOUND).build())
+//                : null;
+//        document.setCategory(category);
         Document saved = documentRepository.save(document);
         return documentMapper.documentToDocumentDetailResponse(saved);
+//        } catch (Exception e) {
+//            throw AppException.builder().appError(AppError.INVALID_JSON_FORMAT).build();
+//        }
     }
 
     @PreAuthorize("hasAuthority('DOWNLOAD_FILE')")
