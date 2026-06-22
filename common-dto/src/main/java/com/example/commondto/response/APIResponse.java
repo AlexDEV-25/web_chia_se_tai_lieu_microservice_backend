@@ -1,5 +1,4 @@
-package com.example.fileservice.dto.response;
-
+package com.example.commondto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

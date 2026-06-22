@@ -1,6 +1,7 @@
-package com.example.fileservice.dto.request;
+package com.example.commondto.request;
 
 
+import com.example.ConnectionStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

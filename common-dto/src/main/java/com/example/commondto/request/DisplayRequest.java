@@ -1,4 +1,4 @@
-package com.example.fileservice.dto.request;
+package com.example.commondto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

@@ -1,10 +1,11 @@
-package com.example.fileservice.dto.response;
+package com.example.commondto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
 
 @Data
 @NoArgsConstructor
