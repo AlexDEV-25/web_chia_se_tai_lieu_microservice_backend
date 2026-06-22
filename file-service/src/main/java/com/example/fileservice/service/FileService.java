@@ -2,9 +2,9 @@ package com.example.fileservice.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.example.AppError;
 import com.example.commondto.response.FileResponse;
-import com.example.fileservice.constant.AppError;
-import com.example.fileservice.exception.AppException;
+import com.example.commonexception.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;

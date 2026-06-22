@@ -2,7 +2,6 @@ package com.example.interactionservice.configuration;
 
 
 import com.example.interactionservice.constant.AppError;
-import com.example.interactionservice.exception.AppException;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;

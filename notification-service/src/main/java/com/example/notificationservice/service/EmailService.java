@@ -1,10 +1,10 @@
 package com.example.notificationservice.service;
 
-import com.example.notificationservice.constant.AppError;
+import com.example.AppError;
+import com.example.commonexception.exception.AppException;
 import com.example.notificationservice.dto.request.EmailRequest;
 import com.example.notificationservice.dto.request.SendEmailRequest;
 import com.example.notificationservice.dto.request.Sender;
-import com.example.notificationservice.exception.AppException;
 import com.example.notificationservice.repository.httpclient.EmailClient;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class EmailService {
     @Value("${app.email.sender-name}")
     @NonFinal
     String senderName;
-    
+
     public void sendEmail(SendEmailRequest request) {
         EmailRequest emailRequest = EmailRequest.builder()
                 .sender(Sender.builder()

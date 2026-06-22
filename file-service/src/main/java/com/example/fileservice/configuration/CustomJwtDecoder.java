@@ -1,8 +1,7 @@
 package com.example.fileservice.configuration;
 
-
-import com.example.fileservice.constant.AppError;
-import com.example.fileservice.exception.AppException;
+import com.example.AppError;
+import com.example.commonexception.exception.AppException;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;

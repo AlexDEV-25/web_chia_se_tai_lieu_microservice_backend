@@ -1,8 +1,8 @@
 package com.example.studyservice.configuration;
 
 
-import com.example.studyservice.constant.AppError;
-import com.example.studyservice.exception.AppException;
+import com.example.AppError;
+import com.example.commonexception.exception.AppException;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;

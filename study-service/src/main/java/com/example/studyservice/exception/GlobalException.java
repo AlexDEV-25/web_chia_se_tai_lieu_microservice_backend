@@ -1,6 +1,7 @@
 package com.example.studyservice.exception;
 
 import com.example.commondto.response.APIResponse;
+import com.example.commonexception.exception.AppException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;

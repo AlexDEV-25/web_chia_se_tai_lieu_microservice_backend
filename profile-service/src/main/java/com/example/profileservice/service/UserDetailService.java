@@ -1,15 +1,15 @@
 package com.example.profileservice.service;
 
 
+import com.example.AppError;
 import com.example.ConnectionStatus;
 import com.example.commondto.request.DisplayRequest;
 import com.example.commondto.request.UserDetailRequest;
 import com.example.commondto.response.UserDetailInfoResponse;
 import com.example.commondto.response.UserDetailResponse;
+import com.example.commonexception.exception.AppException;
 import com.example.commonsecurity.helper.GetUserIdByToken;
-import com.example.profileservice.constant.AppError;
 import com.example.profileservice.dto.response.UserBioResponse;
-import com.example.profileservice.exception.AppException;
 import com.example.profileservice.mapper.UserDetailMapper;
 import com.example.profileservice.model.UserDetail;
 import com.example.profileservice.repository.UserDetailRepository;

@@ -1,8 +1,9 @@
 package com.example.fileservice.exception;
 
 
+import com.example.AppError;
 import com.example.commondto.response.APIResponse;
-import com.example.fileservice.constant.AppError;
+import com.example.commonexception.exception.AppException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

@@ -1,7 +1,6 @@
-package com.example.authservice.exception;
+package com.example.commonexception.exception;
 
-
-import com.example.authservice.constant.AppError;
+import com.example.AppError;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,16 +1,16 @@
 package com.example.studyservice.service;
 
+import com.example.AppError;
 import com.example.ContentStatus;
 import com.example.commondto.response.DocumentInfoResponse;
 import com.example.commondto.response.DocumentSearchAIResponse;
 import com.example.commondto.response.FileResponse;
+import com.example.commonexception.exception.AppException;
 import com.example.commonsecurity.helper.GetUserIdByToken;
 import com.example.constant.NotificationType;
 import com.example.event.SystemNotificationEvent;
-import com.example.studyservice.constant.AppError;
 import com.example.studyservice.dto.request.DocumentRequest;
 import com.example.studyservice.dto.response.*;
-import com.example.studyservice.exception.AppException;
 import com.example.studyservice.mapper.DocumentMapper;
 import com.example.studyservice.model.Document;
 import com.example.studyservice.repository.CategoryRepository;

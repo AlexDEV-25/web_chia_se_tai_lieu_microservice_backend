@@ -1,12 +1,12 @@
 package com.example.studyservice.service;
 
 
+import com.example.AppError;
 import com.example.ContentStatus;
+import com.example.commonexception.exception.AppException;
 import com.example.commonsecurity.helper.GetUserIdByToken;
-import com.example.studyservice.constant.AppError;
 import com.example.studyservice.dto.request.FavoriteRequest;
 import com.example.studyservice.dto.response.FavoriteResponse;
-import com.example.studyservice.exception.AppException;
 import com.example.studyservice.mapper.FavoriteMapper;
 import com.example.studyservice.model.Document;
 import com.example.studyservice.model.Favorite;

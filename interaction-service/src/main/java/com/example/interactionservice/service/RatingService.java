@@ -9,7 +9,6 @@ import com.example.interactionservice.dto.request.RatingRequest;
 import com.example.interactionservice.dto.response.RatingAdminResponse;
 import com.example.interactionservice.dto.response.RatingDetailAdminResponse;
 import com.example.interactionservice.dto.response.RatingUserResponse;
-import com.example.interactionservice.exception.AppException;
 import com.example.interactionservice.mapper.RatingMapper;
 import com.example.interactionservice.model.Rating;
 import com.example.interactionservice.repository.RatingRepository;
