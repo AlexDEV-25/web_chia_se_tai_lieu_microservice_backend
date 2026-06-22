@@ -1,10 +1,11 @@
 package com.example.interactionservice.service;
 
 
+import com.example.AppError;
 import com.example.commondto.response.DocumentInfoResponse;
 import com.example.commondto.response.UserDetailInfoResponse;
+import com.example.commonexception.exception.AppException;
 import com.example.commonsecurity.helper.GetUserIdByToken;
-import com.example.interactionservice.constant.AppError;
 import com.example.interactionservice.dto.request.ReportRequest;
 import com.example.interactionservice.dto.response.ReportAdminResponse;
 import com.example.interactionservice.dto.response.ReportDetailAdminResponse;
