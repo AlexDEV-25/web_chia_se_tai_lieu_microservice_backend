@@ -2,7 +2,6 @@ package com.example.chatservice.helper;
 
 
 import com.example.chatservice.constant.AppError;
-import com.example.chatservice.exception.AppException;
 import com.example.commondto.response.IntrospectResponse;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSVerifier;

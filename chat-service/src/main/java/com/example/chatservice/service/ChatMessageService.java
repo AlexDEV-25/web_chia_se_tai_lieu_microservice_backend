@@ -1,11 +1,9 @@
 package com.example.chatservice.service;
 
-
-import com.example.chatservice.constant.AppError;
+import com.example.AppError;
 import com.example.chatservice.dto.request.ChatMessageRequest;
 import com.example.chatservice.dto.response.ChatMessageResponse;
 import com.example.chatservice.event.MessageCreatedEvent;
-import com.example.chatservice.exception.AppException;
 import com.example.chatservice.mapper.ChatMessageMapper;
 import com.example.chatservice.model.ChatMessage;
 import com.example.chatservice.model.Conversation;
@@ -13,6 +11,7 @@ import com.example.chatservice.model.ParticipantInfo;
 import com.example.chatservice.repository.ChatMessageRepository;
 import com.example.chatservice.repository.ConversationRepository;
 import com.example.chatservice.repository.ParticipantInfoRepository;
+import com.example.commonexception.exception.AppException;
 import com.example.commonsecurity.helper.GetUserIdByToken;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;

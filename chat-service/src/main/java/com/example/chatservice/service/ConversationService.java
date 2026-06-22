@@ -1,14 +1,13 @@
 package com.example.chatservice.service;
 
 
+import com.example.AppError;
 import com.example.ChatRole;
 import com.example.ConversationType;
-import com.example.chatservice.constant.AppError;
 import com.example.chatservice.dto.request.ConversationGroupRequest;
 import com.example.chatservice.dto.request.ConversationRequest;
 import com.example.chatservice.dto.response.ConversationResponse;
 import com.example.chatservice.dto.response.ParticipantInfoResponse;
-import com.example.chatservice.exception.AppException;
 import com.example.chatservice.mapper.ConversationMapper;
 import com.example.chatservice.mapper.ParticipantInfoMapper;
 import com.example.chatservice.model.Conversation;
@@ -18,6 +17,7 @@ import com.example.chatservice.repository.ParticipantInfoRepository;
 import com.example.chatservice.repository.httpclient.FileClient;
 import com.example.chatservice.repository.httpclient.ProfileClient;
 import com.example.commondto.response.UserDetailInfoResponse;
+import com.example.commonexception.exception.AppException;
 import com.example.commonsecurity.helper.GetUserIdByToken;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;

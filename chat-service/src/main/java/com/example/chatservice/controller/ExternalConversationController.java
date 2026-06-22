@@ -1,13 +1,12 @@
 package com.example.chatservice.controller;
 
-
-import com.example.chatservice.constant.AppError;
+import com.example.AppError;
 import com.example.chatservice.dto.request.ConversationGroupRequest;
 import com.example.chatservice.dto.request.ConversationRequest;
 import com.example.chatservice.dto.response.ConversationResponse;
-import com.example.chatservice.exception.AppException;
 import com.example.chatservice.service.ConversationService;
 import com.example.commondto.response.APIResponse;
+import com.example.commonexception.exception.AppException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
