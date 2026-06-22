@@ -6,6 +6,8 @@ import com.example.authservice.dto.request.ChangePasswordRequest;
 import com.example.authservice.dto.request.RegisterRequest;
 import com.example.authservice.dto.response.UserResponse;
 import com.example.authservice.service.UserService;
+import com.example.commondto.request.DisplayRequest;
+import com.example.commondto.response.APIResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

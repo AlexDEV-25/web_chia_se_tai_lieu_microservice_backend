@@ -1,6 +1,6 @@
 package com.example.authservice.repository.httpclient;
 
-import com.example.authservice.dto.response.OutboudUserResponse;
+import com.example.authservice.dto.response.OutboundUserResponse;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface OutboundUserClient {
 
     @GetMapping("/oauth2/v2/userinfo")
-    OutboudUserResponse getUserDetails(@RequestHeader("Authorization") String authorization);
+    OutboundUserResponse getUserDetails(@RequestHeader("Authorization") String authorization);
 }

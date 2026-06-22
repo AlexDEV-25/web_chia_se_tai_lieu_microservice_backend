@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Builder
-public class OutboudUserResponse {
+public class OutboundUserResponse {
     private String id;
     private String email;
     private boolean verifiedEmail;
