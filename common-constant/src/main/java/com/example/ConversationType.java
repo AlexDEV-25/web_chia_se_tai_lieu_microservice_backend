@@ -1,4 +1,4 @@
-package com.example.chatservice.constant;
+package com.example;
 
 public enum ConversationType {
     GROUP, DIRECT

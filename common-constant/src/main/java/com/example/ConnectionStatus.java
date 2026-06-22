@@ -1,4 +1,4 @@
-package com.example.authservice.constant;
+package com.example;
 
 public enum ConnectionStatus {
     ONLINE, OFFLINE

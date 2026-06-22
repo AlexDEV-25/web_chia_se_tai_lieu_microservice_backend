@@ -1,4 +1,4 @@
-package com.example.studyservice.constant;
+package com.example;
 
 public enum ContentStatus {
     PENDING, PUBLISHED, HIDDEN
