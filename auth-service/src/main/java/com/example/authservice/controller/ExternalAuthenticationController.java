@@ -1,10 +1,11 @@
 package com.example.authservice.controller;
 
 
-import com.example.authservice.dto.request.*;
-import com.example.authservice.dto.response.APIResponse;
+import com.example.authservice.dto.request.ActiveAccountRequest;
+import com.example.authservice.dto.request.AuthenticationRequest;
+import com.example.authservice.dto.request.ForgotPasswordRequest;
+import com.example.authservice.dto.request.RegisterRequest;
 import com.example.authservice.dto.response.AuthenticationResponse;
-import com.example.authservice.dto.response.IntrospectResponse;
 import com.example.authservice.dto.response.UserResponse;
 import com.example.authservice.service.AuthenticationService;
 import jakarta.validation.Valid;

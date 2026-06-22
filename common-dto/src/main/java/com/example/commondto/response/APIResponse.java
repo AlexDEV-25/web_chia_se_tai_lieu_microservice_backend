@@ -1,4 +1,4 @@
-package com.example.response;
+package com.example.fileservice.dto.response;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

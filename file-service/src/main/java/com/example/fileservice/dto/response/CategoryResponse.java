@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FileResponse {
-    private InputStreamResource resource;
-    private long length;
-    private MediaType mediaType;
-    private String fileName;
-
+public class CategoryResponse {
+    private Long id;
+    private String name;
+    private String description;
+    private boolean hide;
 }

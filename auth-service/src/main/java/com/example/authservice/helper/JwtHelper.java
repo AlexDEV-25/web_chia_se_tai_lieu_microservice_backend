@@ -2,7 +2,6 @@ package com.example.authservice.helper;
 
 
 import com.example.authservice.constant.AppError;
-import com.example.authservice.dto.response.IntrospectResponse;
 import com.example.authservice.exception.AppException;
 import com.example.authservice.model.Permission;
 import com.example.authservice.model.Role;

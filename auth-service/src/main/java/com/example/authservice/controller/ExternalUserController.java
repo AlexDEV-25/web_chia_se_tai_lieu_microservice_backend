@@ -3,9 +3,7 @@ package com.example.authservice.controller;
 
 import com.example.authservice.dto.request.ChangeEmailRequest;
 import com.example.authservice.dto.request.ChangePasswordRequest;
-import com.example.authservice.dto.request.DisplayRequest;
 import com.example.authservice.dto.request.RegisterRequest;
-import com.example.authservice.dto.response.APIResponse;
 import com.example.authservice.dto.response.UserResponse;
 import com.example.authservice.service.UserService;
 import jakarta.validation.Valid;
@@ -38,7 +36,7 @@ public class ExternalUserController {
         userService.changePassword(request);
         return apiResponse;
     }
-    
+
     @PutMapping("/admin/hide/{id}")
     public APIResponse<UserResponse> hideUser(@PathVariable Long id, @RequestBody @Valid DisplayRequest dto) {
         APIResponse<UserResponse> apiResponse = new APIResponse<UserResponse>();

@@ -1,9 +1,5 @@
 package com.example.authservice.repository.httpclient;
 
-import com.example.authservice.dto.request.DisplayRequest;
-import com.example.authservice.dto.request.UserDetailRequest;
-import com.example.authservice.dto.response.APIResponse;
-import com.example.authservice.dto.response.UserDetailResponse;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
