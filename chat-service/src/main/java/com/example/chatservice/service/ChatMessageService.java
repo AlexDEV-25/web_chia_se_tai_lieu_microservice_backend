@@ -30,11 +30,10 @@ public class ChatMessageService {
     private final ParticipantInfoRepository participantInfoRepository;
     private final ApplicationEventPublisher publisher;
     private final ChatMessageMapper chatMessageMapper;
-    private final GetUserIdByToken getUserIdByToken;
 
     @PreAuthorize("hasAuthority('GET_MESSAGE')")
     public List<ChatMessageResponse> getMessages(Long conversationId) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
 
         if (userId == 0L) {
             throw AppException.builder().appError(AppError.USER_NOT_FOUND).build();
@@ -46,7 +45,7 @@ public class ChatMessageService {
 
     @PreAuthorize("hasAuthority('CREATE_MESSAGE')")
     public void createMessage(ChatMessageRequest request) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
 
         if (userId == 0L) {
             throw AppException.builder().appError(AppError.USER_NOT_FOUND).build();

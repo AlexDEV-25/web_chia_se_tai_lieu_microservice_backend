@@ -43,6 +43,11 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
             "/api/external/auth/register", "/api/external/auth/log-in", "/api/external/auth/log-in-google", "/api/external/auth/introspect",
             "/api/external/auth/refresh-token", "/api/external/auth/activate", "/api/external/auth/forgot-password", "/api/external/auth/change-password",
 
+
+    };
+
+    @NonFinal
+    private String[] publicPutEndpoints = {
 //			"/api/documents"
             "/api/external/documents/view/*",
     };
@@ -109,6 +114,10 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
         } else if (method.equals(HttpMethod.POST)) {
             return Arrays.stream(publicPostEndpoints)
+                    .anyMatch(endpoint ->
+                            pathMatcher.match(apiPrefix + endpoint, path));
+        } else if (method.equals(HttpMethod.PUT)) {
+            return Arrays.stream(publicPutEndpoints)
                     .anyMatch(endpoint ->
                             pathMatcher.match(apiPrefix + endpoint, path));
         }

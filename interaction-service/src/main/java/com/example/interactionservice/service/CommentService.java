@@ -38,7 +38,6 @@ public class CommentService {
 
     private final CommentRepository documentRepo;
     private final CommentMapper mapper;
-    private final GetUserIdByToken getUserIdByToken;
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final StudyClient studyClient;
     private final ProfileClient profileClient;
@@ -48,7 +47,7 @@ public class CommentService {
 
     @PreAuthorize("hasAuthority('POST_COMMENT')")
     public CommentUserResponse saveMyComment(CommentRequest req) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
 
         DocumentInfoResponse doc = studyClient.getAllPublicDocumentsForInteraction(req.getDocumentId()).getResult();
         UserDetailInfoResponse user = profileClient.getUserDetail(userId).getResult();
@@ -89,7 +88,7 @@ public class CommentService {
 
     @PreAuthorize("hasAuthority('UPDATE_MY_COMMENT')")
     public CommentUserResponse updateMyComment(Long id, CommentRequest req) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         Comment c = documentRepo.findByIdAndUserIdAndHideFalse(id, userId)
                 .orElseThrow(() -> new AppException(AppError.CANNOT_UPDATE_COMMENT));
         c.setContent(req.getContent());

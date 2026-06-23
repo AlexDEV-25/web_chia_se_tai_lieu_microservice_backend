@@ -26,12 +26,11 @@ import java.time.LocalDateTime;
 public class ParticipantInfoService {
     private final ParticipantInfoRepository participantInfoRepository;
     private final ParticipantInfoMapper participantInfoMapper;
-    private final GetUserIdByToken getUserIdByToken;
     private final ProfileClient profileClient;
 
     @PreAuthorize("hasAuthority('UPDATE_LAST_SEEN')")
     public ParticipantInfoResponse updateLastSeen(Long id) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         ParticipantInfo participantInfo = participantInfoRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> AppException.builder().appError(AppError.PARTICIPANT_INFO_NOT_FOUND).build());
         participantInfo.setLastSeen(LocalDateTime.now());
@@ -41,7 +40,7 @@ public class ParticipantInfoService {
 
     @PreAuthorize("hasAuthority('ADD_MEMBER')")
     public ParticipantInfoResponse addMember(ParticipantInfoRequest request) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
 
         ParticipantInfo participantInfo = findByUserIdAndConversationId(userId, request.getConversationId());
         if (participantInfo.getChatRole() == ChatRole.MEMBER) {
@@ -69,7 +68,7 @@ public class ParticipantInfoService {
 
     @PreAuthorize("hasAuthority('DELETE_MEMBER')")
     public void deleteMember(Long deleteUserId, Long conversationId) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
 
         ParticipantInfo myParticipantInfo = findByUserIdAndConversationId(userId, conversationId);
 
@@ -94,7 +93,7 @@ public class ParticipantInfoService {
     @PreAuthorize("hasAuthority('CHANGE_ROLE')")
     public ParticipantInfoResponse changeRole(@Valid ParticipantInfoRequest dto) {
 
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
 
         ParticipantInfo myParticipantInfo = findByUserIdAndConversationId(userId, dto.getConversationId());
 

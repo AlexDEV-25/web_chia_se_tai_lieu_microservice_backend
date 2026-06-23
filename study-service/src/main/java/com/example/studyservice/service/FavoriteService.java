@@ -26,11 +26,10 @@ public class FavoriteService {
     private final FavoriteRepository favoriteDocumentRepository;
     private final DocumentRepository documentRepository;
     private final FavoriteMapper favoriteMapper;
-    private final GetUserIdByToken getUserIdByToken;
 
     @PreAuthorize("hasAuthority('ADD_FAVORITE')")
     public FavoriteResponse addFavorite(FavoriteRequest request) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         Favorite favorite = Favorite.builder().createdAt(LocalDateTime.now()).userId(userId).build();
         Document doc = documentRepository.findById(request.getContentId())
                 .orElseThrow(() -> AppException.builder().appError(AppError.DOCUMENT_NOT_FOUND).build());
@@ -41,7 +40,7 @@ public class FavoriteService {
 
     @PreAuthorize("hasAuthority('GET_DOCUMENT_FAVORITE')")
     public List<FavoriteResponse> getDocumentFavoritesByUser() {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         List<Favorite> favorites = favoriteDocumentRepository.findByUserIdAndDocumentFit(userId,
                 ContentStatus.PUBLISHED);
         return favorites.stream().map(favoriteMapper::documentFavoriteToResponse).toList();
@@ -49,7 +48,7 @@ public class FavoriteService {
 
     @PreAuthorize("hasAuthority('REMOVE_DOCUMENT_FAVORITE')")
     public void removeDocumentFavorite(Long documentId) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         Favorite favorite = favoriteDocumentRepository.findByUserIdAndDocument_Id(userId, documentId)
                 .orElseThrow(() -> AppException.builder().appError(AppError.REMOVE_FROM_FAVORITE_FAILED).build());
         favoriteDocumentRepository.deleteById(favorite.getId());
@@ -58,7 +57,7 @@ public class FavoriteService {
 
     @PreAuthorize("hasAuthority('CHECK_DOCUMENT_FAVORITE')")
     public boolean checkDocumentFavorite(Long documentId) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         return favoriteDocumentRepository.existsByUserIdAndDocument_Id(userId, documentId);
     }
 }

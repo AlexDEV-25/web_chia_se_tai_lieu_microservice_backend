@@ -11,15 +11,17 @@ import com.example.event.SystemNotificationEvent;
 import com.example.studyservice.dto.request.DocumentRequest;
 import com.example.studyservice.dto.response.*;
 import com.example.studyservice.mapper.DocumentMapper;
+import com.example.studyservice.model.Category;
 import com.example.studyservice.model.Document;
 import com.example.studyservice.repository.CategoryRepository;
 import com.example.studyservice.repository.DocumentRepository;
 import com.example.studyservice.repository.httpclient.FileClient;
 import com.example.studyservice.repository.httpclient.ProfileClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -29,14 +31,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DocumentService {
     private final DocumentRepository documentRepository;
     private final CategoryRepository categoryRepository;
-    private final ApplicationEventPublisher eventPublisher;
     private final DocumentMapper documentMapper;
-    private final GetUserIdByToken getUserIdByToken;
     private final FileClient fileClient;
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final ProfileClient profileClient;
@@ -61,7 +62,7 @@ public class DocumentService {
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
     public void delete(Long id) {
-        Long adminId = getUserIdByToken.get();
+        Long adminId = GetUserIdByToken.get();
         Document entity = documentRepository.findById(id)
                 .orElseThrow(() -> AppException.builder().appError(AppError.DOCUMENT_NOT_FOUND).build());
         DocumentEventDTO dto = documentMapper.documentToDocumentDTO(entity);
@@ -75,7 +76,7 @@ public class DocumentService {
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public DocumentDetailResponse update(Long id, DocumentRequest request) {
-        Long adminId = getUserIdByToken.get();
+        Long adminId = GetUserIdByToken.get();
         Document entity = documentRepository.findById(id)
                 .orElseThrow(() -> AppException.builder().appError(AppError.DOCUMENT_NOT_FOUND).build());
 
@@ -92,14 +93,14 @@ public class DocumentService {
 
     @PreAuthorize("hasAuthority('GET_MY_DOCUMENT')")
     public List<DocumentUserResponse> getMyDocument() {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         List<Document> documents = documentRepository.findByUserId(userId);
         return documents.stream().map(documentMapper::documentToDocumentUserResponse).toList();
     }
 
     @PreAuthorize("hasAuthority('GET_MY_DOCUMENT_DETAIL')")
     public DocumentDetailResponse getMyDocumentDetail(Long id) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         Document entity = documentRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> AppException.builder().appError(AppError.DOCUMENT_NOT_FOUND).build());
         return documentMapper.documentToDocumentDetailResponse(entity);
@@ -107,7 +108,7 @@ public class DocumentService {
 
     @PreAuthorize("hasAuthority('UPDATE_MY_DOCUMENT')")
     public DocumentUserResponse updateMyDocument(Long id, DocumentRequest request) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         Document entity = documentRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> AppException.builder().appError(AppError.DOCUMENT_NOT_FOUND).build());
         boolean initialState = entity.isHide();
@@ -132,7 +133,7 @@ public class DocumentService {
 
     @PreAuthorize("hasAuthority('DELETE_MY_DOCUMENT')")
     public void deleteMyDocument(Long id) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         Document entity = documentRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> AppException.builder().appError(AppError.DOCUMENT_NOT_FOUND).build());
         DocumentEventDTO dto = documentMapper.documentToDocumentDTO(entity);
@@ -151,45 +152,48 @@ public class DocumentService {
 
     @PreAuthorize("hasAuthority('COUNT_MY_DOCUMENT')")
     public Long countMyDocument() {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         return documentRepository.countByUserId(userId);
     }
 
     @PreAuthorize("hasAuthority('UPLOAD_FILE')")
     public DocumentDetailResponse uploadFile(MultipartFile fileToSave, String dataJson) {
-        Long userId = getUserIdByToken.get();
-//        try {
-//            ObjectMapper mapper = new ObjectMapper();
-//            DocumentRequest dto = mapper.readValue(dataJson, DocumentRequest.class);
+        Long userId = GetUserIdByToken.get();
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            DocumentRequest dto = mapper.readValue(dataJson, DocumentRequest.class);
 
-//            Document document = documentMapper.requestToDocument(dto);
-        Document document = new Document();
-        document.setCreatedAt(LocalDateTime.now());
-        document.setUpdatedAt(LocalDateTime.now());
-        document.setViewsCount(0L);
-        document.setDownloadsCount(0L);
+            Document document = documentMapper.requestToDocument(dto);
+            document.setCreatedAt(LocalDateTime.now());
+            document.setUpdatedAt(LocalDateTime.now());
+            document.setViewsCount(0L);
+            document.setDownloadsCount(0L);
 
+            System.out.println("til" + document.getTitle());
+            try {
+                document.setAuthorName(profileClient.getUserDetail(userId).getResult().getFullName());
+                Map<String, Object> handleDoc = fileClient.uploadPdf(fileToSave).getResult();
+                String url = (String) handleDoc.get("secure_url");
+                String publicId = (String) handleDoc.get("public_id");
+                document.setFileUrl(url);
+                String thumbnailUrl = fileClient.getThumbnail(publicId).getResult();
+                document.setThumbnailUrl(thumbnailUrl);
+                System.out.println("thum" + document.getThumbnailUrl());
+            } catch (Exception e) {
+                log.warn(e.getMessage());
+            }
 
-        document.setAuthorName(profileClient.getUserDetail(userId).getResult().getFullName());
-        Map<String, Object> handleDoc = fileClient.uploadPdf(fileToSave).getResult();
-        String url = (String) handleDoc.get("secure_url");
-        String publicId = (String) handleDoc.get("public_id");
-        document.setFileUrl(url);
-
-        String thumbnailUrl = fileClient.getThumbnail(publicId).getResult();
-        document.setThumbnailUrl(thumbnailUrl);
-
-
-//        Category category = dto.getCategoryId() != null ?
-//                categoryRepository.findById(dto.getCategoryId())
-//                .orElseThrow(() -> AppException.builder().appError(AppError.CATEGORY_NOT_FOUND).build())
-//                : null;
-//        document.setCategory(category);
-        Document saved = documentRepository.save(document);
-        return documentMapper.documentToDocumentDetailResponse(saved);
-//        } catch (Exception e) {
-//            throw AppException.builder().appError(AppError.INVALID_JSON_FORMAT).build();
-//        }
+            Category category = dto.getCategoryId() != null ?
+                    categoryRepository.findById(dto.getCategoryId())
+                    .orElseThrow(() -> AppException.builder().appError(AppError.CATEGORY_NOT_FOUND).build())
+                    : null;
+            document.setCategory(category);
+            Document saved = documentRepository.save(document);
+            return documentMapper.documentToDocumentDetailResponse(saved);
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+            throw AppException.builder().appError(AppError.INVALID_JSON_FORMAT).build();
+        }
     }
 
     @PreAuthorize("hasAuthority('DOWNLOAD_FILE')")
@@ -203,7 +207,7 @@ public class DocumentService {
 
     public List<DocumentResponse> search(String keyword, Long categoryId) {
 
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         if (userId == 0L) {
             return documentRepository.searchWithoutLogin(keyword, categoryId, ContentStatus.PUBLISHED);
         }
@@ -211,7 +215,7 @@ public class DocumentService {
     }
 
     public List<DocumentResponse> getAllPublicDocuments() {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         if (userId == 0L) {
             return documentRepository.getAllWithoutLogin(ContentStatus.PUBLISHED);
         }
@@ -231,7 +235,7 @@ public class DocumentService {
     }
 
     public List<DocumentResponse> getDocumentsByUser(Long authorId, Long currentDocumentId) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         if (userId == 0L) {
             return documentRepository.getByUserWithoutLoginAndDifferentCurrentDocument(authorId, currentDocumentId,
                     ContentStatus.PUBLISHED);
@@ -242,7 +246,7 @@ public class DocumentService {
     }
 
     public List<DocumentResponse> getDocumentsByCategory(Long categoryId, Long currentDocumentId) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         if (userId == 0L) {
             return documentRepository.getByCategoryWithoutLoginAndDifferentCurrentDocument(categoryId,
                     currentDocumentId, ContentStatus.PUBLISHED);
@@ -253,7 +257,7 @@ public class DocumentService {
     }
 
     public List<DocumentResponse> getAllDocumentsByUser(Long authorId) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         if (userId == 0L) {
             return documentRepository.getByUserWithoutLogin(authorId, ContentStatus.PUBLISHED);
         }

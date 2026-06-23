@@ -30,7 +30,6 @@ public class UserFollowService {
     private final UserFollowRepository userFollowRepository;
     private final UserDetailRepository userDetailRepository;
     private final UserFollowMapper userFollowMapper;
-    private final GetUserIdByToken getUserIdByToken;
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Value("${app.domain.frontend}")
@@ -39,7 +38,7 @@ public class UserFollowService {
     @PreAuthorize("hasAuthority('FOLLOW')")
     @Transactional
     public UserFollowResponse save(Long followingId) {
-        Long followerId = getUserIdByToken.get();
+        Long followerId = GetUserIdByToken.get();
 
         if (userFollowRepository.existsByFollower_IdAndFollowing_Id(followerId, followingId)) {
             throw AppException.builder().appError(AppError.ALREADY_FRIEND).build();
@@ -78,7 +77,7 @@ public class UserFollowService {
     @PreAuthorize("hasAuthority('UNFOLLOW')")
     @Transactional
     public void delete(Long followingId) {
-        Long followerId = getUserIdByToken.get();
+        Long followerId = GetUserIdByToken.get();
         userFollowRepository.deleteByFollower_IdAndFollowing_Id(followerId, followingId);
 
     }
@@ -86,7 +85,7 @@ public class UserFollowService {
     // lấy danh sách người mình theo dõi
     @PreAuthorize("hasAuthority('GET_LIST_FOLLOWING')")
     public List<UserFollowResponse> getFollowingByFollower() {
-        Long followerId = getUserIdByToken.get();
+        Long followerId = GetUserIdByToken.get();
         List<UserFollow> userFollows = userFollowRepository.findByFollower_Id(followerId);
         return userFollows.stream().map(userFollowMapper::userFollowToResponse).toList();
     }
@@ -94,7 +93,7 @@ public class UserFollowService {
     // lấy danh sách người theo dõi mình
     @PreAuthorize("hasAuthority('GET_LIST_FOLLOWER')")
     public List<UserFollowResponse> getFollowerByFollowing() {
-        Long followerId = getUserIdByToken.get();
+        Long followerId = GetUserIdByToken.get();
         List<UserFollow> userFollows = userFollowRepository.findByFollowing_Id(followerId);
         return userFollows.stream().map(userFollowMapper::userFollowToResponse).toList();
     }
@@ -107,7 +106,7 @@ public class UserFollowService {
 
     @PreAuthorize("hasAuthority('GET_MY_FOLLOW_COUNT')")
     public FollowCountResponse getMyFollowCount() {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         Long follower = userFollowRepository.countByFollowing_Id(userId);
         Long following = userFollowRepository.countByFollower_Id(userId);
         return FollowCountResponse.builder().follower(follower).following(following).build();
@@ -115,13 +114,13 @@ public class UserFollowService {
 
     @PreAuthorize("hasAuthority('CHECK_FOLLOWED')")
     public boolean checkFollowed(Long followingId) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         return userFollowRepository.existsByFollower_IdAndFollowing_Id(userId, followingId);
     }
 
     @PreAuthorize("hasAuthority('CHECK_IS_ME')")
     public boolean checkIsMe(Long followingId) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         return userId.equals(followingId);
     }
 

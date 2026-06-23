@@ -29,11 +29,10 @@ public class UserDetailService {
     private final UserDetailRepository userDetailRepository;
     private final UserDetailMapper userMapper;
     private final FileClient fileClient;
-    private final GetUserIdByToken getUserIdByToken;
 
     @PreAuthorize("hasAuthority('GET_MY_DETAIL_INFO')")
     public UserDetailResponse getDetailUser() {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         UserDetail find = userDetailRepository.findByUserIdAndHideFalse(userId)
                 .orElseThrow(() -> AppException.builder().appError(AppError.USER_NOT_FOUND).build());
         return userMapper.userToResponse(find);
@@ -68,7 +67,7 @@ public class UserDetailService {
 
     @PreAuthorize("hasAuthority('UPDATE_MY_DETAIL_INFO')")
     public UserDetailResponse updateMyInfo(MultipartFile avt, UserDetailRequest dto) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         UserDetail find = userDetailRepository.findByUserId(userId).orElseThrow(
                 () -> AppException.builder().appError(AppError.USER_NOT_FOUND).build());
         if (find.getAvatarUrl() != null) {

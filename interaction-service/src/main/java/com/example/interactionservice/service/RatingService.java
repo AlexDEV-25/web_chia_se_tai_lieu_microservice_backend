@@ -26,7 +26,6 @@ import java.util.List;
 public class RatingService {
     private final RatingRepository documentRatingRepository;
     private final RatingMapper ratingMapper;
-    private final GetUserIdByToken getUserIdByToken;
     private final StudyClient studyClient;
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -41,13 +40,13 @@ public class RatingService {
 
     @PreAuthorize("hasAuthority('GET_MY_DOCUMENT_RATING')")
     public Integer getMyRatingDocument(Long docId) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         return documentRatingRepository.getMyDocumentRating(docId, userId);
     }
 
     @PreAuthorize("hasAuthority('POST_RATING')")
     public RatingUserResponse saveRating(RatingRequest request) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         DocumentInfoResponse doc = studyClient.getAllPublicDocumentsForInteraction(request.getDocumentId()).getResult();
 
         Rating rating = Rating

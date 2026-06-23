@@ -20,11 +20,10 @@ import java.util.List;
 public class UserNotificationService {
     private final UserNotificationRepository userNotificationRepository;
     private final UserNotificationMapper userNotificationMapper;
-    private final GetUserIdByToken getUserIdByToken;
 
     @PreAuthorize("hasAuthority('GET_ALL_USER_NOTIFICATION')")
     public List<UserNotificationResponse> getByReceiver() {
-        Long receiverId = getUserIdByToken.get();
+        Long receiverId = GetUserIdByToken.get();
         List<UserNotification> userNotifications = userNotificationRepository.findByReceiverId(receiverId);
         List<UserNotificationResponse> response = new ArrayList<UserNotificationResponse>();
         for (UserNotification un : userNotifications) {
@@ -35,7 +34,7 @@ public class UserNotificationService {
 
     @PreAuthorize("hasAuthority('GET_UNREAD_USER_NOTIFICATION')")
     public List<UserNotificationResponse> getByReceiverIdAndReadFalse() {
-        Long receiverId = getUserIdByToken.get();
+        Long receiverId = GetUserIdByToken.get();
         List<UserNotification> userNotifications = userNotificationRepository
                 .findByReceiverIdAndReadFalse(receiverId);
         List<UserNotificationResponse> response = new ArrayList<UserNotificationResponse>();
@@ -47,7 +46,7 @@ public class UserNotificationService {
 
     @PreAuthorize("hasAuthority('READ_NOTIFICATION')")
     public UserNotificationResponse read(Long id) {
-        Long receiverId = getUserIdByToken.get();
+        Long receiverId = GetUserIdByToken.get();
         UserNotification entity = userNotificationRepository.findByIdAndReceiverIdAndReadFalse(id, receiverId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy thông báo"));
         entity.setRead(true);

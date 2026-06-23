@@ -77,7 +77,7 @@ public class ExternalDocumentController {
         return apiResponse;
     }
 
-    @PostMapping("/view/{id}")
+    @PutMapping("/view/{id}")
     public APIResponse<Void> increaseView(@PathVariable Long id) {
         documentService.increaseView(id);
 

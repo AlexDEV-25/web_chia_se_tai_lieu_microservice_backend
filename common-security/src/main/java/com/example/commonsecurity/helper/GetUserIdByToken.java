@@ -1,17 +1,13 @@
 package com.example.commonsecurity.helper;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.stereotype.Component;
 
-@Component
-@RequiredArgsConstructor
-public class GetUserIdByToken {
-    public Long get() {
+public final class GetUserIdByToken {
+    public static Long get() {
 
         SecurityContext context = SecurityContextHolder.getContext();
 

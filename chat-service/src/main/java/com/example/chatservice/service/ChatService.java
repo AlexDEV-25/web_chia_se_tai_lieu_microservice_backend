@@ -35,16 +35,15 @@ public class ChatService {
 
     private final ChatClient chatClient;
     private final JdbcChatMemoryRepository jdbcChatMemoryRepository;
-    private final GetUserIdByToken getUserIdByToken;
     private final InteractionClient interactionClient;
     private final StudyClient studyClient;
     private final ChatMapper chatMapper;
 
 
     public ChatService(ChatClient.Builder builder, JdbcChatMemoryRepository jdbcChatMemoryRepository,
-                       GetUserIdByToken getUserIdByToken, InteractionClient interactionClient, StudyClient studyClient, ChatMapper chatMapper) {
+                       InteractionClient interactionClient, StudyClient studyClient, ChatMapper chatMapper) {
         this.jdbcChatMemoryRepository = jdbcChatMemoryRepository;
-        this.getUserIdByToken = getUserIdByToken;
+
         this.interactionClient = interactionClient;
         this.studyClient = studyClient;
         this.chatMapper = chatMapper;
@@ -79,7 +78,7 @@ public class ChatService {
 
     @PreAuthorize("hasAuthority('CHAT_GEMINI')")
     public String chat(MultipartFile file, String message) {
-        String conversationId = getUserIdByToken.get() + "";
+        String conversationId = GetUserIdByToken.get() + "";
         String systemPrompt = resolveSystemPrompt(message);
 
         if (file == null || file.getContentType() == null) {
@@ -111,7 +110,7 @@ public class ChatService {
 
     @PreAuthorize("hasAuthority('HISTORY_CHAT_GEMINI')")
     public List<ChatHistoryResponse> getChatHistory() {
-        String conversationId = getUserIdByToken.get() + "";
+        String conversationId = GetUserIdByToken.get() + "";
         List<Message> list = jdbcChatMemoryRepository.findByConversationId(conversationId);
         List<ChatHistoryResponse> history = new ArrayList<ChatHistoryResponse>();
         for (Message item : list) {

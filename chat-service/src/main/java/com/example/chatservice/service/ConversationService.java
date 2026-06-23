@@ -40,11 +40,10 @@ public class ConversationService {
     private final ParticipantInfoMapper participantInfoMapper;
     private final FileClient fileClient;
     private final ProfileClient profileClient;
-    private final GetUserIdByToken getUserIdByToken;
 
     @PreAuthorize("hasAuthority('GET_MY_CONVERSATION')")
     public List<ConversationResponse> getMyConversations() {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         List<Conversation> conversations = conversationRepository.findMyConversations(userId);
         return conversations.stream()
                 .map(conversation -> toConversationResponse(conversation, userId)).toList();
@@ -53,7 +52,7 @@ public class ConversationService {
     @Transactional
     @PreAuthorize("hasAuthority('CREATE_DIRECT_CONVERSATION')")
     public ConversationResponse createDirectConversation(ConversationRequest request) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
 
         if (request.getOtherUserIds().size() != 1) {
             throw AppException.builder().appError(AppError.MEMBER_LIMIT_EXCEEDED).build();
@@ -83,7 +82,7 @@ public class ConversationService {
     @Transactional
     @PreAuthorize("hasAuthority('CREATE_GROUP_CONVERSATION')")
     public ConversationResponse createGroupConversation(MultipartFile avt, ConversationGroupRequest request) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
 
         // 1. validate
         if (request.getOtherUserIds() == null || request.getOtherUserIds().size() < 2) {
@@ -137,7 +136,7 @@ public class ConversationService {
 
     @PreAuthorize("hasAuthority('SEARCH_CONVERSATION')")
     public List<ConversationResponse> search(String keyword) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
 
         List<Conversation> conversations = conversationRepository.search(userId, keyword);
         return conversations.stream().map(conversation -> toConversationResponse(conversation, userId)).toList();
@@ -145,7 +144,7 @@ public class ConversationService {
 
     @PreAuthorize("hasAuthority('GET_DETAIL_CONVERSATION')")
     public ConversationResponse getDetailConversation(Long id) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
 
         Conversation conversation = conversationRepository.findById(id)
                 .orElseThrow(() -> AppException.builder().appError(AppError.CONVERSATION_NOT_FOUND).build());

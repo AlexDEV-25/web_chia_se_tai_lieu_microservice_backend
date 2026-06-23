@@ -27,7 +27,6 @@ import java.util.List;
 public class ReportService {
     private final ReportRepository documentReportRepository;
     private final ReportMapper reportMapper;
-    private final GetUserIdByToken getUserIdByToken;
     private final StudyClient studyClient;
     private final ProfileClient profileClient;
 
@@ -44,7 +43,7 @@ public class ReportService {
 
     @PreAuthorize("hasAuthority('REPORT')")
     public ReportUserResponse report(ReportRequest request) {
-        Long userId = getUserIdByToken.get();
+        Long userId = GetUserIdByToken.get();
         DocumentInfoResponse doc = studyClient.getAllPublicDocumentsForInteraction(request.getDocumentId()).getResult();
         UserDetailInfoResponse user = profileClient.getUserDetail(userId).getResult();
 
