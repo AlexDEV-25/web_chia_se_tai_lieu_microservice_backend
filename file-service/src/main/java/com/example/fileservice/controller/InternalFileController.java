@@ -1,7 +1,7 @@
 package com.example.fileservice.controller;
 
 import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.FileResponse;
+import com.example.fileservice.dto.response.FileResponse;
 import com.example.fileservice.service.FileService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
