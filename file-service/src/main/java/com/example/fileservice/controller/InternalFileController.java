@@ -16,8 +16,8 @@ import java.util.Map;
 public class InternalFileController {
     private final FileService fileService;
 
-    @GetMapping("/{publicId}/thumbnail")
-    public APIResponse<String> getThumbnail(@PathVariable String publicId) {
+    @GetMapping("/thumbnail")
+    public APIResponse<String> getThumbnail(@RequestParam String publicId) {
         APIResponse<String> apiResponse = new APIResponse<String>();
         apiResponse.setResult(fileService.getThumbnail(publicId));
         return apiResponse;

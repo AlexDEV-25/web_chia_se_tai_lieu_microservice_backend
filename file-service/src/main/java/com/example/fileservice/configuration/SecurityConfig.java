@@ -23,7 +23,7 @@ public class SecurityConfig {
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
-            "/api/internal/files/{url}/download", "/api/internal/files/{publicId}/thumbnail"
+            "/api/internal/files/{url}/download", "/api/internal/files/thumbnail"
     };
 
     private final String[] PUBLIC_ENDPOINTS_DELETE = {

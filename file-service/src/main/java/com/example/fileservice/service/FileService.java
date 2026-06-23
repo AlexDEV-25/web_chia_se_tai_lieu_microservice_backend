@@ -6,6 +6,7 @@ import com.example.AppError;
 import com.example.commonexception.exception.AppException;
 import com.example.fileservice.dto.response.FileResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class FileService {
@@ -117,10 +119,10 @@ public class FileService {
                             "access_mode", "public"
                     )
             );
-            System.out.println(result);
             return result;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
+            throw AppException.builder().appError(AppError.UPLOAD_DOCUMENT_FAILED).build();
         }
 
     }

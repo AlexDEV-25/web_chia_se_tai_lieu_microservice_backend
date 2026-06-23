@@ -18,7 +18,7 @@ public interface FileClient {
     @DeleteMapping(value = "/api/internal/files/{url}", produces = MediaType.APPLICATION_JSON_VALUE)
     APIResponse<Void> deleteFile(@PathVariable String url);
 
-    @PostMapping(value = "/api/internal/files/upload-file-image", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/api/internal/files/upload-file-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     APIResponse<Map<String, Object>> uploadImage(@RequestPart("file") MultipartFile file);
 
 }
