@@ -34,7 +34,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<CommentAdminResponse> findDocumentCommentsLast7Days(@Param("fromDate") LocalDateTime fromDate);
 
     @Query("""
-            SELECT new com.example.commondto.response.CommentTotalAdminResponse(
+            SELECT new com.example.interactionservice.dto.response.CommentTotalAdminResponse(
             c.documentId,
             c.documentTitle,
             COUNT(c)
