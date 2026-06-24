@@ -14,11 +14,11 @@ public interface FileClient {
     @GetMapping(value = "/api/internal/files/thumbnail", produces = MediaType.APPLICATION_JSON_VALUE)
     APIResponse<String> getThumbnail(@RequestParam String publicId);
 
-    @GetMapping(value = "/api/internal/files/{url}/download", produces = MediaType.APPLICATION_JSON_VALUE)
-    APIResponse<FileResponse> downloadFile(@PathVariable String url);
+    @GetMapping(value = "/api/internal/files/download", produces = MediaType.APPLICATION_JSON_VALUE)
+    APIResponse<FileResponse> downloadFile(@RequestParam String url);
 
-    @DeleteMapping(value = "/api/internal/files/{url}", produces = MediaType.APPLICATION_JSON_VALUE)
-    APIResponse<Void> deleteFile(@PathVariable String url);
+    @DeleteMapping(value = "/api/internal/files/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    APIResponse<Void> deleteFile(@RequestParam String url);
 
     @PostMapping(value = "/api/internal/files/upload-file-pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     APIResponse<Map<String, Object>> uploadPdf(@RequestPart("file") MultipartFile file);

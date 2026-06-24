@@ -23,8 +23,8 @@ public class InternalFileController {
         return apiResponse;
     }
 
-    @GetMapping("/{url}/download")
-    public APIResponse<FileResponse> downloadFile(@PathVariable String url) throws Exception {
+    @GetMapping("/download")
+    public APIResponse<FileResponse> downloadFile(@RequestParam String url) throws Exception {
         FileResponse file = fileService.downloadFile(url);
         APIResponse<FileResponse> apiResponse = new APIResponse<FileResponse>();
         apiResponse.setResult(file);
@@ -32,8 +32,8 @@ public class InternalFileController {
 
     }
 
-    @DeleteMapping("/{url}")
-    public APIResponse<Void> deleteFile(@PathVariable String url) {
+    @DeleteMapping("/delete")
+    public APIResponse<Void> deleteFile(@RequestParam String url) {
         fileService.deleteFile(url);
         return APIResponse.<Void>builder().build();
     }

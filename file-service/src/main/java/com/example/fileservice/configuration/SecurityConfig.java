@@ -23,11 +23,11 @@ public class SecurityConfig {
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
-            "/api/internal/files/{url}/download", "/api/internal/files/thumbnail"
+            "/api/internal/files/download", "/api/internal/files/thumbnail"
     };
 
     private final String[] PUBLIC_ENDPOINTS_DELETE = {
-            "/api/internal/files/{url}",
+            "/api/internal/files/delete",
     };
 
     private final CustomJwtDecoder customJwtDecoder;
