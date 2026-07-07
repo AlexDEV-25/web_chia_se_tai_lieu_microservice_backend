@@ -2,7 +2,7 @@ package com.example.interactionservice.controller;
 
 import com.example.commondto.response.APIResponse;
 import com.example.interactionservice.dto.request.ReportRequest;
-import com.example.interactionservice.dto.response.ReportAdminResponse;
+import com.example.interactionservice.dto.response.ReportAdminProjection;
 import com.example.interactionservice.dto.response.ReportDetailAdminResponse;
 import com.example.interactionservice.dto.response.ReportUserResponse;
 import com.example.interactionservice.service.ReportService;
@@ -31,8 +31,8 @@ public class ExternalReportController {
     }
 
     @GetMapping("/admin/document")
-    public APIResponse<ReportAdminResponse> getAllDocumentReportSummary() {
-        APIResponse<ReportAdminResponse> apiResponse = new APIResponse<ReportAdminResponse>();
+    public APIResponse<ReportAdminProjection> getAllDocumentReportSummary() {
+        APIResponse<ReportAdminProjection> apiResponse = new APIResponse<>();
         apiResponse.setResultList(reportService.getAllDocumentReportSummary());
         return apiResponse;
     }

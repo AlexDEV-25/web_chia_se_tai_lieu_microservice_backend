@@ -1,8 +1,6 @@
 package com.example.studyservice.controller;
 
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.DocumentInfoResponse;
-import com.example.commondto.response.DocumentSearchAIResponse;
+import com.example.commondto.response.*;
 import com.example.studyservice.service.DocumentService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,5 +26,18 @@ public class InternalDocumentController {
         APIResponse<DocumentInfoResponse> apiResponse = new APIResponse<>();
         apiResponse.setResult(documentService.getAllPublicDocumentsForInteraction(documentId));
         return apiResponse;
+    }
+
+
+    @GetMapping("/last-7-days")
+    public APIResponse<DailyCountProjection> documentLast7Days() {
+        return APIResponse.<DailyCountProjection>builder()
+                .resultList(documentService.documentLast7Days()).build();
+    }
+
+    @GetMapping("/by-category")
+    public APIResponse<CategoryCountProjection> documentByCategory() {
+        return APIResponse.<CategoryCountProjection>builder()
+                .resultList(documentService.documentByCategory()).build();
     }
 }

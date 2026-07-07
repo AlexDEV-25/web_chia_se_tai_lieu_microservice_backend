@@ -2,6 +2,8 @@ package com.example.studyservice.service;
 
 import com.example.AppError;
 import com.example.ContentStatus;
+import com.example.commondto.response.CategoryCountProjection;
+import com.example.commondto.response.DailyCountProjection;
 import com.example.commondto.response.DocumentInfoResponse;
 import com.example.commondto.response.DocumentSearchAIResponse;
 import com.example.commonexception.exception.AppException;
@@ -26,6 +28,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -297,6 +300,18 @@ public class DocumentService {
         fileClient.deleteFile(entity.getFileUrl());
         fileClient.deleteFile(entity.getThumbnailUrl());
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<DailyCountProjection> documentLast7Days() {
+        return documentRepository
+                .countDocumentByDay(LocalDate.now().minusDays(6).atStartOfDay(), ContentStatus.PUBLISHED);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<CategoryCountProjection> documentByCategory() {
+        return documentRepository.countDocumentByCategory(ContentStatus.PUBLISHED);
+    }
+
 
     private void adminUpdateEvent(Document saved, ContentStatus initialStatus, Long adminId) {
         if (initialStatus == ContentStatus.PENDING && saved.getStatus() == ContentStatus.PUBLISHED) {

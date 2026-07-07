@@ -8,6 +8,7 @@ import com.example.authservice.dto.response.UserResponse;
 import com.example.authservice.service.UserService;
 import com.example.commondto.request.DisplayRequest;
 import com.example.commondto.response.APIResponse;
+import com.example.commondto.response.DailyCountProjection;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -58,5 +59,11 @@ public class ExternalUserController {
         APIResponse<UserResponse> apiResponse = new APIResponse<UserResponse>();
         apiResponse.setResult(userService.createUser(dto));
         return apiResponse;
+    }
+
+    @GetMapping("/users/last-7-days")
+    public APIResponse<DailyCountProjection> userLast7Days() {
+        return APIResponse.<DailyCountProjection>builder()
+                .resultList(userService.userLast7Days()).build();
     }
 }

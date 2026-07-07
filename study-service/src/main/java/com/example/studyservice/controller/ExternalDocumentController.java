@@ -35,42 +35,42 @@ public class ExternalDocumentController {
     @GetMapping("/search")
     public APIResponse<DocumentResponse> search(@RequestParam(required = false) String keyword,
                                                 @RequestParam(required = false) Long categoryId) {
-        APIResponse<DocumentResponse> apiResponse = new APIResponse<DocumentResponse>();
+        APIResponse<DocumentResponse> apiResponse = new APIResponse<>();
         apiResponse.setResultList(documentService.search(keyword, categoryId));
         return apiResponse;
     }
 
     @GetMapping("/{id}")
     public APIResponse<DocumentDetailResponse> getByIdPublicDocument(@PathVariable Long id) {
-        APIResponse<DocumentDetailResponse> apiResponse = new APIResponse<DocumentDetailResponse>();
+        APIResponse<DocumentDetailResponse> apiResponse = new APIResponse<>();
         apiResponse.setResult(documentService.findByIdPublicDocument(id));
         return apiResponse;
     }
 
     @GetMapping
     public APIResponse<DocumentResponse> getAllPublicDocuments() {
-        APIResponse<DocumentResponse> apiResponse = new APIResponse<DocumentResponse>();
+        APIResponse<DocumentResponse> apiResponse = new APIResponse<>();
         apiResponse.setResultList(documentService.getAllPublicDocuments());
         return apiResponse;
     }
 
     @GetMapping("/user")
     public APIResponse<DocumentResponse> getByUser(@RequestParam Long documentId, @RequestParam Long userId) {
-        APIResponse<DocumentResponse> apiResponse = new APIResponse<DocumentResponse>();
+        APIResponse<DocumentResponse> apiResponse = new APIResponse<>();
         apiResponse.setResultList(documentService.getDocumentsByUser(userId, documentId));
         return apiResponse;
     }
 
     @GetMapping("/category")
     public APIResponse<DocumentResponse> getByCategory(@RequestParam Long categoryId, @RequestParam Long documentId) {
-        APIResponse<DocumentResponse> apiResponse = new APIResponse<DocumentResponse>();
+        APIResponse<DocumentResponse> apiResponse = new APIResponse<>();
         apiResponse.setResultList(documentService.getDocumentsByCategory(categoryId, documentId));
         return apiResponse;
     }
 
     @GetMapping("/user/{userId}")
     public APIResponse<DocumentResponse> getAllDocumentsByUser(@PathVariable Long userId) {
-        APIResponse<DocumentResponse> apiResponse = new APIResponse<DocumentResponse>();
+        APIResponse<DocumentResponse> apiResponse = new APIResponse<>();
         apiResponse.setResultList(documentService.getAllDocumentsByUser(userId));
         return apiResponse;
     }

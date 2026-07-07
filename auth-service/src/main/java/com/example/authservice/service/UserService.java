@@ -15,6 +15,7 @@ import com.example.authservice.repository.UserRepository;
 import com.example.authservice.repository.httpclient.ProfileClient;
 import com.example.commondto.request.DisplayRequest;
 import com.example.commondto.request.UserDetailRequest;
+import com.example.commondto.response.DailyCountProjection;
 import com.example.commonexception.exception.AppException;
 import com.example.event.EmailNotificationEvent;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,6 +39,11 @@ public class UserService {
     private final ProfileClient profileClient;
     private final CreateBodyEmail createBodyEmail;
     private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<DailyCountProjection> userLast7Days() {
+        return userRepository.countUserByDay(LocalDate.now().minusDays(6).atStartOfDay());
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAllUsers() {
@@ -132,5 +139,4 @@ public class UserService {
             throw AppException.builder().appError(AppError.INCORRECT_PASSWORD).build();
         }
     }
-
 }

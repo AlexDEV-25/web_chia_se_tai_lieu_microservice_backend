@@ -5,6 +5,7 @@ import com.example.commondto.request.UserDetailRequest;
 import com.example.commondto.response.APIResponse;
 import com.example.commondto.response.UserDetailResponse;
 import com.example.commonexception.exception.AppException;
+import com.example.profileservice.dto.response.UserBioProjection;
 import com.example.profileservice.dto.response.UserBioResponse;
 import com.example.profileservice.service.UserDetailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,8 +35,8 @@ public class ExternalUserDetailController {
     }
 
     @GetMapping("/search")
-    public APIResponse<UserBioResponse> search(@RequestParam String keyword) {
-        APIResponse<UserBioResponse> apiResponse = new APIResponse<UserBioResponse>();
+    public APIResponse<UserBioProjection> search(@RequestParam String keyword) {
+        APIResponse<UserBioProjection> apiResponse = new APIResponse<>();
         apiResponse.setResultList(userService.search(keyword));
         return apiResponse;
     }

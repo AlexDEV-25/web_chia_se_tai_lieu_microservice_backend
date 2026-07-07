@@ -7,8 +7,8 @@ import com.example.commondto.response.RatingSummaryResponse;
 import com.example.commonexception.exception.AppException;
 import com.example.commonsecurity.helper.GetUserIdByToken;
 import com.example.interactionservice.dto.request.RatingRequest;
-import com.example.interactionservice.dto.response.RatingAdminResponse;
-import com.example.interactionservice.dto.response.RatingDetailAdminResponse;
+import com.example.interactionservice.dto.response.RatingAdminProjection;
+import com.example.interactionservice.dto.response.RatingDetailAdminProjection;
 import com.example.interactionservice.dto.response.RatingUserResponse;
 import com.example.interactionservice.mapper.RatingMapper;
 import com.example.interactionservice.model.Rating;
@@ -29,12 +29,12 @@ public class RatingService {
     private final StudyClient studyClient;
 
     @PreAuthorize("hasRole('ADMIN')")
-    public RatingDetailAdminResponse getByDocument(Long docId) {
+    public RatingDetailAdminProjection getByDocument(Long docId) {
         return documentRatingRepository.getDocumentRatingDetail(docId);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public List<RatingAdminResponse> getAllDocumentRatingSummary() {
+    public List<RatingAdminProjection> getAllDocumentRatingSummary() {
         return documentRatingRepository.getAllDocumentRatingSummary();
     }
 

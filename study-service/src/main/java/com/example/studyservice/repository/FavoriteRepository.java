@@ -26,6 +26,4 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     Optional<Favorite> findByUserIdAndDocument_Id(Long userId, Long documentId);
 
     boolean existsByUserIdAndDocument_Id(Long userId, Long documentId);
-
-    void deleteByDocument_Id(Long documentId);
 }

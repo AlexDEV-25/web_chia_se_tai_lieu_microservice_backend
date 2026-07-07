@@ -1,6 +1,7 @@
 package com.example.authservice.repository;
 
 import com.example.authservice.model.User;
+import com.example.commondto.response.DailyCountProjection;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,12 +27,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsById(@NonNull Long id);
 
     @Query(value = """
-            	SELECT DATE(u.created_at) as stat_date, COUNT(u.id)
-            	FROM users u
-            	WHERE (u.hide = 0 OR u.hide IS NULL)
-            	AND u.created_at >= :fromDate
-            	GROUP BY DATE(u.created_at)
-            	ORDER BY DATE(u.created_at)
+            SELECT
+                DATE(u.created_at) AS date,
+                COUNT(u.id) AS total
+            FROM users u
+            WHERE (u.hide = 0 OR u.hide IS NULL)
+              AND u.created_at >= :fromDate
+            GROUP BY DATE(u.created_at)
+            ORDER BY DATE(u.created_at)
             """, nativeQuery = true)
-    List<Object[]> countUserByDay(@Param("fromDate") LocalDateTime fromDate);
+    List<DailyCountProjection> countUserByDay(@Param("fromDate") LocalDateTime fromDate);
 }

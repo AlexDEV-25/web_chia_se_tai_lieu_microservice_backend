@@ -28,7 +28,7 @@ public class SecurityConfig {
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
-
+            "/api/internal/users/users/last-7-days",
     };
 
     private final CustomJwtDecoder customJwtDecoder;

@@ -1,7 +1,7 @@
 package com.example.interactionservice.repository;
 
 
-import com.example.interactionservice.dto.response.ReportAdminResponse;
+import com.example.interactionservice.dto.response.ReportAdminProjection;
 import com.example.interactionservice.model.Report;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,14 +16,13 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     boolean existsByUserIdAndDocumentId(Long userId, Long documentId);
 
     @Query("""
-                SELECT new com.example.interactionservice.dto.response.ReportAdminResponse(
-                    r.documentId,
-                    r.documentTitle,
-                    COUNT(r)
-                )
+                SELECT
+                    r.documentId AS id,
+                    r.documentTitle AS documentTitle,
+                    COUNT(r) AS total
                 FROM Report r
-                GROUP BY  r.documentId,r.documentTitle
+                GROUP BY r.documentId, r.documentTitle
                 ORDER BY COUNT(r) DESC
             """)
-    List<ReportAdminResponse> getAllDocumentReportSummary();
+    List<ReportAdminProjection> getAllDocumentReportSummary();
 }

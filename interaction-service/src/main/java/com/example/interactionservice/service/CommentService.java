@@ -12,7 +12,7 @@ import com.example.commonsecurity.helper.GetUserIdByToken;
 import com.example.constant.NotificationType;
 import com.example.event.SystemNotificationEvent;
 import com.example.interactionservice.dto.request.CommentRequest;
-import com.example.interactionservice.dto.response.CommentTotalAdminResponse;
+import com.example.interactionservice.dto.response.CommentTotalAdminProjection;
 import com.example.interactionservice.dto.response.CommentTreeUserResponse;
 import com.example.interactionservice.dto.response.CommentUserResponse;
 import com.example.interactionservice.mapper.CommentMapper;
@@ -105,7 +105,7 @@ public class CommentService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public List<CommentTotalAdminResponse> getTotalCommentOfDocument() {
+    public List<CommentTotalAdminProjection> getTotalCommentOfDocument() {
         return documentRepo.getTotalCommentOfDocument();
     }
 

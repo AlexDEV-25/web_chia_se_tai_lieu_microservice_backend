@@ -2,8 +2,8 @@ package com.example.interactionservice.repository;
 
 
 import com.example.commondto.response.RatingSummaryResponse;
-import com.example.interactionservice.dto.response.RatingAdminResponse;
-import com.example.interactionservice.dto.response.RatingDetailAdminResponse;
+import com.example.interactionservice.dto.response.RatingAdminProjection;
+import com.example.interactionservice.dto.response.RatingDetailAdminProjection;
 import com.example.interactionservice.model.Rating;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -36,33 +36,33 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     Integer getMyDocumentRating(@Param("documentId") Long documentId, @Param("userId") Long userId);
 
     @Query("""
-                SELECT new com.example.interactionservice.dto.response.RatingAdminResponse(
-                    r.documentId,
-                    r.documentTitle,
-                    COALESCE(AVG(r.rating), 0),
-                    COUNT(r)
-                )
+                SELECT
+                    r.documentId AS id,
+                    r.documentTitle AS documentTitle,
+                    COALESCE(AVG(r.rating), 0) AS average,
+                    COUNT(r) AS total
                 FROM Rating r
-                GROUP BY  r.documentId, r.documentTitle
+                GROUP BY r.documentId, r.documentTitle
                 ORDER BY
                     COALESCE(AVG(r.rating), 0) DESC,
                     COUNT(r) DESC
             """)
-    List<RatingAdminResponse> getAllDocumentRatingSummary();
+    List<RatingAdminProjection> getAllDocumentRatingSummary();
 
     @Query("""
-                SELECT new com.example.interactionservice.dto.response.RatingDetailAdminResponse(
-                    r.documentId,
-                    r.documentTitle,
-                    SUM(CASE WHEN r.rating = 1 THEN 1 ELSE 0 END),
-                    SUM(CASE WHEN r.rating = 2 THEN 1 ELSE 0 END),
-                    SUM(CASE WHEN r.rating = 3 THEN 1 ELSE 0 END),
-                    SUM(CASE WHEN r.rating = 4 THEN 1 ELSE 0 END),
-                    SUM(CASE WHEN r.rating = 5 THEN 1 ELSE 0 END)
-                )
+                SELECT
+                    r.documentId AS documentId,
+                    r.documentTitle AS documentTitle,
+                    SUM(CASE WHEN r.rating = 1 THEN 1 ELSE 0 END) AS star1,
+                    SUM(CASE WHEN r.rating = 2 THEN 1 ELSE 0 END) AS star2,
+                    SUM(CASE WHEN r.rating = 3 THEN 1 ELSE 0 END) AS star3,
+                    SUM(CASE WHEN r.rating = 4 THEN 1 ELSE 0 END) AS star4,
+                    SUM(CASE WHEN r.rating = 5 THEN 1 ELSE 0 END) AS star5
                 FROM Rating r
                 WHERE r.documentId = :documentId
-                GROUP BY  r.documentId,r.documentTitle
+                GROUP BY r.documentId, r.documentTitle
             """)
-    RatingDetailAdminResponse getDocumentRatingDetail(@Param("documentId") Long documentId);
+    RatingDetailAdminProjection getDocumentRatingDetail(
+            @Param("documentId") Long documentId
+    );
 }

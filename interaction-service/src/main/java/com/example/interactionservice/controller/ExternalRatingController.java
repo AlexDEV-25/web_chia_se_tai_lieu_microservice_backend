@@ -3,8 +3,8 @@ package com.example.interactionservice.controller;
 import com.example.commondto.response.APIResponse;
 import com.example.commondto.response.RatingSummaryResponse;
 import com.example.interactionservice.dto.request.RatingRequest;
-import com.example.interactionservice.dto.response.RatingAdminResponse;
-import com.example.interactionservice.dto.response.RatingDetailAdminResponse;
+import com.example.interactionservice.dto.response.RatingAdminProjection;
+import com.example.interactionservice.dto.response.RatingDetailAdminProjection;
 import com.example.interactionservice.dto.response.RatingUserResponse;
 import com.example.interactionservice.service.RatingService;
 import jakarta.validation.Valid;
@@ -39,15 +39,15 @@ public class ExternalRatingController {
     }
 
     @GetMapping("/admin/document/{docId}")
-    public APIResponse<RatingDetailAdminResponse> getByDocument(@PathVariable Long docId) {
-        APIResponse<RatingDetailAdminResponse> apiResponse = new APIResponse<RatingDetailAdminResponse>();
+    public APIResponse<RatingDetailAdminProjection> getByDocument(@PathVariable Long docId) {
+        APIResponse<RatingDetailAdminProjection> apiResponse = new APIResponse<>();
         apiResponse.setResult(ratingService.getByDocument(docId));
         return apiResponse;
     }
 
     @GetMapping("/admin/document")
-    public APIResponse<RatingAdminResponse> getAllDocumentRatingSummary() {
-        APIResponse<RatingAdminResponse> apiResponse = new APIResponse<RatingAdminResponse>();
+    public APIResponse<RatingAdminProjection> getAllDocumentRatingSummary() {
+        APIResponse<RatingAdminProjection> apiResponse = new APIResponse<>();
         apiResponse.setResultList(ratingService.getAllDocumentRatingSummary());
         return apiResponse;
     }

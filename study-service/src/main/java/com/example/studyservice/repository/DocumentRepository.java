@@ -1,10 +1,10 @@
 package com.example.studyservice.repository;
 
 import com.example.ContentStatus;
-import com.example.studyservice.dto.response.CategoryCountResponse;
+import com.example.commondto.response.CategoryCountProjection;
+import com.example.commondto.response.DailyCountProjection;
 import com.example.studyservice.dto.response.DocumentResponse;
 import com.example.studyservice.dto.response.DocumentStatsResponse;
-import com.example.studyservice.model.Category;
 import com.example.studyservice.model.Document;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -38,29 +38,35 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
     long countByUserId(Long userId);
 
     @Query(value = """
-            	SELECT DATE(d.created_at) as stat_date, COUNT(d.id)
-            	FROM documents d
-            	WHERE d.status = :status
-            	AND (d.hide = 0 OR d.hide IS NULL)
-            	AND d.created_at >= :fromDate
-            	GROUP BY DATE(d.created_at)
-            	ORDER BY DATE(d.created_at)
+            SELECT
+                DATE(d.created_at) AS date,
+                COUNT(d.id) AS total
+            FROM documents d
+            WHERE d.status = :status
+              AND (d.hide = 0 OR d.hide IS NULL)
+              AND d.created_at >= :fromDate
+            GROUP BY DATE(d.created_at)
+            ORDER BY DATE(d.created_at)
             """, nativeQuery = true)
-    List<Object[]> countDocumentByDay(@Param("fromDate") LocalDateTime fromDate, @Param("status") ContentStatus status);
+    List<DailyCountProjection> countDocumentByDay(
+            @Param("fromDate") LocalDateTime fromDate,
+            @Param("status") ContentStatus status
+    );
 
     @Query("""
-            	SELECT new com.example.studyservice.dto.response.CategoryCountResponse(
-                c.id,
-                c.name,
-                COUNT(d)
-            )
-            	FROM Document d
-            	JOIN  d.category c ON d.category.id = c.id
-            	WHERE d.status = :status
-            	AND (d.hide = false OR d.hide IS NULL)
-            	GROUP BY c.id, c.name
+                SELECT
+                    c.id AS categoryId,
+                    c.name AS categoryName,
+                    COUNT(d) AS total
+                FROM Document d
+                JOIN d.category c
+                WHERE d.status = :status
+                  AND (d.hide = false OR d.hide IS NULL)
+                GROUP BY c.id, c.name
             """)
-    List<CategoryCountResponse> countDocumentByCategory(@Param("status") ContentStatus status);
+    List<CategoryCountProjection> countDocumentByCategory(
+            @Param("status") ContentStatus status
+    );
 
     @Query("""
                 SELECT new com.example.studyservice.dto.response.DocumentStatsResponse(
@@ -75,19 +81,18 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
     DocumentStatsResponse getStats(@Param("status") ContentStatus status);
 
     @Query("""
-                SELECT new com.example.studyservice.dto.response.DocumentResponse(
-                    d.id,
-                    d.title,
-                    d.description,
-                    d.thumbnailUrl,
-                    d.authorName,
-                    d.viewsCount,
-                    d.downloadsCount,
-                    CASE WHEN f IS NOT NULL THEN true ELSE false END
-                )
+                SELECT
+                    d.id AS id,
+                    d.title AS title,
+                    d.description AS description,
+                    d.thumbnailUrl AS thumbnailUrl,
+                    d.authorName AS authorName,
+                    d.viewsCount AS viewsCount,
+                    d.downloadsCount AS downloadsCount,
+                    CASE WHEN f IS NOT NULL THEN true ELSE false END AS favorite
                 FROM Document d
                 LEFT JOIN Favorite f
-                    ON  f.document.id = d.id
+                    ON f.document.id = d.id
                     AND f.userId = :currentUserId
                 WHERE d.hide = false
                   AND d.status = :status
@@ -98,20 +103,23 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                         OR d.description LIKE CONCAT('%', :keyword, '%')
                   )
             """)
-    List<DocumentResponse> searchWhenLogin(@Param("keyword") String keyword, @Param("categoryId") Long categoryId,
-                                           @Param("currentUserId") Long currentUserId, @Param("status") ContentStatus status);
+    List<DocumentResponse> searchWhenLogin(
+            @Param("keyword") String keyword,
+            @Param("categoryId") Long categoryId,
+            @Param("currentUserId") Long currentUserId,
+            @Param("status") ContentStatus status
+    );
 
     @Query("""
-              SELECT new com.example.studyservice.dto.response.DocumentResponse(
-                    d.id,
-                    d.title,
-                    d.description,
-                    d.thumbnailUrl,
-                    d.authorName,
-                    d.viewsCount,
-                    d.downloadsCount,
-                    false
-                )
+                SELECT
+                    d.id AS id,
+                    d.title AS title,
+                    d.description AS description,
+                    d.thumbnailUrl AS thumbnailUrl,
+                    d.authorName AS authorName,
+                    d.viewsCount AS viewsCount,
+                    d.downloadsCount AS downloadsCount,
+                    false AS favorite
                 FROM Document d
                 WHERE d.hide = false
                   AND d.status = :status
@@ -122,23 +130,25 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                         OR d.description LIKE CONCAT('%', :keyword, '%')
                   )
             """)
-    List<DocumentResponse> searchWithoutLogin(@Param("keyword") String keyword, @Param("categoryId") Long categoryId,
-                                              @Param("status") ContentStatus status);
+    List<DocumentResponse> searchWithoutLogin(
+            @Param("keyword") String keyword,
+            @Param("categoryId") Long categoryId,
+            @Param("status") ContentStatus status
+    );
 
     @Query("""
-                SELECT new com.example.studyservice.dto.response.DocumentResponse(
-                    d.id,
-                    d.title,
-                    d.description,
-                    d.thumbnailUrl,
-                    d.authorName,
-                    d.viewsCount,
-                    d.downloadsCount,
-                    CASE WHEN f.id IS NOT NULL THEN true ELSE false END
-                )
+                SELECT
+                    d.id AS id,
+                    d.title AS title,
+                    d.description AS description,
+                    d.thumbnailUrl AS thumbnailUrl,
+                    d.authorName AS authorName,
+                    d.viewsCount AS viewsCount,
+                    d.downloadsCount AS downloadsCount,
+                    CASE WHEN f.id IS NOT NULL THEN true ELSE false END AS favorite
                 FROM Document d
                 LEFT JOIN Favorite f
-                    ON  f.document.id = d.id
+                    ON f.document.id = d.id
                     AND f.userId = :currentUserId
                 WHERE d.userId = :authorId
                     AND d.id <> :currentDocumentId
@@ -146,21 +156,23 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     AND d.hide = false
                 ORDER BY d.createdAt DESC
             """)
-    List<DocumentResponse> getByUserWhenLoginAndDifferentCurrentDocument(@Param("authorId") Long authorId,
-                                                                         @Param("currentUserId") Long currentUserId, @Param("currentDocumentId") Long currentDocumentId,
-                                                                         @Param("status") ContentStatus status);
+    List<DocumentResponse> getByUserWhenLoginAndDifferentCurrentDocument(
+            @Param("authorId") Long authorId,
+            @Param("currentUserId") Long currentUserId,
+            @Param("currentDocumentId") Long currentDocumentId,
+            @Param("status") ContentStatus status
+    );
 
     @Query("""
-                SELECT new com.example.studyservice.dto.response.DocumentResponse(
-                    d.id,
-                    d.title,
-                    d.description,
-                    d.thumbnailUrl,
-                    d.authorName,
-                    d.viewsCount,
-                    d.downloadsCount,
-                    false
-                )
+                SELECT
+                    d.id AS id,
+                    d.title AS title,
+                    d.description AS description,
+                    d.thumbnailUrl AS thumbnailUrl,
+                    d.authorName AS authorName,
+                    d.viewsCount AS viewsCount,
+                    d.downloadsCount AS downloadsCount,
+                    false AS favorite
                 FROM Document d
                 WHERE d.userId = :authorId
                     AND d.id <> :currentDocumentId
@@ -168,66 +180,68 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     AND d.hide = false
                 ORDER BY d.createdAt DESC
             """)
-    List<DocumentResponse> getByUserWithoutLoginAndDifferentCurrentDocument(@Param("authorId") Long authorId,
-                                                                            @Param("currentDocumentId") Long currentDocumentId, @Param("status") ContentStatus status);
+    List<DocumentResponse> getByUserWithoutLoginAndDifferentCurrentDocument(
+            @Param("authorId") Long authorId,
+            @Param("currentDocumentId") Long currentDocumentId,
+            @Param("status") ContentStatus status
+    );
 
     @Query("""
-                SELECT new com.example.studyservice.dto.response.DocumentResponse(
-                    d.id,
-                    d.title,
-                    d.description,
-                    d.thumbnailUrl,
-                    d.authorName,
-                    d.viewsCount,
-                    d.downloadsCount,
-                    CASE WHEN f.id IS NOT NULL THEN true ELSE false END
-                )
+                SELECT
+                    d.id AS id,
+                    d.title AS title,
+                    d.description AS description,
+                    d.thumbnailUrl AS thumbnailUrl,
+                    d.authorName AS authorName,
+                    d.viewsCount AS viewsCount,
+                    d.downloadsCount AS downloadsCount,
+                    CASE WHEN f.id IS NOT NULL THEN true ELSE false END AS favorite
                 FROM Document d
-                 LEFT JOIN Favorite f
-                    ON  f.document.id = d.id
+                LEFT JOIN Favorite f
+                    ON f.document.id = d.id
                     AND f.userId = :currentUserId
                 WHERE d.userId = :authorId
                     AND d.status = :status
                     AND d.hide = false
                 ORDER BY d.createdAt DESC
             """)
-    List<DocumentResponse> getByUserWhenLogin(@Param("authorId") Long authorId,
-                                              @Param("currentUserId") Long currentUserId, @Param("status") ContentStatus status);
+    List<DocumentResponse> getByUserWhenLogin(
+            @Param("authorId") Long authorId,
+            @Param("currentUserId") Long currentUserId,
+            @Param("status") ContentStatus status
+    );
 
-    @Query("""
-                SELECT new com.example.studyservice.dto.response.DocumentResponse(
-                    d.id,
-                    d.title,
-                    d.description,
-                    d.thumbnailUrl,
-                    d.authorName,
-                    d.viewsCount,
-                    d.downloadsCount,
-                    false
-                )
-                FROM Document d
-                WHERE d.userId = :authorId
-                    AND d.status = :status
-                    AND d.hide = false
-                ORDER BY d.createdAt DESC
+    @Query(""" 
+            SELECT
+                d.id AS id,
+                d.title AS title,
+                d.description AS description,
+                d.thumbnailUrl AS thumbnailUrl,
+                d.authorName AS authorName,
+                d.viewsCount AS viewsCount,
+                d.downloadsCount AS downloadsCount,
+                false AS favorite
+            FROM Document d
+            WHERE d.userId = :authorId
+               AND d.status = :status
+               AND d.hide = false
+            ORDER BY d.createdAt DESC
             """)
-    List<DocumentResponse> getByUserWithoutLogin(@Param("authorId") Long authorId,
-                                                 @Param("status") ContentStatus status);
+    List<DocumentResponse> getByUserWithoutLogin(@Param("authorId") Long authorId, @Param("status") ContentStatus status);
 
     @Query("""
-                SELECT new com.example.studyservice.dto.response.DocumentResponse(
-                    d.id,
-                    d.title,
-                    d.description,
-                    d.thumbnailUrl,
-                    d.authorName,
-                    d.viewsCount,
-                    d.downloadsCount,
-                    CASE WHEN f.id IS NOT NULL THEN true ELSE false END
-                )
+                SELECT
+                    d.id AS id,
+                    d.title AS title,
+                    d.description AS description,
+                    d.thumbnailUrl AS thumbnailUrl,
+                    d.authorName AS authorName,
+                    d.viewsCount AS viewsCount,
+                    d.downloadsCount AS downloadsCount,
+                    CASE WHEN f.id IS NOT NULL THEN true ELSE false END AS favorite
                 FROM Document d
                 LEFT JOIN Favorite f
-                    ON  f.document.id = d.id
+                    ON f.document.id = d.id
                     AND f.userId = :currentUserId
                 WHERE d.category.id = :categoryId
                     AND d.id <> :currentDocumentId
@@ -235,21 +249,23 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     AND d.hide = false
                 ORDER BY d.createdAt DESC
             """)
-    List<DocumentResponse> getByCategoryWhenLoginAndDifferentCurrentDocument(@Param("categoryId") Long categoryId,
-                                                                             @Param("currentUserId") Long currentUserId, @Param("currentDocumentId") Long currentDocumentId,
-                                                                             @Param("status") ContentStatus status);
+    List<DocumentResponse> getByCategoryWhenLoginAndDifferentCurrentDocument(
+            @Param("categoryId") Long categoryId,
+            @Param("currentUserId") Long currentUserId,
+            @Param("currentDocumentId") Long currentDocumentId,
+            @Param("status") ContentStatus status
+    );
 
     @Query("""
-                SELECT new com.example.studyservice.dto.response.DocumentResponse(
-                    d.id,
-                    d.title,
-                    d.description,
-                    d.thumbnailUrl,
-                    d.authorName,
-                    d.viewsCount,
-                    d.downloadsCount,
-                    false
-                )
+                SELECT
+                    d.id AS id,
+                    d.title AS title,
+                    d.description AS description,
+                    d.thumbnailUrl AS thumbnailUrl,
+                    d.authorName AS authorName,
+                    d.viewsCount AS viewsCount,
+                    d.downloadsCount AS downloadsCount,
+                    false AS favorite
                 FROM Document d
                 WHERE d.category.id = :categoryId
                     AND d.id <> :currentDocumentId
@@ -257,49 +273,52 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     AND d.hide = false
                 ORDER BY d.createdAt DESC
             """)
-    List<DocumentResponse> getByCategoryWithoutLoginAndDifferentCurrentDocument(@Param("categoryId") Long categoryId,
-                                                                                @Param("currentDocumentId") Long currentDocumentId, @Param("status") ContentStatus status);
+    List<DocumentResponse> getByCategoryWithoutLoginAndDifferentCurrentDocument(
+            @Param("categoryId") Long categoryId,
+            @Param("currentDocumentId") Long currentDocumentId,
+            @Param("status") ContentStatus status
+    );
 
     @Query("""
-                SELECT new com.example.studyservice.dto.response.DocumentResponse(
-                    d.id,
-                    d.title,
-                    d.description,
-                    d.thumbnailUrl,
-                    d.authorName,
-                    d.viewsCount,
-                    d.downloadsCount,
-                    CASE WHEN f.id IS NOT NULL THEN true ELSE false END
-                )
+                SELECT
+                    d.id AS id,
+                    d.title AS title,
+                    d.description AS description,
+                    d.thumbnailUrl AS thumbnailUrl,
+                    d.authorName AS authorName,
+                    d.viewsCount AS viewsCount,
+                    d.downloadsCount AS downloadsCount,
+                    CASE WHEN f.id IS NOT NULL THEN true ELSE false END AS favorite
                 FROM Document d
                 LEFT JOIN Favorite f
-                    ON  f.document.id = d.id
+                    ON f.document.id = d.id
                     AND f.userId = :currentUserId
                 WHERE d.status = :status
                     AND d.hide = false
                 ORDER BY d.createdAt DESC
             """)
-    List<DocumentResponse> getAllWhenLogin(@Param("currentUserId") Long currentUserId,
-                                           @Param("status") ContentStatus status);
+    List<DocumentResponse> getAllWhenLogin(
+            @Param("currentUserId") Long currentUserId,
+            @Param("status") ContentStatus status
+    );
 
     @Query("""
-                SELECT new com.example.studyservice.dto.response.DocumentResponse(
-                    d.id,
-                    d.title,
-                    d.description,
-                    d.thumbnailUrl,
-                    d.authorName,
-                    d.viewsCount,
-                    d.downloadsCount,
-                    false
-                )
+                SELECT
+                    d.id AS id,
+                    d.title AS title,
+                    d.description AS description,
+                    d.thumbnailUrl AS thumbnailUrl,
+                    d.authorName AS authorName,
+                    d.viewsCount AS viewsCount,
+                    d.downloadsCount AS downloadsCount,
+                    false AS favorite
                 FROM Document d
                 WHERE d.status = :status
                     AND d.hide = false
                 ORDER BY d.createdAt DESC
             """)
-    List<DocumentResponse> getAllWithoutLogin(@Param("status") ContentStatus status);
-
-    List<Document> findByCategoryAndStatusAndHideFalse(Category category, ContentStatus status);
+    List<DocumentResponse> getAllWithoutLogin(
+            @Param("status") ContentStatus status
+    );
 
 }

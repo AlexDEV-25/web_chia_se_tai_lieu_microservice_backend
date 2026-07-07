@@ -7,7 +7,7 @@ import com.example.commondto.response.UserDetailInfoResponse;
 import com.example.commonexception.exception.AppException;
 import com.example.commonsecurity.helper.GetUserIdByToken;
 import com.example.interactionservice.dto.request.ReportRequest;
-import com.example.interactionservice.dto.response.ReportAdminResponse;
+import com.example.interactionservice.dto.response.ReportAdminProjection;
 import com.example.interactionservice.dto.response.ReportDetailAdminResponse;
 import com.example.interactionservice.dto.response.ReportUserResponse;
 import com.example.interactionservice.mapper.ReportMapper;
@@ -37,7 +37,7 @@ public class ReportService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public List<ReportAdminResponse> getAllDocumentReportSummary() {
+    public List<ReportAdminProjection> getAllDocumentReportSummary() {
         return documentReportRepository.getAllDocumentReportSummary();
     }
 

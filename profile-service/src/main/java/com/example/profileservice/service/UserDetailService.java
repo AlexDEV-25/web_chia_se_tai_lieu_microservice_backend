@@ -9,6 +9,7 @@ import com.example.commondto.response.UserDetailInfoResponse;
 import com.example.commondto.response.UserDetailResponse;
 import com.example.commonexception.exception.AppException;
 import com.example.commonsecurity.helper.GetUserIdByToken;
+import com.example.profileservice.dto.response.UserBioProjection;
 import com.example.profileservice.dto.response.UserBioResponse;
 import com.example.profileservice.mapper.UserDetailMapper;
 import com.example.profileservice.model.UserDetail;
@@ -97,7 +98,7 @@ public class UserDetailService {
     }
 
     @PreAuthorize("hasAuthority('SEARCH_USER')")
-    public List<UserBioResponse> search(String keyword) {
+    public List<UserBioProjection> search(String keyword) {
         return userDetailRepository.search(keyword);
     }
 

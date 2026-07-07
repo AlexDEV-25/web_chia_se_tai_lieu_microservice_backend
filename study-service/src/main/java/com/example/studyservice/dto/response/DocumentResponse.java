@@ -1,21 +1,19 @@
 package com.example.studyservice.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+public interface DocumentResponse {
+    Long getId();
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class DocumentResponse {
-    private Long id;
-    private String title;
-    private String description;
-    private String thumbnailUrl;
-    private String authorName;
-    private Long viewsCount;
-    private Long downloadsCount;
-    private boolean favorite;
+    String getTitle();
+
+    String getDescription();
+
+    String getThumbnailUrl();
+
+    String getAuthorName();
+
+    Long getViewsCount();
+
+    Long getDownloadsCount();
+
+    Boolean getFavorite();
 }
