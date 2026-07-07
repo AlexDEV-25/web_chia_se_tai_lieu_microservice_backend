@@ -3,10 +3,7 @@ package com.example.interactionservice.service;
 
 import com.example.AppError;
 import com.example.commondto.request.DisplayRequest;
-import com.example.commondto.response.CommentAdminResponse;
-import com.example.commondto.response.CommentDetailAdminResponse;
-import com.example.commondto.response.DocumentInfoResponse;
-import com.example.commondto.response.UserDetailInfoResponse;
+import com.example.commondto.response.*;
 import com.example.commonexception.exception.AppException;
 import com.example.commonsecurity.helper.GetUserIdByToken;
 import com.example.constant.NotificationType;
@@ -22,15 +19,16 @@ import com.example.interactionservice.repository.httpclient.ProfileClient;
 import com.example.interactionservice.repository.httpclient.StudyClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -118,40 +116,41 @@ public class CommentService {
         return documentRepo.findByDocumentId(documentId).stream().map(mapper::documentCommentToCommentDetailAdminResponse).toList();
     }
 
-    public List<CommentTreeUserResponse> getDocumentTree(Long docId) {
-        List<Comment> list = documentRepo.findByDocumentIdAndHideFalseOrderByLevelAscCreatedAtAsc(docId);
-        return buildTreeDocument(list);
+    public PageResponse<CommentTreeUserResponse> getRootComments(Long documentId, int page, int size) {
+
+        Page<CommentTreeUserResponse> pageData = documentRepo
+                .findByDocumentIdAndParentIsNullAndHideFalse(
+                        documentId,
+                        getPageable(page, size))
+                .map(mapper::documentCommentToCommentTreeResponse);
+
+        return pageResponse(pageData);
     }
 
-    private List<CommentTreeUserResponse> buildTreeDocument(List<Comment> list) {
+    public PageResponse<CommentTreeUserResponse> getReplies(Long parentId, int page, int size) {
 
-        Map<Long, CommentTreeUserResponse> map = new HashMap<>();
+        Page<CommentTreeUserResponse> pageData = documentRepo
+                .findByParentIdAndHideFalse(
+                        parentId,
+                        getPageable(page, size))
+                .map(mapper::documentCommentToCommentTreeResponse);
 
-        for (Comment c : list) {
-            CommentTreeUserResponse dto = mapper.documentCommentToCommentTreeResponse(c);
-            map.put(dto.getId(), dto);
-        }
-
-        return buildTree(map);
+        return pageResponse(pageData);
     }
 
-    private List<CommentTreeUserResponse> buildTree(Map<Long, CommentTreeUserResponse> map) {
+    private PageResponse<CommentTreeUserResponse> pageResponse(Page<CommentTreeUserResponse> pageData) {
+        return PageResponse.<CommentTreeUserResponse>builder()
+                .currentPage(pageData.getNumber() + 1)
+                .totalPages(pageData.getTotalPages())
+                .pageSize(pageData.getSize())
+                .totalElements(pageData.getTotalElements())
+                .data(pageData.getContent())
+                .build();
+    }
 
-        List<CommentTreeUserResponse> roots = new ArrayList<>();
-
-        for (CommentTreeUserResponse dto : map.values()) {
-
-            if (dto.getParentId() == null) {
-                roots.add(dto);
-            } else {
-                CommentTreeUserResponse parent = map.get(dto.getParentId());
-                if (parent != null) {
-                    parent.getChildren().add(dto);
-                }
-            }
-        }
-
-        return roots;
+    private Pageable getPageable(int page, int size) {
+        Sort sort = Sort.by("createdAt").descending();
+        return PageRequest.of(page - 1, size, sort);
     }
 
     private Long calcLevel(Comment parent) {
@@ -159,8 +158,7 @@ public class CommentService {
     }
 
     private Comment getParentDocument(Long parentId) {
-        if (parentId == null)
-            return null;
+        if (parentId == null) return null;
         return documentRepo.findById(parentId).orElseThrow(() -> new RuntimeException("Không tìm thấy parent"));
     }
 

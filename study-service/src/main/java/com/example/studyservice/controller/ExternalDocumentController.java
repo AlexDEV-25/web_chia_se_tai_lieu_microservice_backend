@@ -3,6 +3,7 @@ package com.example.studyservice.controller;
 
 import com.example.AppError;
 import com.example.commondto.response.APIResponse;
+import com.example.commondto.response.PageResponse;
 import com.example.commonexception.exception.AppException;
 import com.example.studyservice.dto.request.DocumentRequest;
 import com.example.studyservice.dto.response.*;
@@ -33,11 +34,13 @@ public class ExternalDocumentController {
     }
 
     @GetMapping("/search")
-    public APIResponse<DocumentResponse> search(@RequestParam(required = false) String keyword,
-                                                @RequestParam(required = false) Long categoryId) {
-        APIResponse<DocumentResponse> apiResponse = new APIResponse<>();
-        apiResponse.setResultList(documentService.search(keyword, categoryId));
-        return apiResponse;
+    public PageResponse<DocumentResponse> search(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size
+    ) {
+        return documentService.search(keyword, categoryId, page, size);
     }
 
     @GetMapping("/{id}")
@@ -48,10 +51,11 @@ public class ExternalDocumentController {
     }
 
     @GetMapping
-    public APIResponse<DocumentResponse> getAllPublicDocuments() {
-        APIResponse<DocumentResponse> apiResponse = new APIResponse<>();
-        apiResponse.setResultList(documentService.getAllPublicDocuments());
-        return apiResponse;
+    public PageResponse<DocumentResponse> getAllPublicDocuments(
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+
+        return documentService.getAllPublicDocuments(page, size);
     }
 
     @GetMapping("/user")
@@ -62,17 +66,22 @@ public class ExternalDocumentController {
     }
 
     @GetMapping("/category")
-    public APIResponse<DocumentResponse> getByCategory(@RequestParam Long categoryId, @RequestParam Long documentId) {
-        APIResponse<DocumentResponse> apiResponse = new APIResponse<>();
-        apiResponse.setResultList(documentService.getDocumentsByCategory(categoryId, documentId));
-        return apiResponse;
+    public PageResponse<DocumentResponse> getByCategory(
+            @RequestParam Long categoryId,
+            @RequestParam Long documentId,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size
+    ) {
+        return documentService.getDocumentsByCategory(categoryId, documentId, page, size);
     }
 
     @GetMapping("/user/{userId}")
-    public APIResponse<DocumentResponse> getAllDocumentsByUser(@PathVariable Long userId) {
-        APIResponse<DocumentResponse> apiResponse = new APIResponse<>();
-        apiResponse.setResultList(documentService.getAllDocumentsByUser(userId));
-        return apiResponse;
+    public PageResponse<DocumentResponse> getAllDocumentsByUser(
+            @PathVariable Long userId,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size
+    ) {
+        return documentService.getAllDocumentsByUser(userId, page, size);
     }
 
     @GetMapping("/count/{userId}")

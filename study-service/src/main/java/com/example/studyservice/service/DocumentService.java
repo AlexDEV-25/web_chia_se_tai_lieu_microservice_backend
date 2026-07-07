@@ -2,10 +2,7 @@ package com.example.studyservice.service;
 
 import com.example.AppError;
 import com.example.ContentStatus;
-import com.example.commondto.response.CategoryCountProjection;
-import com.example.commondto.response.DailyCountProjection;
-import com.example.commondto.response.DocumentInfoResponse;
-import com.example.commondto.response.DocumentSearchAIResponse;
+import com.example.commondto.response.*;
 import com.example.commonexception.exception.AppException;
 import com.example.commonsecurity.helper.GetUserIdByToken;
 import com.example.constant.NotificationType;
@@ -23,6 +20,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -203,21 +204,27 @@ public class DocumentService {
 
     }
 
-    public List<DocumentResponse> search(String keyword, Long categoryId) {
-
+    public PageResponse<DocumentResponse> search(String keyword, Long categoryId, int page, int size) {
         Long userId = GetUserIdByToken.get();
         if (userId == 0L) {
-            return documentRepository.searchWithoutLogin(keyword, categoryId, ContentStatus.PUBLISHED);
+            Page<DocumentResponse> pageData = documentRepository.searchWithoutLogin(keyword, categoryId, ContentStatus.PUBLISHED, getPageable(page, size));
+            return pageResponse(pageData);
         }
-        return documentRepository.searchWhenLogin(keyword, categoryId, userId, ContentStatus.PUBLISHED);
+        Page<DocumentResponse> pageData = documentRepository.searchWhenLogin(keyword, categoryId, userId, ContentStatus.PUBLISHED, getPageable(page, size));
+        return pageResponse(pageData);
+
     }
 
-    public List<DocumentResponse> getAllPublicDocuments() {
+    public PageResponse<DocumentResponse> getAllPublicDocuments(int page, int size) {
         Long userId = GetUserIdByToken.get();
+
         if (userId == 0L) {
-            return documentRepository.getAllWithoutLogin(ContentStatus.PUBLISHED);
+            Page<DocumentResponse> pageData = documentRepository.getAllWithoutLogin(ContentStatus.PUBLISHED, getPageable(page, size));
+            return pageResponse(pageData);
         }
-        return documentRepository.getAllWhenLogin(userId, ContentStatus.PUBLISHED);
+
+        Page<DocumentResponse> pageData = documentRepository.getAllWhenLogin(userId, ContentStatus.PUBLISHED, getPageable(page, size));
+        return pageResponse(pageData);
 
     }
 
@@ -243,23 +250,27 @@ public class DocumentService {
 
     }
 
-    public List<DocumentResponse> getDocumentsByCategory(Long categoryId, Long currentDocumentId) {
+    public PageResponse<DocumentResponse> getDocumentsByCategory(Long categoryId, Long currentDocumentId, int page, int size) {
         Long userId = GetUserIdByToken.get();
         if (userId == 0L) {
-            return documentRepository.getByCategoryWithoutLoginAndDifferentCurrentDocument(categoryId,
-                    currentDocumentId, ContentStatus.PUBLISHED);
+            Page<DocumentResponse> pageData = documentRepository.getByCategoryWithoutLoginAndDifferentCurrentDocument(categoryId,
+                    currentDocumentId, ContentStatus.PUBLISHED, getPageable(page, size));
+            return pageResponse(pageData);
         }
-        return documentRepository.getByCategoryWhenLoginAndDifferentCurrentDocument(categoryId, userId,
-                currentDocumentId, ContentStatus.PUBLISHED);
+        Page<DocumentResponse> pageData = documentRepository.getByCategoryWhenLoginAndDifferentCurrentDocument(categoryId, userId,
+                currentDocumentId, ContentStatus.PUBLISHED, getPageable(page, size));
+        return pageResponse(pageData);
 
     }
 
-    public List<DocumentResponse> getAllDocumentsByUser(Long authorId) {
+    public PageResponse<DocumentResponse> getAllDocumentsByUser(Long authorId, int page, int size) {
         Long userId = GetUserIdByToken.get();
         if (userId == 0L) {
-            return documentRepository.getByUserWithoutLogin(authorId, ContentStatus.PUBLISHED);
+            Page<DocumentResponse> pageData = documentRepository.getByUserWithoutLogin(authorId, ContentStatus.PUBLISHED, getPageable(page, size));
+            return pageResponse(pageData);
         }
-        return documentRepository.getByUserWhenLogin(authorId, userId, ContentStatus.PUBLISHED);
+        Page<DocumentResponse> pageData = documentRepository.getByUserWhenLogin(authorId, userId, ContentStatus.PUBLISHED, getPageable(page, size));
+        return pageResponse(pageData);
     }
 
     public DocumentStatsResponse getStats() {
@@ -289,6 +300,21 @@ public class DocumentService {
 
     public Long countDocumentOfUser(Long userId) {
         return documentRepository.countByUserIdAndStatusAndHideFalse(userId, ContentStatus.PUBLISHED);
+    }
+
+    private Pageable getPageable(int page, int size) {
+        Sort sort = Sort.by("createdAt").descending();
+        return PageRequest.of(page - 1, size, sort);
+    }
+
+    private PageResponse<DocumentResponse> pageResponse(Page<DocumentResponse> pageData) {
+        return PageResponse.<DocumentResponse>builder()
+                .currentPage(pageData.getNumber() + 1)
+                .totalPages(pageData.getTotalPages())
+                .pageSize(pageData.getSize())
+                .totalElements(pageData.getTotalElements())
+                .data(pageData.getContent())
+                .build();
     }
 
     private void deleteByKey(Long id) {

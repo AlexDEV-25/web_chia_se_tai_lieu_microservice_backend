@@ -3,6 +3,8 @@ package com.example.interactionservice.repository;
 import com.example.commondto.response.CommentAdminResponse;
 import com.example.interactionservice.dto.response.CommentTotalAdminProjection;
 import com.example.interactionservice.model.Comment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +18,10 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByDocumentId(Long documentId);
 
-    List<Comment> findByDocumentIdAndHideFalseOrderByLevelAscCreatedAtAsc(Long documentId);
+    Page<Comment> findByDocumentIdAndParentIsNullAndHideFalse(Long documentId, Pageable pageable);
+
+    Page<Comment> findByParentIdAndHideFalse(Long parentId, Pageable pageable);
+
 
     Optional<Comment> findByIdAndUserIdAndHideFalse(Long id, Long UserId);
 

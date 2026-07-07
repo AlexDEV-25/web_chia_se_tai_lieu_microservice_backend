@@ -4,6 +4,7 @@ package com.example.interactionservice.controller;
 import com.example.commondto.request.DisplayRequest;
 import com.example.commondto.response.APIResponse;
 import com.example.commondto.response.CommentDetailAdminResponse;
+import com.example.commondto.response.PageResponse;
 import com.example.interactionservice.dto.request.CommentRequest;
 import com.example.interactionservice.dto.response.CommentTotalAdminProjection;
 import com.example.interactionservice.dto.response.CommentTreeUserResponse;
@@ -20,10 +21,21 @@ public class ExternalCommentController {
     private final CommentService commentService;
 
     @GetMapping("/document/{docId}")
-    public APIResponse<CommentTreeUserResponse> getDocumentCommentTree(@PathVariable Long docId) {
-        APIResponse<CommentTreeUserResponse> apiResponse = new APIResponse<CommentTreeUserResponse>();
-        apiResponse.setResultList(commentService.getDocumentTree(docId));
-        return apiResponse;
+    public PageResponse<CommentTreeUserResponse> getRootComments(
+            @PathVariable Long docId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        
+        return commentService.getRootComments(docId, page, size);
+    }
+
+    @GetMapping("/{parentId}/replies")
+    public PageResponse<CommentTreeUserResponse> getReplies(
+            @PathVariable Long parentId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return commentService.getReplies(parentId, page, size);
     }
 
 

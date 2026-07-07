@@ -6,6 +6,8 @@ import com.example.commondto.response.DailyCountProjection;
 import com.example.studyservice.dto.response.DocumentResponse;
 import com.example.studyservice.dto.response.DocumentStatsResponse;
 import com.example.studyservice.model.Document;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -103,11 +105,12 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                         OR d.description LIKE CONCAT('%', :keyword, '%')
                   )
             """)
-    List<DocumentResponse> searchWhenLogin(
+    Page<DocumentResponse> searchWhenLogin(
             @Param("keyword") String keyword,
             @Param("categoryId") Long categoryId,
             @Param("currentUserId") Long currentUserId,
-            @Param("status") ContentStatus status
+            @Param("status") ContentStatus status,
+            Pageable pageable
     );
 
     @Query("""
@@ -130,10 +133,11 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                         OR d.description LIKE CONCAT('%', :keyword, '%')
                   )
             """)
-    List<DocumentResponse> searchWithoutLogin(
+    Page<DocumentResponse> searchWithoutLogin(
             @Param("keyword") String keyword,
             @Param("categoryId") Long categoryId,
-            @Param("status") ContentStatus status
+            @Param("status") ContentStatus status,
+            Pageable pageable
     );
 
     @Query("""
@@ -205,10 +209,11 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     AND d.hide = false
                 ORDER BY d.createdAt DESC
             """)
-    List<DocumentResponse> getByUserWhenLogin(
+    Page<DocumentResponse> getByUserWhenLogin(
             @Param("authorId") Long authorId,
             @Param("currentUserId") Long currentUserId,
-            @Param("status") ContentStatus status
+            @Param("status") ContentStatus status,
+            Pageable pageable
     );
 
     @Query(""" 
@@ -227,7 +232,11 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                AND d.hide = false
             ORDER BY d.createdAt DESC
             """)
-    List<DocumentResponse> getByUserWithoutLogin(@Param("authorId") Long authorId, @Param("status") ContentStatus status);
+    Page<DocumentResponse> getByUserWithoutLogin(
+            @Param("authorId") Long authorId,
+            @Param("status") ContentStatus status,
+            Pageable pageable
+    );
 
     @Query("""
                 SELECT
@@ -249,11 +258,12 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     AND d.hide = false
                 ORDER BY d.createdAt DESC
             """)
-    List<DocumentResponse> getByCategoryWhenLoginAndDifferentCurrentDocument(
+    Page<DocumentResponse> getByCategoryWhenLoginAndDifferentCurrentDocument(
             @Param("categoryId") Long categoryId,
             @Param("currentUserId") Long currentUserId,
             @Param("currentDocumentId") Long currentDocumentId,
-            @Param("status") ContentStatus status
+            @Param("status") ContentStatus status,
+            Pageable pageable
     );
 
     @Query("""
@@ -273,10 +283,11 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     AND d.hide = false
                 ORDER BY d.createdAt DESC
             """)
-    List<DocumentResponse> getByCategoryWithoutLoginAndDifferentCurrentDocument(
+    Page<DocumentResponse> getByCategoryWithoutLoginAndDifferentCurrentDocument(
             @Param("categoryId") Long categoryId,
             @Param("currentDocumentId") Long currentDocumentId,
-            @Param("status") ContentStatus status
+            @Param("status") ContentStatus status,
+            Pageable pageable
     );
 
     @Query("""
@@ -297,9 +308,10 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     AND d.hide = false
                 ORDER BY d.createdAt DESC
             """)
-    List<DocumentResponse> getAllWhenLogin(
+    Page<DocumentResponse> getAllWhenLogin(
             @Param("currentUserId") Long currentUserId,
-            @Param("status") ContentStatus status
+            @Param("status") ContentStatus status,
+            Pageable pageable
     );
 
     @Query("""
@@ -314,11 +326,11 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
                     false AS favorite
                 FROM Document d
                 WHERE d.status = :status
-                    AND d.hide = false
-                ORDER BY d.createdAt DESC
+                  AND d.hide = false
             """)
-    List<DocumentResponse> getAllWithoutLogin(
-            @Param("status") ContentStatus status
+    Page<DocumentResponse> getAllWithoutLogin(
+            @Param("status") ContentStatus status,
+            Pageable pageable
     );
 
 }
