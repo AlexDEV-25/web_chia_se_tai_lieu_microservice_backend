@@ -1,6 +1,7 @@
 package com.example.notificationservice.controller;
 
 import com.example.commondto.response.APIResponse;
+import com.example.commondto.response.PageResponse;
 import com.example.notificationservice.dto.response.UserNotificationResponse;
 import com.example.notificationservice.service.UserNotificationService;
 import lombok.AllArgsConstructor;
@@ -13,17 +14,20 @@ public class ExternalUserNotificationController {
     private final UserNotificationService userNotificationService;
 
     @GetMapping("/receiver")
-    public APIResponse<UserNotificationResponse> getByReceiver() {
-        APIResponse<UserNotificationResponse> apiResponse = new APIResponse<>();
-        apiResponse.setResultList(userNotificationService.getByReceiver());
-        return apiResponse;
+    public PageResponse<UserNotificationResponse> getByReceiver(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        return userNotificationService.getByReceiver(page, size);
     }
 
     @GetMapping("/receiver/unread")
-    public APIResponse<UserNotificationResponse> getByReceiverIdAndReadFalse() {
-        APIResponse<UserNotificationResponse> apiResponse = new APIResponse<>();
-        apiResponse.setResultList(userNotificationService.getByReceiverIdAndReadFalse());
-        return apiResponse;
+    public PageResponse<UserNotificationResponse> getByReceiverIdAndReadFalse(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return userNotificationService.getByReceiverIdAndReadFalse(page, size);
     }
 
     @PutMapping("read/{id}")

@@ -1,6 +1,7 @@
 package com.example.notificationservice.service;
 
 
+import com.example.commondto.response.PageResponse;
 import com.example.commonsecurity.helper.GetUserIdByToken;
 import com.example.notificationservice.dto.request.UserNotificationRequest;
 import com.example.notificationservice.dto.response.UserNotificationResponse;
@@ -8,11 +9,14 @@ import com.example.notificationservice.mapper.UserNotificationMapper;
 import com.example.notificationservice.model.UserNotification;
 import com.example.notificationservice.repository.UserNotificationRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,26 +26,23 @@ public class UserNotificationService {
     private final UserNotificationMapper userNotificationMapper;
 
     @PreAuthorize("hasAuthority('GET_ALL_USER_NOTIFICATION')")
-    public List<UserNotificationResponse> getByReceiver() {
+    public PageResponse<UserNotificationResponse> getByReceiver(int page, int size) {
         Long receiverId = GetUserIdByToken.get();
-        List<UserNotification> userNotifications = userNotificationRepository.findByReceiverId(receiverId);
-        List<UserNotificationResponse> response = new ArrayList<UserNotificationResponse>();
-        for (UserNotification un : userNotifications) {
-            response.add(userNotificationMapper.userNotificationToResponse(un));
-        }
-        return response;
+        Page<UserNotificationResponse> pageData = userNotificationRepository
+                .findByReceiverId(receiverId, getPageable(page, size))
+                .map(userNotificationMapper::userNotificationToResponse);
+
+        return pageResponse(pageData);
     }
 
     @PreAuthorize("hasAuthority('GET_UNREAD_USER_NOTIFICATION')")
-    public List<UserNotificationResponse> getByReceiverIdAndReadFalse() {
+    public PageResponse<UserNotificationResponse> getByReceiverIdAndReadFalse(int page, int size) {
         Long receiverId = GetUserIdByToken.get();
-        List<UserNotification> userNotifications = userNotificationRepository
-                .findByReceiverIdAndReadFalse(receiverId);
-        List<UserNotificationResponse> response = new ArrayList<UserNotificationResponse>();
-        for (UserNotification un : userNotifications) {
-            response.add(userNotificationMapper.userNotificationToResponse(un));
-        }
-        return response;
+        Page<UserNotificationResponse> pageData = userNotificationRepository
+                .findByReceiverIdAndReadFalse(receiverId, getPageable(page, size))
+                .map(userNotificationMapper::userNotificationToResponse);
+
+        return pageResponse(pageData);
     }
 
     @PreAuthorize("hasAuthority('READ_NOTIFICATION')")
@@ -67,6 +68,21 @@ public class UserNotificationService {
         UserNotification userNotification = userNotificationMapper.requestToUserNotification(request);
         userNotification.setCreatedAt(LocalDateTime.now());
         userNotificationRepository.save(userNotification);
+    }
+
+    private Pageable getPageable(int page, int size) {
+        Sort sort = Sort.by("createdAt").descending();
+        return PageRequest.of(page - 1, size, sort);
+    }
+
+    private PageResponse<UserNotificationResponse> pageResponse(Page<UserNotificationResponse> pageData) {
+        return PageResponse.<UserNotificationResponse>builder()
+                .currentPage(pageData.getNumber() + 1)
+                .totalPages(pageData.getTotalPages())
+                .pageSize(pageData.getSize())
+                .totalElements(pageData.getTotalElements())
+                .data(pageData.getContent())
+                .build();
     }
 
 }
