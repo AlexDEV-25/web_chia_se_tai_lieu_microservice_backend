@@ -1,8 +1,12 @@
 package com.example.authservice.configuration;
 
+import com.example.commonsecurity.configuration.CommonSecurityConfiguration;
+import com.example.commonsecurity.helper.CustomAuthEntryPoint;
+import com.example.commonsecurity.helper.CustomJwtDecoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -19,6 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableMethodSecurity
+@Import(CommonSecurityConfiguration.class)
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_POST = {

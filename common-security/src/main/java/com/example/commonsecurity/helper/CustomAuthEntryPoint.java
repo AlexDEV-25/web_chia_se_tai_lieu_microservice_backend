@@ -1,4 +1,4 @@
-package com.example.fileservice.configuration;
+package com.example.commonsecurity.helper;
 
 import com.example.commondto.response.APIResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;

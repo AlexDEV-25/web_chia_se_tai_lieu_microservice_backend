@@ -2,6 +2,7 @@ package com.example.profileservice.repository.httpclient;
 
 
 import com.example.commondto.response.APIResponse;
+import com.example.commonsecurity.configuration.CommonFeignConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
-@FeignClient(name = "file-service", url = "${app.services.file.url}")
+@FeignClient(name = "file-service", url = "${app.services.file.url}", configuration = CommonFeignConfiguration.class)
 public interface FileClient {
 
     @DeleteMapping(value = "/api/internal/files/delete", produces = MediaType.APPLICATION_JSON_VALUE)

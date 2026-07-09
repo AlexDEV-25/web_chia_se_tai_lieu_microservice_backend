@@ -14,6 +14,7 @@ import com.example.studyservice.model.Category;
 import com.example.studyservice.model.Document;
 import com.example.studyservice.repository.CategoryRepository;
 import com.example.studyservice.repository.DocumentRepository;
+import com.example.studyservice.repository.FavoriteRepository;
 import com.example.studyservice.repository.httpclient.FileClient;
 import com.example.studyservice.repository.httpclient.ProfileClient;
 import jakarta.transaction.Transactional;
@@ -40,6 +41,7 @@ import java.util.Map;
 public class DocumentService {
     private final DocumentRepository documentRepository;
     private final CategoryRepository categoryRepository;
+    private final FavoriteRepository favoriteRepository;
     private final DocumentMapper documentMapper;
     private final FileClient fileClient;
     private final KafkaTemplate<String, Object> kafkaTemplate;
@@ -320,6 +322,7 @@ public class DocumentService {
     private void deleteByKey(Long id) {
         // xóa nhưng thằng liên quan
         documentRepository.deleteById(id);
+        favoriteRepository.deleteByDocument_Id(id);
     }
 
     private void deleteFile(Document entity) {

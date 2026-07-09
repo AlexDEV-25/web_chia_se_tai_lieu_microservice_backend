@@ -1,4 +1,4 @@
-package com.example.interactionservice.configuration;
+package com.example.commonsecurity.helper;
 
 import com.example.AppError;
 import com.example.commonexception.exception.AppException;

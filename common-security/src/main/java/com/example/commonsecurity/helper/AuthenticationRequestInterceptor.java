@@ -1,4 +1,4 @@
-package com.example.authservice.configuration;
+package com.example.commonsecurity.helper;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
