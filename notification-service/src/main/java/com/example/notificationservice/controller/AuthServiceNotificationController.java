@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class AuthServiceNotificationController {
     private final EmailService emailService;
 
-    @KafkaListener(topics = "activate-account")
+    @KafkaListener(topics = "activate-account", concurrency = "2")
     public void listenActivateAccount(EmailNotificationEvent message) {
         emailService.sendEmail(
                 SendEmailRequest.builder()
@@ -25,7 +25,7 @@ public class AuthServiceNotificationController {
                         .build());
     }
 
-    @KafkaListener(topics = "change-password")
+    @KafkaListener(topics = "change-password", concurrency = "2")
     public void listenChangePassword(EmailNotificationEvent message) {
         emailService.sendEmail(
                 SendEmailRequest.builder()
@@ -37,7 +37,7 @@ public class AuthServiceNotificationController {
                         .build());
     }
 
-    @KafkaListener(topics = "lock-account")
+    @KafkaListener(topics = "lock-account", concurrency = "2")
     public void listenLockAccount(EmailNotificationEvent message) {
         emailService.sendEmail(
                 SendEmailRequest.builder()

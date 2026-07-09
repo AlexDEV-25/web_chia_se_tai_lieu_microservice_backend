@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class InteractionServiceNotificationController {
     private final BuildNotification buildNotification;
 
-    @KafkaListener(topics = "reply-comment")
+    @KafkaListener(topics = "reply-comment", concurrency = "2")
     public void listenReplyComment(SystemNotificationEvent message) {
         buildNotification.buildNotificationToUser(message);
     }

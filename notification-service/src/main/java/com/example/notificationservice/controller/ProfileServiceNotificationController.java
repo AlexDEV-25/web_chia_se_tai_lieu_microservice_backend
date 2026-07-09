@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class ProfileServiceNotificationController {
     private final BuildNotification buildNotification;
 
-    @KafkaListener(topics = "follow-user")
+    @KafkaListener(topics = "follow-user", concurrency = "2")
     public void listenFollowUser(SystemNotificationEvent message) {
         buildNotification.buildNotificationToUser(message);
     }

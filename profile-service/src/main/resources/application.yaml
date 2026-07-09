@@ -21,6 +21,11 @@ spring:
       retries: 3
       acks: all
 
+      #      tránh việc gửi nhiều bản sao của cùng một tin nhắn trong trường hợp xảy ra lỗi
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+
 server:
   port: 8081
 
