@@ -18,6 +18,7 @@ import com.example.interactionservice.repository.CommentRepository;
 import com.example.interactionservice.repository.httpclient.ProfileClient;
 import com.example.interactionservice.repository.httpclient.StudyClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -77,7 +79,12 @@ public class CommentService {
                     .link(frontendDomain + "/document/" + saved.getDocumentId())
                     .type(NotificationType.INFO)
                     .build();
-            kafkaTemplate.send("reply-comment", systemNotificationEvent);
+            kafkaTemplate.send("reply-comment", systemNotificationEvent).whenComplete((result, ex) -> {
+                if (ex != null) {
+                    log.error("Cannot send event", ex);
+                    // sau này thích dùng @Schedule và Outbox pattern để gửi lại event
+                }
+            });
         }
 
 

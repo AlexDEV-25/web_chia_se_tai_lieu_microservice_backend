@@ -21,10 +21,18 @@ spring:
       retries: 3
       acks: all
 
-      #      tránh việc gửi nhiều bản sao của cùng một tin nhắn trong trường hợp xảy ra lỗi
       properties:
+        # Đảm bảo mỗi message chỉ được ghi một lần, tránh duplicate khi retry
         enable.idempotence: true
+
+        # Số request tối đa được gửi đồng thời trên một kết nối (giữ 5 để vừa hiệu năng vừa đảm bảo thứ tự khi bật idempotence)
         max.in.flight.requests.per.connection: 5
+
+        # Thời gian tối đa để producer cố gắng gửi một message (bao gồm cả retry)
+        delivery.timeout.ms: 120000
+
+        # Thời gian tối đa chờ ACK của broker cho mỗi lần gửi trước khi timeout và retry
+        request.timeout.ms: 30000
 
 server:
   port: 8081

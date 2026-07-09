@@ -19,6 +19,7 @@ import com.example.commondto.response.DailyCountProjection;
 import com.example.commonexception.exception.AppException;
 import com.example.event.EmailNotificationEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +29,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -101,8 +103,12 @@ public class UserService {
                 .body(createBodyEmail.bodyLockAccount())
                 .build();
 
-        kafkaTemplate.send("lock-account", emailNotificationEvent);
-
+        kafkaTemplate.send("lock-account", emailNotificationEvent).whenComplete((result, ex) -> {
+            if (ex != null) {
+                log.error("Cannot send event", ex);
+                // sau này thích dùng @Schedule và Outbox pattern để gửi lại event
+            }
+        });
         return userMapper.userToResponse(saved);
     }
 

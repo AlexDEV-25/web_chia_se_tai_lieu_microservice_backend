@@ -23,6 +23,7 @@ import com.example.event.EmailNotificationEvent;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -149,7 +151,13 @@ public class AuthenticationService {
                 .body(createBodyEmail.bodyActivateAccount(saved.getEmail(), saved.getActivationCode()))
                 .build();
 
-        kafkaTemplate.send("activate-account", emailNotificationEvent);
+        kafkaTemplate.send("activate-account", emailNotificationEvent)
+                .whenComplete((result, ex) -> {
+                    if (ex != null) {
+                        log.error("Cannot send event", ex);
+                        // sau này thích dùng @Schedule và Outbox pattern để gửi lại event
+                    }
+                });
         return userMapper.userToResponse(saved);
     }
 
@@ -184,8 +192,13 @@ public class AuthenticationService {
                     .body(createBodyEmail.bodyActivateAccount(user.getEmail(), user.getForgotPasswordCode()))
                     .build();
 
-            kafkaTemplate.send("change-password", emailNotificationEvent);
-
+            kafkaTemplate.send("change-password", emailNotificationEvent)
+                    .whenComplete((result, ex) -> {
+                        if (ex != null) {
+                            log.error("Cannot send event", ex);
+                            // sau này thích dùng @Schedule và Outbox pattern để gửi lại event
+                        }
+                    });
         } else {
             throw AppException.builder().appError(AppError.EMAIL_NOT_FOUND).build();
         }

@@ -399,6 +399,11 @@ public class DocumentService {
                 .content(content)
                 .link(link).type(type)
                 .build();
-        kafkaTemplate.send(topic, systemNotificationEvent);
+        kafkaTemplate.send(topic, systemNotificationEvent).whenComplete((result, ex) -> {
+            if (ex != null) {
+                log.error("Cannot send event", ex);
+                // sau này thích dùng @Schedule và Outbox pattern để gửi lại event
+            }
+        });
     }
 }

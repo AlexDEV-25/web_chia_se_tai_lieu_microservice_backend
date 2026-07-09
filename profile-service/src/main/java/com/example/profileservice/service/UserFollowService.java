@@ -16,6 +16,7 @@ import com.example.profileservice.repository.UserDetailRepository;
 import com.example.profileservice.repository.UserFollowRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserFollowService {
@@ -69,7 +71,12 @@ public class UserFollowService {
                 .link(frontendDomain + "/profile/" + saved.getFollower().getFullName())
                 .type(NotificationType.INFO)
                 .build();
-        kafkaTemplate.send("follow-user", systemNotificationEvent);
+        kafkaTemplate.send("follow-user", systemNotificationEvent).whenComplete((result, ex) -> {
+            if (ex != null) {
+                log.error("Cannot send event", ex);
+                // sau này thích dùng @Schedule và Outbox pattern để gửi lại event
+            }
+        });
 
         return userFollowMapper.userFollowToResponse(saved);
     }
