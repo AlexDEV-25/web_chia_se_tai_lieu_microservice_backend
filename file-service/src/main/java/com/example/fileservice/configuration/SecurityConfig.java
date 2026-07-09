@@ -24,11 +24,11 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_POST = {
-            "/api/internal/files/upload-file-pdf", "/api/internal/files/upload-file-image",
+//            "/api/internal/files/upload-file-pdf", "/api/internal/files/upload-file-image",
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
-            "/api/internal/files/download", "/api/internal/files/thumbnail"
+//            "/api/internal/files/download", "/api/internal/files/thumbnail"
     };
 
     private final String[] PUBLIC_ENDPOINTS_DELETE = {

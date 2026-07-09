@@ -36,7 +36,8 @@ public class SecurityConfig {
     };
 
     private final String[] PUBLIC_ENDPOINTS_PUT = {
-            "/api/internal/users-detail/admin/detail-info/{userId}", "/api/internal/users-detail/detail-info/{userId}"
+//            "/api/internal/users-detail/admin/detail-info/{userId}",
+//            "/api/internal/users-detail/detail-info/{userId}"
     };
 
 

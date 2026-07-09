@@ -31,10 +31,16 @@ public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS_GET = {
             "/api/external/categories",
 
-            "/api/external/documents", "/api/external/documents/{id}", "/api/external/documents/user/{userId}",
-            "/api/external/documents/category/{categoryId}", "/api/external/documents/user/{userId}", "/api/external/documents/count/{userId}",
-            "/api/internal/documents/ai", "/api/internal/documents/info/{documentId}",
-            "/api/internal/documents/last-7-days", "/api/internal/documents/by-category",
+            "/api/external/documents",
+            "/api/external/documents/{id}",
+            "/api/external/documents/user/{userId}",
+            "/api/external/documents/category/{categoryId}",
+            "/api/external/documents/user/{userId}",
+            "/api/external/documents/count/{userId}",
+//            "/api/internal/documents/ai",
+//            "/api/internal/documents/info/{documentId}",
+//            "/api/internal/documents/last-7-days",
+//            "/api/internal/documents/by-category",
     };
 
     private final CustomJwtDecoder customJwtDecoder;

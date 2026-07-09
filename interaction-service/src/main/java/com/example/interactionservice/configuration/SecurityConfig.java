@@ -30,7 +30,7 @@ public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS_GET = {
 //            "/api/comments"
             "/api/external/comments/document/{docId}",
-            "/api/internal/comments/admin/7-days",
+//            "/api/internal/comments/admin/7-days",
 
 //            "/api/ratings"
             "/api/external/ratings/document-summary/{documentId}",
