@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserFollowNotificationResponse {
     private Long followerId;
-    private String followerName;
 }
