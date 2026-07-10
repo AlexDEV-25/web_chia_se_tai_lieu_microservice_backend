@@ -1,9 +1,9 @@
 package com.example.statisticsservice.repository;
 
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.CategoryCountProjection;
-import com.example.commondto.response.DailyCountProjection;
-import com.example.commonsecurity.configuration.CommonFeignConfiguration;
+import com.example.configuration.CommonFeignConfiguration;
+import com.example.response.APIResponse;
+import com.example.response.CategoryCountProjection;
+import com.example.response.DailyCountProjection;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;

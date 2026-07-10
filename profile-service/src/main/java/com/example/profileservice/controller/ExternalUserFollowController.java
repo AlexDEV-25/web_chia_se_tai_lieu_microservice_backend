@@ -1,10 +1,10 @@
 package com.example.profileservice.controller;
 
 
-import com.example.commondto.response.APIResponse;
 import com.example.profileservice.dto.response.FollowCountResponse;
 import com.example.profileservice.dto.response.UserFollowResponse;
 import com.example.profileservice.service.UserFollowService;
+import com.example.response.APIResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

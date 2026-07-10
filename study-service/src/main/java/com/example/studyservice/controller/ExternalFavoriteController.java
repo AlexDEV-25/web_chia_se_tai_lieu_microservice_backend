@@ -1,6 +1,6 @@
 package com.example.studyservice.controller;
 
-import com.example.commondto.response.APIResponse;
+import com.example.response.APIResponse;
 import com.example.studyservice.dto.request.FavoriteRequest;
 import com.example.studyservice.dto.response.FavoriteResponse;
 import com.example.studyservice.service.FavoriteService;

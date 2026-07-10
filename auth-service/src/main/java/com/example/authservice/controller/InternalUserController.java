@@ -2,8 +2,8 @@ package com.example.authservice.controller;
 
 
 import com.example.authservice.service.UserService;
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.DailyCountProjection;
+import com.example.response.APIResponse;
+import com.example.response.DailyCountProjection;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

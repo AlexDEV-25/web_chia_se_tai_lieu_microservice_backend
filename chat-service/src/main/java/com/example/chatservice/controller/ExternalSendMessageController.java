@@ -3,7 +3,7 @@ package com.example.chatservice.controller;
 import com.example.AppError;
 import com.example.chatservice.dto.request.ChatMessageRequest;
 import com.example.chatservice.service.ChatMessageService;
-import com.example.commonexception.exception.AppException;
+import com.example.AppException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;

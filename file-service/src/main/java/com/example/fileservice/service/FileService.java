@@ -3,7 +3,7 @@ package com.example.fileservice.service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.AppError;
-import com.example.commonexception.exception.AppException;
+import com.example.AppException;
 import com.example.fileservice.dto.response.FileResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

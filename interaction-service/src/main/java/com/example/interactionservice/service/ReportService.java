@@ -2,10 +2,8 @@ package com.example.interactionservice.service;
 
 
 import com.example.AppError;
-import com.example.commondto.response.DocumentInfoResponse;
-import com.example.commondto.response.UserDetailInfoResponse;
-import com.example.commonexception.exception.AppException;
-import com.example.commonsecurity.helper.GetUserIdByToken;
+import com.example.AppException;
+import com.example.helper.GetUserIdByToken;
 import com.example.interactionservice.dto.request.ReportRequest;
 import com.example.interactionservice.dto.response.ReportAdminProjection;
 import com.example.interactionservice.dto.response.ReportDetailAdminResponse;
@@ -15,6 +13,8 @@ import com.example.interactionservice.model.Report;
 import com.example.interactionservice.repository.ReportRepository;
 import com.example.interactionservice.repository.httpclient.ProfileClient;
 import com.example.interactionservice.repository.httpclient.StudyClient;
+import com.example.response.DocumentInfoResponse;
+import com.example.response.UserDetailInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;

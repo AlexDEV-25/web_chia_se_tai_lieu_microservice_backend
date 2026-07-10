@@ -2,7 +2,7 @@ package com.example.apigateway.configuration;
 
 
 import com.example.apigateway.service.AuthService;
-import com.example.commondto.response.APIResponse;
+import com.example.response.APIResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;

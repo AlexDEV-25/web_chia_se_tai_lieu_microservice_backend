@@ -1,9 +1,9 @@
 package com.example.studyservice.controller;
 
 
-import com.example.commondto.request.DisplayRequest;
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.CategoryResponse;
+import com.example.request.DisplayRequest;
+import com.example.response.APIResponse;
+import com.example.response.CategoryResponse;
 import com.example.studyservice.dto.request.CategoryRequest;
 import com.example.studyservice.service.CategoryService;
 import jakarta.validation.Valid;

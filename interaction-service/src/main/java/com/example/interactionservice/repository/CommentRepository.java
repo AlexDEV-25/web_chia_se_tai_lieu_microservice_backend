@@ -1,8 +1,8 @@
 package com.example.interactionservice.repository;
 
-import com.example.commondto.response.CommentAdminResponse;
 import com.example.interactionservice.dto.response.CommentTotalAdminProjection;
 import com.example.interactionservice.model.Comment;
+import com.example.response.CommentAdminResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

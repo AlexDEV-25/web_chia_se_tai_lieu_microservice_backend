@@ -1,10 +1,10 @@
 package com.example.authservice.repository.httpclient;
 
-import com.example.commondto.request.DisplayRequest;
-import com.example.commondto.request.UserDetailRequest;
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.UserDetailResponse;
-import com.example.commonsecurity.configuration.CommonFeignConfiguration;
+import com.example.configuration.CommonFeignConfiguration;
+import com.example.request.DisplayRequest;
+import com.example.request.UserDetailRequest;
+import com.example.response.APIResponse;
+import com.example.response.UserDetailResponse;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;

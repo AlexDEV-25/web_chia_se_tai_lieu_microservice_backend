@@ -1,8 +1,8 @@
 package com.example.statisticsservice.configuration;
 
-import com.example.commonsecurity.configuration.CommonSecurityConfiguration;
-import com.example.commonsecurity.helper.CustomAuthEntryPoint;
-import com.example.commonsecurity.helper.CustomJwtDecoder;
+import com.example.configuration.CommonSecurityConfiguration;
+import com.example.helper.CustomAuthEntryPoint;
+import com.example.helper.CustomJwtDecoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

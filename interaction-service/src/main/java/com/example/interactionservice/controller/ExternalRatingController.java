@@ -1,12 +1,12 @@
 package com.example.interactionservice.controller;
 
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.RatingSummaryResponse;
 import com.example.interactionservice.dto.request.RatingRequest;
 import com.example.interactionservice.dto.response.RatingAdminProjection;
 import com.example.interactionservice.dto.response.RatingDetailAdminProjection;
 import com.example.interactionservice.dto.response.RatingUserResponse;
 import com.example.interactionservice.service.RatingService;
+import com.example.response.APIResponse;
+import com.example.response.RatingSummaryResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

@@ -1,8 +1,8 @@
 package com.example.profileservice.configuration;
 
-import com.example.commonsecurity.configuration.CommonSecurityConfiguration;
-import com.example.commonsecurity.helper.CustomAuthEntryPoint;
-import com.example.commonsecurity.helper.CustomJwtDecoder;
+import com.example.configuration.CommonSecurityConfiguration;
+import com.example.helper.CustomAuthEntryPoint;
+import com.example.helper.CustomJwtDecoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,8 +31,8 @@ public class SecurityConfig {
             "/api/external/users-detail/bio-info/{userId}",
             "/api/external/follows/follow-count/{userId}",
 
-            "/api/internal/users-detail/detail-info/{userId}",
-            "/api/internal/follows/follower/{userId}"
+//            "/api/internal/users-detail/detail-info/{userId}",
+//            "/api/internal/follows/follower/{userId}"
     };
 
     private final String[] PUBLIC_ENDPOINTS_PUT = {

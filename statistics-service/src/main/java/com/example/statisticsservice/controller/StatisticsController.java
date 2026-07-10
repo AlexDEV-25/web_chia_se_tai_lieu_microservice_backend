@@ -1,8 +1,8 @@
 package com.example.statisticsservice.controller;
 
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.CategoryCountProjection;
-import com.example.commondto.response.DailyCountProjection;
+import com.example.response.APIResponse;
+import com.example.response.CategoryCountProjection;
+import com.example.response.DailyCountProjection;
 import com.example.statisticsservice.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

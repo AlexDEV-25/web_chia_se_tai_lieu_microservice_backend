@@ -2,11 +2,11 @@ package com.example.studyservice.service;
 
 import com.example.AppError;
 import com.example.ContentStatus;
-import com.example.commondto.response.*;
-import com.example.commonexception.exception.AppException;
-import com.example.commonsecurity.helper.GetUserIdByToken;
+import com.example.SystemNotificationEvent;
+import com.example.AppException;
+import com.example.helper.GetUserIdByToken;
 import com.example.constant.NotificationType;
-import com.example.event.SystemNotificationEvent;
+import com.example.response.*;
 import com.example.studyservice.dto.request.DocumentRequest;
 import com.example.studyservice.dto.response.*;
 import com.example.studyservice.mapper.DocumentMapper;

@@ -1,8 +1,8 @@
 package com.example.notificationservice.exception;
 
 
-import com.example.commondto.response.APIResponse;
-import com.example.commonexception.exception.AppException;
+import com.example.AppException;
+import com.example.response.APIResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

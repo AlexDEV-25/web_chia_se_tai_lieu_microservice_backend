@@ -1,6 +1,6 @@
 package com.example.studyservice.controller;
 
-import com.example.commondto.response.*;
+import com.example.response.*;
 import com.example.studyservice.service.DocumentService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

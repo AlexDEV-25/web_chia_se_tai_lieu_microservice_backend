@@ -1,6 +1,7 @@
 package com.example.authservice.service;
 
 import com.example.AppError;
+import com.example.EmailNotificationEvent;
 import com.example.authservice.dto.request.ChangeEmailRequest;
 import com.example.authservice.dto.request.ChangePasswordRequest;
 import com.example.authservice.dto.request.RegisterRequest;
@@ -13,11 +14,10 @@ import com.example.authservice.model.User;
 import com.example.authservice.repository.RoleRepository;
 import com.example.authservice.repository.UserRepository;
 import com.example.authservice.repository.httpclient.ProfileClient;
-import com.example.commondto.request.DisplayRequest;
-import com.example.commondto.request.UserDetailRequest;
-import com.example.commondto.response.DailyCountProjection;
-import com.example.commonexception.exception.AppException;
-import com.example.event.EmailNotificationEvent;
+import com.example.AppException;
+import com.example.request.DisplayRequest;
+import com.example.request.UserDetailRequest;
+import com.example.response.DailyCountProjection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

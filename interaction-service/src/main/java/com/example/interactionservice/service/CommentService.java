@@ -2,12 +2,10 @@ package com.example.interactionservice.service;
 
 
 import com.example.AppError;
-import com.example.commondto.request.DisplayRequest;
-import com.example.commondto.response.*;
-import com.example.commonexception.exception.AppException;
-import com.example.commonsecurity.helper.GetUserIdByToken;
+import com.example.SystemNotificationEvent;
+import com.example.AppException;
+import com.example.helper.GetUserIdByToken;
 import com.example.constant.NotificationType;
-import com.example.event.SystemNotificationEvent;
 import com.example.interactionservice.dto.request.CommentRequest;
 import com.example.interactionservice.dto.response.CommentTotalAdminProjection;
 import com.example.interactionservice.dto.response.CommentTreeUserResponse;
@@ -17,6 +15,8 @@ import com.example.interactionservice.model.Comment;
 import com.example.interactionservice.repository.CommentRepository;
 import com.example.interactionservice.repository.httpclient.ProfileClient;
 import com.example.interactionservice.repository.httpclient.StudyClient;
+import com.example.request.DisplayRequest;
+import com.example.response.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

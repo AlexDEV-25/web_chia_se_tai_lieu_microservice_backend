@@ -1,6 +1,6 @@
 package com.example.notificationservice.controller;
 
-import com.example.event.EmailNotificationEvent;
+import com.example.EmailNotificationEvent;
 import com.example.notificationservice.dto.request.Recipient;
 import com.example.notificationservice.dto.request.SendEmailRequest;
 import com.example.notificationservice.service.EmailService;

@@ -2,7 +2,7 @@ package com.example.chatservice.controller;
 
 import com.example.chatservice.dto.response.ChatMessageResponse;
 import com.example.chatservice.service.ChatMessageService;
-import com.example.commondto.response.APIResponse;
+import com.example.response.APIResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

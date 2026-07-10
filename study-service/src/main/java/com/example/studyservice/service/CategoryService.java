@@ -2,9 +2,9 @@ package com.example.studyservice.service;
 
 
 import com.example.AppError;
-import com.example.commondto.request.DisplayRequest;
-import com.example.commondto.response.CategoryResponse;
-import com.example.commonexception.exception.AppException;
+import com.example.AppException;
+import com.example.request.DisplayRequest;
+import com.example.response.CategoryResponse;
 import com.example.studyservice.dto.request.CategoryRequest;
 import com.example.studyservice.mapper.CategoryMapper;
 import com.example.studyservice.model.Category;

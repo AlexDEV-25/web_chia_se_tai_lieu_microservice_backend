@@ -1,7 +1,7 @@
 package com.example.authservice.repository;
 
 import com.example.authservice.model.User;
-import com.example.commondto.response.DailyCountProjection;
+import com.example.response.DailyCountProjection;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

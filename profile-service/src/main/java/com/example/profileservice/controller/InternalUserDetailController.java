@@ -1,12 +1,12 @@
 package com.example.profileservice.controller;
 
-import com.example.commondto.request.ConnectRequest;
-import com.example.commondto.request.DisplayRequest;
-import com.example.commondto.request.UserDetailRequest;
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.UserDetailInfoResponse;
-import com.example.commondto.response.UserDetailResponse;
 import com.example.profileservice.service.UserDetailService;
+import com.example.request.ConnectRequest;
+import com.example.request.DisplayRequest;
+import com.example.request.UserDetailRequest;
+import com.example.response.APIResponse;
+import com.example.response.UserDetailInfoResponse;
+import com.example.response.UserDetailResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

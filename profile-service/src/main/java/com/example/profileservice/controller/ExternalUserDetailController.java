@@ -1,13 +1,13 @@
 package com.example.profileservice.controller;
 
 import com.example.AppError;
-import com.example.commondto.request.UserDetailRequest;
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.UserDetailResponse;
-import com.example.commonexception.exception.AppException;
+import com.example.AppException;
 import com.example.profileservice.dto.response.UserBioProjection;
 import com.example.profileservice.dto.response.UserBioResponse;
 import com.example.profileservice.service.UserDetailService;
+import com.example.request.UserDetailRequest;
+import com.example.response.APIResponse;
+import com.example.response.UserDetailResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;

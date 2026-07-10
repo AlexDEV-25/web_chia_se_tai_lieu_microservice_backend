@@ -1,7 +1,7 @@
 package com.example.statisticsservice.service;
 
-import com.example.commondto.response.CategoryCountProjection;
-import com.example.commondto.response.DailyCountProjection;
+import com.example.response.CategoryCountProjection;
+import com.example.response.DailyCountProjection;
 import com.example.statisticsservice.repository.AuthClient;
 import com.example.statisticsservice.repository.StudyClient;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +30,5 @@ public class StatisticsService {
     public List<CategoryCountProjection> documentByCategory() {
         return studyClient.documentByCategory().getResultList();
     }
-    
+
 }

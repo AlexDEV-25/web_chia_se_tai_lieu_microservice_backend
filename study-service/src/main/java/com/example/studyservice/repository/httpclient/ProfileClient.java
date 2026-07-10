@@ -1,8 +1,8 @@
 package com.example.studyservice.repository.httpclient;
 
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.UserDetailInfoResponse;
-import com.example.commonsecurity.configuration.CommonFeignConfiguration;
+import com.example.configuration.CommonFeignConfiguration;
+import com.example.response.APIResponse;
+import com.example.response.UserDetailInfoResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;

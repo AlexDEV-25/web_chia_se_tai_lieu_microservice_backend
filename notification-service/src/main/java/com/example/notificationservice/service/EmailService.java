@@ -1,7 +1,7 @@
 package com.example.notificationservice.service;
 
 import com.example.AppError;
-import com.example.commonexception.exception.AppException;
+import com.example.AppException;
 import com.example.notificationservice.dto.request.EmailRequest;
 import com.example.notificationservice.dto.request.SendEmailRequest;
 import com.example.notificationservice.dto.request.Sender;

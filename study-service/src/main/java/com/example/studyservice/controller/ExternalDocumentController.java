@@ -2,9 +2,9 @@ package com.example.studyservice.controller;
 
 
 import com.example.AppError;
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.PageResponse;
-import com.example.commonexception.exception.AppException;
+import com.example.AppException;
+import com.example.response.APIResponse;
+import com.example.response.PageResponse;
 import com.example.studyservice.dto.request.DocumentRequest;
 import com.example.studyservice.dto.response.*;
 import com.example.studyservice.service.DocumentService;

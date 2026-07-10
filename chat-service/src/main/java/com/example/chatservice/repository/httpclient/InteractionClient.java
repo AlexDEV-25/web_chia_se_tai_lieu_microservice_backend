@@ -1,11 +1,11 @@
 package com.example.chatservice.repository.httpclient;
 
-import com.example.commondto.request.DisplayRequest;
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.CommentAdminResponse;
-import com.example.commondto.response.CommentDetailAdminResponse;
-import com.example.commondto.response.RatingSummaryResponse;
-import com.example.commonsecurity.configuration.CommonFeignConfiguration;
+import com.example.configuration.CommonFeignConfiguration;
+import com.example.request.DisplayRequest;
+import com.example.response.APIResponse;
+import com.example.response.CommentAdminResponse;
+import com.example.response.CommentDetailAdminResponse;
+import com.example.response.RatingSummaryResponse;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;

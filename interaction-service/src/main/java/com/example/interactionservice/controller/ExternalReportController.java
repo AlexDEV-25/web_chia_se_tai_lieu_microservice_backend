@@ -1,11 +1,11 @@
 package com.example.interactionservice.controller;
 
-import com.example.commondto.response.APIResponse;
 import com.example.interactionservice.dto.request.ReportRequest;
 import com.example.interactionservice.dto.response.ReportAdminProjection;
 import com.example.interactionservice.dto.response.ReportDetailAdminResponse;
 import com.example.interactionservice.dto.response.ReportUserResponse;
 import com.example.interactionservice.service.ReportService;
+import com.example.response.APIResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

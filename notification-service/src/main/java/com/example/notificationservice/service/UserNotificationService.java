@@ -1,13 +1,13 @@
 package com.example.notificationservice.service;
 
 
-import com.example.commondto.response.PageResponse;
-import com.example.commonsecurity.helper.GetUserIdByToken;
+import com.example.helper.GetUserIdByToken;
 import com.example.notificationservice.dto.request.UserNotificationRequest;
 import com.example.notificationservice.dto.response.UserNotificationResponse;
 import com.example.notificationservice.mapper.UserNotificationMapper;
 import com.example.notificationservice.model.UserNotification;
 import com.example.notificationservice.repository.UserNotificationRepository;
+import com.example.response.PageResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

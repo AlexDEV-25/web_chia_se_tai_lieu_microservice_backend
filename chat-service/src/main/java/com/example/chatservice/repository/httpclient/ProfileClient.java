@@ -1,9 +1,9 @@
 package com.example.chatservice.repository.httpclient;
 
-import com.example.commondto.request.ConnectRequest;
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.UserDetailInfoResponse;
-import com.example.commonsecurity.configuration.CommonFeignConfiguration;
+import com.example.configuration.CommonFeignConfiguration;
+import com.example.request.ConnectRequest;
+import com.example.response.APIResponse;
+import com.example.response.UserDetailInfoResponse;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;

@@ -1,9 +1,9 @@
 package com.example.notificationservice.controller;
 
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.PageResponse;
 import com.example.notificationservice.dto.response.UserNotificationResponse;
 import com.example.notificationservice.service.UserNotificationService;
+import com.example.response.APIResponse;
+import com.example.response.PageResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

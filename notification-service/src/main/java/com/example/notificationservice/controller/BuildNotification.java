@@ -1,6 +1,6 @@
 package com.example.notificationservice.controller;
 
-import com.example.event.SystemNotificationEvent;
+import com.example.SystemNotificationEvent;
 import com.example.notificationservice.dto.request.NotificationRequest;
 import com.example.notificationservice.dto.request.UserNotificationRequest;
 import com.example.notificationservice.dto.response.UserFollowNotificationResponse;

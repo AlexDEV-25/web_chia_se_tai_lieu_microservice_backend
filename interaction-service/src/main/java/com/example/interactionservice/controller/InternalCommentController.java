@@ -1,8 +1,8 @@
 package com.example.interactionservice.controller;
 
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.CommentAdminResponse;
 import com.example.interactionservice.service.CommentService;
+import com.example.response.APIResponse;
+import com.example.response.CommentAdminResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

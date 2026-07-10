@@ -1,7 +1,7 @@
 package com.example.studyservice.mapper;
 
-import com.example.commondto.response.DocumentInfoResponse;
-import com.example.commondto.response.DocumentSearchAIResponse;
+import com.example.response.DocumentInfoResponse;
+import com.example.response.DocumentSearchAIResponse;
 import com.example.studyservice.dto.request.DocumentRequest;
 import com.example.studyservice.dto.response.DocumentAdminResponse;
 import com.example.studyservice.dto.response.DocumentDetailResponse;

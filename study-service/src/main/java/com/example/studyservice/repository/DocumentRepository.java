@@ -1,8 +1,8 @@
 package com.example.studyservice.repository;
 
 import com.example.ContentStatus;
-import com.example.commondto.response.CategoryCountProjection;
-import com.example.commondto.response.DailyCountProjection;
+import com.example.response.CategoryCountProjection;
+import com.example.response.DailyCountProjection;
 import com.example.studyservice.dto.response.DocumentResponse;
 import com.example.studyservice.dto.response.DocumentStatsResponse;
 import com.example.studyservice.model.Document;

@@ -2,10 +2,8 @@ package com.example.interactionservice.service;
 
 
 import com.example.AppError;
-import com.example.commondto.response.DocumentInfoResponse;
-import com.example.commondto.response.RatingSummaryResponse;
-import com.example.commonexception.exception.AppException;
-import com.example.commonsecurity.helper.GetUserIdByToken;
+import com.example.AppException;
+import com.example.helper.GetUserIdByToken;
 import com.example.interactionservice.dto.request.RatingRequest;
 import com.example.interactionservice.dto.response.RatingAdminProjection;
 import com.example.interactionservice.dto.response.RatingDetailAdminProjection;
@@ -14,6 +12,8 @@ import com.example.interactionservice.mapper.RatingMapper;
 import com.example.interactionservice.model.Rating;
 import com.example.interactionservice.repository.RatingRepository;
 import com.example.interactionservice.repository.httpclient.StudyClient;
+import com.example.response.DocumentInfoResponse;
+import com.example.response.RatingSummaryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;

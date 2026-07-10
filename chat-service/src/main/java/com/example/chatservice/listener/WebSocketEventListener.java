@@ -3,7 +3,7 @@ package com.example.chatservice.listener;
 import com.example.ConnectionStatus;
 import com.example.chatservice.dto.request.UserPrincipalRequest;
 import com.example.chatservice.repository.httpclient.ProfileClient;
-import com.example.commondto.request.ConnectRequest;
+import com.example.request.ConnectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

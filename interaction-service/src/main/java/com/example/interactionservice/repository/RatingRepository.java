@@ -1,10 +1,10 @@
 package com.example.interactionservice.repository;
 
 
-import com.example.commondto.response.RatingSummaryResponse;
 import com.example.interactionservice.dto.response.RatingAdminProjection;
 import com.example.interactionservice.dto.response.RatingDetailAdminProjection;
 import com.example.interactionservice.model.Rating;
+import com.example.response.RatingSummaryResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,15 +1,15 @@
 package com.example.interactionservice.controller;
 
 
-import com.example.commondto.request.DisplayRequest;
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.CommentDetailAdminResponse;
-import com.example.commondto.response.PageResponse;
 import com.example.interactionservice.dto.request.CommentRequest;
 import com.example.interactionservice.dto.response.CommentTotalAdminProjection;
 import com.example.interactionservice.dto.response.CommentTreeUserResponse;
 import com.example.interactionservice.dto.response.CommentUserResponse;
 import com.example.interactionservice.service.CommentService;
+import com.example.request.DisplayRequest;
+import com.example.response.APIResponse;
+import com.example.response.CommentDetailAdminResponse;
+import com.example.response.PageResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class ExternalCommentController {
             @PathVariable Long docId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
-        
+
         return commentService.getRootComments(docId, page, size);
     }
 

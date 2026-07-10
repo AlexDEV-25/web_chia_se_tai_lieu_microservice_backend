@@ -1,8 +1,8 @@
 package com.example.apigateway.repository;
 
-import com.example.commondto.request.TokenRequest;
-import com.example.commondto.response.APIResponse;
-import com.example.commondto.response.IntrospectResponse;
+import com.example.request.TokenRequest;
+import com.example.response.APIResponse;
+import com.example.response.IntrospectResponse;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.service.annotation.PostExchange;

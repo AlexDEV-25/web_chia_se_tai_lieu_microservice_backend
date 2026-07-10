@@ -1,6 +1,7 @@
 package com.example.authservice.service;
 
 import com.example.AppError;
+import com.example.EmailNotificationEvent;
 import com.example.authservice.dto.request.*;
 import com.example.authservice.dto.response.AuthenticationResponse;
 import com.example.authservice.dto.response.ExchangeTokenResponse;
@@ -16,10 +17,9 @@ import com.example.authservice.repository.UserRepository;
 import com.example.authservice.repository.httpclient.OutboundIdentityClient;
 import com.example.authservice.repository.httpclient.OutboundUserClient;
 import com.example.authservice.repository.httpclient.ProfileClient;
-import com.example.commondto.request.UserDetailRequest;
-import com.example.commondto.response.IntrospectResponse;
-import com.example.commonexception.exception.AppException;
-import com.example.event.EmailNotificationEvent;
+import com.example.AppException;
+import com.example.request.UserDetailRequest;
+import com.example.response.IntrospectResponse;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
