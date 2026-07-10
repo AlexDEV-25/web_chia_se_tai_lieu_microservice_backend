@@ -2,10 +2,10 @@ package com.example.interactionservice.service;
 
 
 import com.example.AppError;
-import com.example.SystemNotificationEvent;
 import com.example.AppException;
+import com.example.NotificationType;
+import com.example.SystemNotificationEvent;
 import com.example.helper.GetUserIdByToken;
-import com.example.constant.NotificationType;
 import com.example.interactionservice.dto.request.CommentRequest;
 import com.example.interactionservice.dto.response.CommentTotalAdminProjection;
 import com.example.interactionservice.dto.response.CommentTreeUserResponse;

@@ -1,6 +1,6 @@
 package com.example.notificationservice.dto.response;
 
-import com.example.constant.NotificationType;
+import com.example.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

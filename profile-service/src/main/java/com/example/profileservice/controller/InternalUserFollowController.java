@@ -1,8 +1,8 @@
 package com.example.profileservice.controller;
 
-import com.example.profileservice.dto.response.UserFollowNotificationResponse;
 import com.example.profileservice.service.UserFollowService;
 import com.example.response.APIResponse;
+import com.example.response.UserFollowNotificationResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

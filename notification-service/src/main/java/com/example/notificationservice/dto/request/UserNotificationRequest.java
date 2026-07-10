@@ -23,9 +23,6 @@ public class UserNotificationRequest {
     @NotNull(message = "receiverId không được để trống")
     private Long receiverId;
 
-    @NotBlank(message = "receiverName không được để trống")
-    private String receiverName;
-
     @NotNull(message = "notificationId không được để trống")
     private Notification notification;
 

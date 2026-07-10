@@ -1,6 +1,6 @@
 package com.example.notificationservice.dto.request;
 
-import com.example.constant.NotificationType;
+import com.example.NotificationType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

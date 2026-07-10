@@ -2,18 +2,18 @@ package com.example.profileservice.service;
 
 
 import com.example.AppError;
-import com.example.SystemNotificationEvent;
 import com.example.AppException;
+import com.example.NotificationType;
+import com.example.SystemNotificationEvent;
 import com.example.helper.GetUserIdByToken;
-import com.example.constant.NotificationType;
 import com.example.profileservice.dto.response.FollowCountResponse;
-import com.example.profileservice.dto.response.UserFollowNotificationResponse;
 import com.example.profileservice.dto.response.UserFollowResponse;
 import com.example.profileservice.mapper.UserFollowMapper;
 import com.example.profileservice.model.UserDetail;
 import com.example.profileservice.model.UserFollow;
 import com.example.profileservice.repository.UserDetailRepository;
 import com.example.profileservice.repository.UserFollowRepository;
+import com.example.response.UserFollowNotificationResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -2,8 +2,8 @@ package com.example.notificationservice.repository.httpclient;
 
 
 import com.example.configuration.CommonFeignConfiguration;
-import com.example.notificationservice.dto.response.UserFollowNotificationResponse;
 import com.example.response.APIResponse;
+import com.example.response.UserFollowNotificationResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;

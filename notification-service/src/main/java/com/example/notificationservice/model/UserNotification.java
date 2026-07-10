@@ -26,9 +26,6 @@ public class UserNotification {
     @Column(name = "receiver_id", nullable = false)
     private Long receiverId;
 
-    @Column(name = "receiver_name", nullable = false)
-    private Long receiverName;
-
     @ManyToOne
     @JoinColumn(name = "notification_id")
     private Notification notification;

@@ -3,11 +3,11 @@ package com.example.notificationservice.controller;
 import com.example.SystemNotificationEvent;
 import com.example.notificationservice.dto.request.NotificationRequest;
 import com.example.notificationservice.dto.request.UserNotificationRequest;
-import com.example.notificationservice.dto.response.UserFollowNotificationResponse;
 import com.example.notificationservice.model.Notification;
 import com.example.notificationservice.repository.httpclient.ProfileClient;
 import com.example.notificationservice.service.NotificationService;
 import com.example.notificationservice.service.UserNotificationService;
+import com.example.response.UserFollowNotificationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +33,6 @@ public class BuildNotification {
                         .senderId(message.getSenderId())
                         .senderName(message.getSenderName())
                         .receiverId(message.getReceiverId())
-                        .receiverName(message.getReceiverName())
                         .notification(notification).read(false).build());
     }
 
@@ -55,7 +54,6 @@ public class BuildNotification {
                             .senderId(message.getSenderId())
                             .senderName(message.getSenderName())
                             .receiverId(userFollowNotificationResponse.getFollowerId())
-                            .receiverName(userFollowNotificationResponse.getFollowerName())
                             .notification(notification).read(false).build());
         }
     }

@@ -1,6 +1,6 @@
 package com.example.notificationservice.model;
 
-import com.example.constant.NotificationType;
+import com.example.NotificationType;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,8 +1,8 @@
 package com.example.profileservice.mapper;
 
-import com.example.profileservice.dto.response.UserFollowNotificationResponse;
 import com.example.profileservice.dto.response.UserFollowResponse;
 import com.example.profileservice.model.UserFollow;
+import com.example.response.UserFollowNotificationResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -17,6 +17,5 @@ public interface UserFollowMapper {
     UserFollowResponse userFollowToResponse(UserFollow entity);
 
     @Mapping(source = "follower.id", target = "followerId")
-    @Mapping(source = "follower.fullName", target = "followerName")
     UserFollowNotificationResponse userFollowToNotificationResponse(UserFollow entity);
 }
