@@ -72,10 +72,11 @@ public class UserNotificationService {
     }
 
     public void changeSenderInfo(UserProfileUpdatedEvent request) {
-        UserNotification entity = userNotificationRepository.findBySenderId(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy thông báo"));
-        entity.setSenderName(request.getFullName());
-        userNotificationRepository.save(entity);
+        List<UserNotification> userNotifications = userNotificationRepository.findBySenderId(request.getUserId());
+        userNotifications.forEach(entity -> {
+            entity.setSenderName(request.getFullName());
+            userNotificationRepository.save(entity);
+        });
     }
 
     private Pageable getPageable(int page, int size) {

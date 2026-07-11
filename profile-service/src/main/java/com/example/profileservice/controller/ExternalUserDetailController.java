@@ -42,7 +42,7 @@ public class ExternalUserDetailController {
     }
 
     @PutMapping(value = "/my-detail-info", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public APIResponse<UserDetailResponse> create(@RequestPart("file") MultipartFile file,
+    public APIResponse<UserDetailResponse> create(@RequestPart(value = "file", required = false) MultipartFile file,
                                                   @RequestPart("data") String dataJson) {
         try {
             ObjectMapper mapper = new ObjectMapper();

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserNotificationRepository extends JpaRepository<UserNotification, Long> {
-    Optional<UserNotification> findBySenderId(Long SenderId);
+    List<UserNotification> findBySenderId(Long SenderId);
 
     Page<UserNotification> findByReceiverIdAndReadFalse(Long receiverId, Pageable pageable);
 

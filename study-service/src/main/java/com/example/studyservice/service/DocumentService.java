@@ -410,5 +410,6 @@ public class DocumentService {
 
     private void updateUserInfo(Document document, UserProfileUpdatedEvent message) {
         document.setAuthorName(message.getFullName());
+        documentRepository.save(document);
     }
 }
