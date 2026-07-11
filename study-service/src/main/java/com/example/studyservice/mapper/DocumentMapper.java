@@ -14,16 +14,6 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface DocumentMapper {
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "thumbnailUrl", ignore = true)
-    @Mapping(target = "fileUrl", ignore = true)
-    @Mapping(target = "downloadsCount", ignore = true)
-    @Mapping(target = "viewsCount", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "category", ignore = true)
-    Document requestToDocument(DocumentRequest request);
-
 
     @Mapping(source = "category.id", target = "categoryId")
     @Mapping(source = "category.name", target = "categoryName")

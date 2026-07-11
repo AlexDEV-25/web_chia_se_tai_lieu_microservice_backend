@@ -16,6 +16,7 @@ import com.example.request.DisplayRequest;
 import com.example.request.UserDetailRequest;
 import com.example.response.UserDetailInfoResponse;
 import com.example.response.UserDetailResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -73,50 +74,21 @@ public class UserDetailService {
     }
 
     @PreAuthorize("hasAuthority('UPDATE_MY_DETAIL_INFO')")
-    public UserDetailResponse updateMyInfo(MultipartFile avt, UserDetailRequest dto) {
+    public UserDetailResponse updateMyInfo(MultipartFile avt, String dataJson) {
         Long userId = GetUserIdByToken.get();
         UserDetail find = userDetailRepository.findByUserId(userId).orElseThrow(
                 () -> AppException.builder().appError(AppError.USER_NOT_FOUND).build());
+
+        mapJson(find, dataJson);
+
         String originName = find.getFullName();
         String originAvatar = find.getAvatarUrl();
-        if (find.getAvatarUrl() != null) {
-            try {
-                fileClient.deleteFile(find.getAvatarUrl());
-            } catch (Exception e) {
-                throw AppException.builder().appError(AppError.UPDATE_PROFILE_FAILED).build();
-            }
-        }
 
-
-        find.setUpdatedAt(LocalDateTime.now());
-        find.setFullName(dto.getFullName());
-        find.setBio(dto.getBio());
-
-        if (avt != null) {
-            try {
-                Map<String, Object> handleAvt = fileClient.uploadImage(avt).getResult();
-                String avatarUrl = (String) handleAvt.get("secure_url");
-                find.setAvatarUrl(avatarUrl);
-            } catch (Exception e) {
-                throw AppException.builder().appError(AppError.UPDATE_PROFILE_FAILED).build();
-            }
-        }
+        handleAvatar(find, avt);
 
         UserDetail saved = userDetailRepository.save(find);
 
-        if (!originName.equals(saved.getFullName()) || !Objects.equals(originAvatar, saved.getAvatarUrl())) {
-            UserProfileUpdatedEvent userProfileUpdatedEvent = UserProfileUpdatedEvent.builder()
-                    .userId(saved.getUserId())
-                    .fullName(saved.getFullName())
-                    .avatarUrl(saved.getAvatarUrl())
-                    .build();
-            kafkaTemplate.send("user-profile-updated", userProfileUpdatedEvent).whenComplete((result, ex) -> {
-                if (ex != null) {
-                    log.error("Cannot send event", ex);
-                    // sau này thích dùng @Schedule và Outbox pattern để gửi lại event
-                }
-            });
-        }
+        sendNotification(saved, originName, originAvatar);
 
         return userMapper.userToResponse(saved);
     }
@@ -137,5 +109,53 @@ public class UserDetailService {
         UserDetail find = userDetailRepository.findByUserIdAndHideFalse(userId)
                 .orElseThrow(() -> AppException.builder().appError(AppError.USER_NOT_FOUND).build());
         return userMapper.userToInfoResponse(find);
+    }
+
+    private void sendNotification(UserDetail entity, String originName, String originAvatar) {
+        if (!originName.equals(entity.getFullName()) || !Objects.equals(originAvatar, entity.getAvatarUrl())) {
+            UserProfileUpdatedEvent userProfileUpdatedEvent = UserProfileUpdatedEvent.builder()
+                    .userId(entity.getUserId())
+                    .fullName(entity.getFullName())
+                    .avatarUrl(entity.getAvatarUrl())
+                    .build();
+            kafkaTemplate.send("user-profile-updated", userProfileUpdatedEvent).whenComplete((result, ex) -> {
+                if (ex != null) {
+                    log.error("Cannot send event", ex);
+                    // sau này thích dùng @Schedule và Outbox pattern để gửi lại event
+                }
+            });
+        }
+    }
+
+    private void handleAvatar(UserDetail entity, MultipartFile avt) {
+        if (entity.getAvatarUrl() != null) {
+            try {
+                fileClient.deleteFile(entity.getAvatarUrl());
+            } catch (Exception e) {
+                throw AppException.builder().appError(AppError.UPDATE_PROFILE_FAILED).build();
+            }
+        }
+
+        if (avt != null) {
+            try {
+                Map<String, Object> handleAvt = fileClient.uploadImage(avt).getResult();
+                String avatarUrl = (String) handleAvt.get("secure_url");
+                entity.setAvatarUrl(avatarUrl);
+            } catch (Exception e) {
+                throw AppException.builder().appError(AppError.UPDATE_PROFILE_FAILED).build();
+            }
+        }
+    }
+
+    private void mapJson(UserDetail entity, String dataJson) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            UserDetailRequest dto = mapper.readValue(dataJson, UserDetailRequest.class);
+            entity.setFullName(dto.getFullName());
+            entity.setBio(dto.getBio());
+            entity.setUpdatedAt(LocalDateTime.now());
+        } catch (Exception e) {
+            throw AppException.builder().appError(AppError.INVALID_JSON_FORMAT).build();
+        }
     }
 }

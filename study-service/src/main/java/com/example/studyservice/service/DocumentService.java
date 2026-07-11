@@ -13,6 +13,7 @@ import com.example.studyservice.repository.DocumentRepository;
 import com.example.studyservice.repository.FavoriteRepository;
 import com.example.studyservice.repository.httpclient.FileClient;
 import com.example.studyservice.repository.httpclient.ProfileClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -92,6 +93,17 @@ public class DocumentService {
         return documentMapper.documentToDocumentDetailResponse(saved);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<DailyCountProjection> documentLast7Days() {
+        return documentRepository
+                .countDocumentByDay(LocalDate.now().minusDays(6).atStartOfDay(), ContentStatus.PUBLISHED);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<CategoryCountProjection> documentByCategory() {
+        return documentRepository.countDocumentByCategory(ContentStatus.PUBLISHED);
+    }
+
     @PreAuthorize("hasAuthority('GET_MY_DOCUMENT')")
     public List<DocumentUserResponse> getMyDocument() {
         Long userId = GetUserIdByToken.get();
@@ -128,7 +140,6 @@ public class DocumentService {
                     "author-hide-document-to-follower");
         }
 
-
         return documentMapper.documentToDocumentUserResponse(saved);
     }
 
@@ -158,39 +169,19 @@ public class DocumentService {
     }
 
     @PreAuthorize("hasAuthority('UPLOAD_FILE')")
-    public DocumentDetailResponse uploadFile(MultipartFile fileToSave, DocumentRequest dto) {
+    public DocumentDetailResponse uploadFile(MultipartFile fileToSave, String dataJson) {
         Long userId = GetUserIdByToken.get();
+        Document document = Document.builder()
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .viewsCount(0L).downloadsCount(0L).userId(userId)
+                .build();
 
-        Document document = documentMapper.requestToDocument(dto);
-        document.setCreatedAt(LocalDateTime.now());
-        document.setUpdatedAt(LocalDateTime.now());
-        document.setViewsCount(0L);
-        document.setDownloadsCount(0L);
-        document.setUserId(userId);
+        mapJson(document, dataJson);
+        handleFile(userId, document, fileToSave);
 
-        try {
-            document.setAuthorName(profileClient.getUserDetail(userId).getResult().getFullName());
-
-            Map<String, Object> handleDoc = fileClient.uploadPdf(fileToSave).getResult();
-
-            String url = (String) handleDoc.get("secure_url");
-            String publicId = (String) handleDoc.get("public_id");
-            document.setFileUrl(url);
-            System.out.println(publicId);
-            String thumbnailUrl = fileClient.getThumbnail(publicId).getResult();
-            document.setThumbnailUrl(thumbnailUrl);
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw AppException.builder().appError(AppError.UPLOAD_DOCUMENT_FAILED).build();
-        }
-        Category category = dto.getCategoryId() != null ?
-                categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> AppException.builder().appError(AppError.CATEGORY_NOT_FOUND).build())
-                : null;
-        document.setCategory(category);
         Document saved = documentRepository.save(document);
         return documentMapper.documentToDocumentDetailResponse(saved);
-
     }
 
     @PreAuthorize("hasAuthority('DOWNLOAD_FILE')")
@@ -199,7 +190,14 @@ public class DocumentService {
                 .orElseThrow(() -> AppException.builder().appError(AppError.DOCUMENT_NOT_FOUND).build());
 
         return fileClient.downloadFile(doc.getFileUrl()).getResult();
+    }
 
+    @PreAuthorize("hasAuthority('INCREASE_DOWNLOAD')")
+    public void increaseDownload(Long id) {
+        documentRepository.findById(id).ifPresent(entity -> {
+            entity.setDownloadsCount(entity.getDownloadsCount() + 1);
+            documentRepository.save(entity);
+        });
     }
 
     public PageResponse<DocumentResponse> search(String keyword, Long categoryId, int page, int size) {
@@ -288,16 +286,13 @@ public class DocumentService {
         });
     }
 
-    @PreAuthorize("hasAuthority('INCREASE_DOWNLOAD')")
-    public void increaseDownload(Long id) {
-        documentRepository.findById(id).ifPresent(entity -> {
-            entity.setDownloadsCount(entity.getDownloadsCount() + 1);
-            documentRepository.save(entity);
-        });
-    }
-
     public Long countDocumentOfUser(Long userId) {
         return documentRepository.countByUserIdAndStatusAndHideFalse(userId, ContentStatus.PUBLISHED);
+    }
+
+    public void changeUserInfo(UserProfileUpdatedEvent message) {
+        List<Document> documents = documentRepository.findByUserId(message.getUserId());
+        documents.forEach(document -> updateUserInfo(document, message));
     }
 
     private Pageable getPageable(int page, int size) {
@@ -325,18 +320,6 @@ public class DocumentService {
         fileClient.deleteFile(entity.getFileUrl());
         fileClient.deleteFile(entity.getThumbnailUrl());
     }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<DailyCountProjection> documentLast7Days() {
-        return documentRepository
-                .countDocumentByDay(LocalDate.now().minusDays(6).atStartOfDay(), ContentStatus.PUBLISHED);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<CategoryCountProjection> documentByCategory() {
-        return documentRepository.countDocumentByCategory(ContentStatus.PUBLISHED);
-    }
-
 
     private void adminUpdateEvent(Document saved, ContentStatus initialStatus, Long adminId) {
         if (initialStatus == ContentStatus.PENDING && saved.getStatus() == ContentStatus.PUBLISHED) {
@@ -403,13 +386,45 @@ public class DocumentService {
         });
     }
 
-    public void changeUserInfo(UserProfileUpdatedEvent message) {
-        List<Document> documents = documentRepository.findByUserId(message.getUserId());
-        documents.forEach(document -> updateUserInfo(document, message));
-    }
-
     private void updateUserInfo(Document document, UserProfileUpdatedEvent message) {
         document.setAuthorName(message.getFullName());
         documentRepository.save(document);
+    }
+
+    private void mapJson(Document document, String dataJson) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            DocumentRequest dto = mapper.readValue(dataJson, DocumentRequest.class);
+
+            document.setTitle(dto.getTitle());
+            document.setDescription(dto.getDescription());
+            document.setStatus(dto.getStatus());
+            document.setHide(dto.isHide());
+
+            Category category = dto.getCategoryId() != null ?
+                    categoryRepository.findById(dto.getCategoryId())
+                    .orElseThrow(() -> AppException.builder().appError(AppError.CATEGORY_NOT_FOUND).build())
+                    : null;
+            document.setCategory(category);
+        } catch (Exception e) {
+            throw AppException.builder().appError(AppError.INVALID_JSON_FORMAT).build();
+        }
+    }
+
+    private void handleFile(Long userId, Document document, MultipartFile fileToSave) {
+        try {
+            document.setAuthorName(profileClient.getUserDetail(userId).getResult().getFullName());
+
+            Map<String, Object> handleDoc = fileClient.uploadPdf(fileToSave).getResult();
+
+            String url = (String) handleDoc.get("secure_url");
+            String publicId = (String) handleDoc.get("public_id");
+            document.setFileUrl(url);
+            System.out.println(publicId);
+            String thumbnailUrl = fileClient.getThumbnail(publicId).getResult();
+            document.setThumbnailUrl(thumbnailUrl);
+        } catch (Exception e) {
+            throw AppException.builder().appError(AppError.UPLOAD_DOCUMENT_FAILED).build();
+        }
     }
 }
