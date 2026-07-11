@@ -5,6 +5,7 @@ import com.example.chatservice.model.ParticipantInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -13,8 +14,9 @@ public interface ParticipantInfoRepository extends JpaRepository<ParticipantInfo
 
     Optional<ParticipantInfo> findByConversation_IdAndUserId(Long conversationId, Long userId);
 
-    Optional<ParticipantInfo> findByIdAndUserId(Long conversationId, Long userId);
+    Optional<ParticipantInfo> findByIdAndUserId(Long id, Long userId);
 
     Optional<ParticipantInfo> findByUserIdAndConversation_Id(Long userId, Long conversationId);
 
+    List<ParticipantInfo> findByUserId(Long userId);
 }

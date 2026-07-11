@@ -34,6 +34,13 @@ spring:
 
         # Thời gian tối đa chờ ACK của broker cho mỗi lần gửi trước khi timeout và retry
         request.timeout.ms: 30000
+    consumer:
+      group-id: interaction-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
 
 server:
   port: 8084

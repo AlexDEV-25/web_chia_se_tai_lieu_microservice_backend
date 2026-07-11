@@ -89,8 +89,10 @@ public enum AppError {
 
     DOCUMENT_NOT_FOUND(1028, "Không tìm thấy tài liệu", HttpStatus.NOT_FOUND),
 
-    REMOVE_FROM_FAVORITE_FAILED(1033, "Xóa khỏi kho yêu thích thất bại", HttpStatus.BAD_REQUEST);
+    REMOVE_FROM_FAVORITE_FAILED(1033, "Xóa khỏi kho yêu thích thất bại", HttpStatus.BAD_REQUEST),
     
+    CANNOT_UPDATE_REPORT(1034, "không thể cập nhật report", HttpStatus.BAD_REQUEST);
+
     private final int code;
     private final String message;
     private final HttpStatusCode statusCode;

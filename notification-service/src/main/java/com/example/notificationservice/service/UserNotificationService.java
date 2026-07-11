@@ -1,6 +1,7 @@
 package com.example.notificationservice.service;
 
 
+import com.example.UserProfileUpdatedEvent;
 import com.example.helper.GetUserIdByToken;
 import com.example.notificationservice.dto.request.UserNotificationRequest;
 import com.example.notificationservice.dto.response.UserNotificationResponse;
@@ -68,6 +69,13 @@ public class UserNotificationService {
         UserNotification userNotification = userNotificationMapper.requestToUserNotification(request);
         userNotification.setCreatedAt(LocalDateTime.now());
         userNotificationRepository.save(userNotification);
+    }
+
+    public void changeSenderInfo(UserProfileUpdatedEvent request) {
+        UserNotification entity = userNotificationRepository.findBySenderId(request.getUserId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy thông báo"));
+        entity.setSenderName(request.getFullName());
+        userNotificationRepository.save(entity);
     }
 
     private Pageable getPageable(int page, int size) {

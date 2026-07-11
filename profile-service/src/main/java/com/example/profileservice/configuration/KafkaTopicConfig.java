@@ -14,4 +14,12 @@ public class KafkaTopicConfig {
                 .replicas(1)
                 .build();
     }
+
+    @Bean
+    public NewTopic userProfileUpdatedTopic() {
+        return TopicBuilder.name("user-profile-updated")
+                .partitions(2)
+                .replicas(1)
+                .build();
+    }
 }

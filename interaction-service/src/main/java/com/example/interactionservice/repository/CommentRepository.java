@@ -25,6 +25,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Optional<Comment> findByIdAndUserIdAndHideFalse(Long id, Long UserId);
 
+    List<Comment> findByUserId(Long UserId);
 
     @Query("""
             SELECT new com.example.commondto.response.CommentAdminResponse(

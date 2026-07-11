@@ -2,8 +2,9 @@ package com.example.profileservice.service;
 
 
 import com.example.AppError;
-import com.example.ConnectionStatus;
 import com.example.AppException;
+import com.example.ConnectionStatus;
+import com.example.UserProfileUpdatedEvent;
 import com.example.helper.GetUserIdByToken;
 import com.example.profileservice.dto.response.UserBioProjection;
 import com.example.profileservice.dto.response.UserBioResponse;
@@ -16,6 +17,8 @@ import com.example.request.UserDetailRequest;
 import com.example.response.UserDetailInfoResponse;
 import com.example.response.UserDetailResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,13 +26,16 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserDetailService {
     private final UserDetailRepository userDetailRepository;
     private final UserDetailMapper userMapper;
     private final FileClient fileClient;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @PreAuthorize("hasAuthority('GET_MY_DETAIL_INFO')")
     public UserDetailResponse getDetailUser() {
@@ -71,6 +77,8 @@ public class UserDetailService {
         Long userId = GetUserIdByToken.get();
         UserDetail find = userDetailRepository.findByUserId(userId).orElseThrow(
                 () -> AppException.builder().appError(AppError.USER_NOT_FOUND).build());
+        String originName = find.getFullName();
+        String originAvatar = find.getAvatarUrl();
         if (find.getAvatarUrl() != null) {
             try {
                 fileClient.deleteFile(find.getAvatarUrl());
@@ -78,6 +86,7 @@ public class UserDetailService {
                 throw AppException.builder().appError(AppError.UPDATE_PROFILE_FAILED).build();
             }
         }
+
 
         find.setUpdatedAt(LocalDateTime.now());
         find.setFullName(dto.getFullName());
@@ -94,6 +103,21 @@ public class UserDetailService {
         }
 
         UserDetail saved = userDetailRepository.save(find);
+
+        if (!originName.equals(saved.getFullName()) || !Objects.equals(originAvatar, saved.getAvatarUrl())) {
+            UserProfileUpdatedEvent userProfileUpdatedEvent = UserProfileUpdatedEvent.builder()
+                    .userId(saved.getUserId())
+                    .fullName(saved.getFullName())
+                    .avatarUrl(saved.getAvatarUrl())
+                    .build();
+            kafkaTemplate.send("user-profile-updated", userProfileUpdatedEvent).whenComplete((result, ex) -> {
+                if (ex != null) {
+                    log.error("Cannot send event", ex);
+                    // sau này thích dùng @Schedule và Outbox pattern để gửi lại event
+                }
+            });
+        }
+
         return userMapper.userToResponse(saved);
     }
 

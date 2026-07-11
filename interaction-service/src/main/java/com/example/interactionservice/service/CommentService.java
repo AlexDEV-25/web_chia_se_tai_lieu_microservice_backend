@@ -1,10 +1,7 @@
 package com.example.interactionservice.service;
 
 
-import com.example.AppError;
-import com.example.AppException;
-import com.example.NotificationType;
-import com.example.SystemNotificationEvent;
+import com.example.*;
 import com.example.helper.GetUserIdByToken;
 import com.example.interactionservice.dto.request.CommentRequest;
 import com.example.interactionservice.dto.response.CommentTotalAdminProjection;
@@ -36,7 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentService {
 
-    private final CommentRepository documentRepo;
+    private final CommentRepository commentRepository;
     private final CommentMapper mapper;
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final StudyClient studyClient;
@@ -66,7 +63,7 @@ public class CommentService {
                 .documentTitle(doc.getTitle())
                 .hide(false).build();
 
-        Comment saved = documentRepo.save(comment);
+        Comment saved = commentRepository.save(comment);
 
         if (parent != null) {
             SystemNotificationEvent systemNotificationEvent = SystemNotificationEvent.builder()
@@ -94,16 +91,16 @@ public class CommentService {
     @PreAuthorize("hasAuthority('UPDATE_MY_COMMENT')")
     public CommentUserResponse updateMyComment(Long id, CommentRequest req) {
         Long userId = GetUserIdByToken.get();
-        Comment c = documentRepo.findByIdAndUserIdAndHideFalse(id, userId)
+        Comment c = commentRepository.findByIdAndUserIdAndHideFalse(id, userId)
                 .orElseThrow(() -> new AppException(AppError.CANNOT_UPDATE_COMMENT));
         c.setContent(req.getContent());
         c.setUpdatedAt(LocalDateTime.now());
-        return mapper.documentCommentToCommentResponse(documentRepo.save(c));
+        return mapper.documentCommentToCommentResponse(commentRepository.save(c));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     public CommentDetailAdminResponse hide(Long id, DisplayRequest req) {
-        Comment c = documentRepo.findById(id).orElseThrow(() -> new RuntimeException("Không thấy comment"));
+        Comment c = commentRepository.findById(id).orElseThrow(() -> new RuntimeException("Không thấy comment"));
         c.setHide(req.isHide());
         c.setUpdatedAt(LocalDateTime.now());
         return mapper.documentCommentToCommentDetailAdminResponse(c);
@@ -111,21 +108,21 @@ public class CommentService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<CommentTotalAdminProjection> getTotalCommentOfDocument() {
-        return documentRepo.getTotalCommentOfDocument();
+        return commentRepository.getTotalCommentOfDocument();
     }
 
     public List<CommentAdminResponse> findDocumentCommentsLast7Days() {
-        return documentRepo.findDocumentCommentsLast7Days(LocalDateTime.now().minusDays(7));
+        return commentRepository.findDocumentCommentsLast7Days(LocalDateTime.now().minusDays(7));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<CommentDetailAdminResponse> getDetailDocumentComments(Long documentId) {
-        return documentRepo.findByDocumentId(documentId).stream().map(mapper::documentCommentToCommentDetailAdminResponse).toList();
+        return commentRepository.findByDocumentId(documentId).stream().map(mapper::documentCommentToCommentDetailAdminResponse).toList();
     }
 
     public PageResponse<CommentTreeUserResponse> getRootComments(Long documentId, int page, int size) {
 
-        Page<CommentTreeUserResponse> pageData = documentRepo
+        Page<CommentTreeUserResponse> pageData = commentRepository
                 .findByDocumentIdAndParentIsNullAndHideFalse(
                         documentId,
                         getPageable(page, size))
@@ -136,7 +133,7 @@ public class CommentService {
 
     public PageResponse<CommentTreeUserResponse> getReplies(Long parentId, int page, int size) {
 
-        Page<CommentTreeUserResponse> pageData = documentRepo
+        Page<CommentTreeUserResponse> pageData = commentRepository
                 .findByParentIdAndHideFalse(
                         parentId,
                         getPageable(page, size))
@@ -166,7 +163,19 @@ public class CommentService {
 
     private Comment getParentDocument(Long parentId) {
         if (parentId == null) return null;
-        return documentRepo.findById(parentId).orElseThrow(() -> new RuntimeException("Không tìm thấy parent"));
+        return commentRepository.findById(parentId).orElseThrow(() -> new RuntimeException("Không tìm thấy parent"));
     }
 
+    public void changeUserInfo(UserProfileUpdatedEvent message) {
+        List<Comment> comments = commentRepository.findByUserId(message.getUserId());
+        comments.forEach(c -> updateCommentUserInfo(c, message));
+
+
+    }
+
+    private void updateCommentUserInfo(Comment c, UserProfileUpdatedEvent message) {
+        c.setFullName(message.getFullName());
+        c.setAvatarUrl(message.getAvatarUrl());
+        commentRepository.save(c);
+    }
 }

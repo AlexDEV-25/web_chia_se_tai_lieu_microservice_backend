@@ -402,4 +402,13 @@ public class DocumentService {
             }
         });
     }
+
+    public void changeUserInfo(UserProfileUpdatedEvent message) {
+        List<Document> documents = documentRepository.findByUserId(message.getUserId());
+        documents.forEach(document -> updateUserInfo(document, message));
+    }
+
+    private void updateUserInfo(Document document, UserProfileUpdatedEvent message) {
+        document.setAuthorName(message.getFullName());
+    }
 }

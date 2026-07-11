@@ -1,4 +1,4 @@
-package com.example.notificationservice.controller;
+package com.example.notificationservice.controller.listener;
 
 import com.example.SystemNotificationEvent;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class StudyServiceNotificationController {
+public class StudyServiceListener {
     private final BuildNotification buildNotification;
 
     @RetryableTopic(

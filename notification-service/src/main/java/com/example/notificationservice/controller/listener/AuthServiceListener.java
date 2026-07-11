@@ -1,4 +1,4 @@
-package com.example.notificationservice.controller;
+package com.example.notificationservice.controller.listener;
 
 import com.example.EmailNotificationEvent;
 import com.example.notificationservice.dto.request.Recipient;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AuthServiceNotificationController {
+public class AuthServiceListener {
     private final EmailService emailService;
 
     @RetryableTopic(

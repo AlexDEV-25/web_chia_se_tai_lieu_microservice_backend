@@ -13,6 +13,8 @@ import java.util.List;
 public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findByDocumentId(Long documentId);
 
+    List<Report> findByUserId(Long UserId);
+
     boolean existsByUserIdAndDocumentId(Long userId, Long documentId);
 
     @Query("""

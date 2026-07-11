@@ -3,6 +3,7 @@ package com.example.interactionservice.service;
 
 import com.example.AppError;
 import com.example.AppException;
+import com.example.UserProfileUpdatedEvent;
 import com.example.helper.GetUserIdByToken;
 import com.example.interactionservice.dto.request.ReportRequest;
 import com.example.interactionservice.dto.response.ReportAdminProjection;
@@ -25,20 +26,20 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ReportService {
-    private final ReportRepository documentReportRepository;
+    private final ReportRepository reportRepository;
     private final ReportMapper reportMapper;
     private final StudyClient studyClient;
     private final ProfileClient profileClient;
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<ReportDetailAdminResponse> findByDocumentId(Long documentId) {
-        List<Report> reports = documentReportRepository.findByDocumentId(documentId);
+        List<Report> reports = reportRepository.findByDocumentId(documentId);
         return reports.stream().map(reportMapper::documentReportToResponse).toList();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<ReportAdminProjection> getAllDocumentReportSummary() {
-        return documentReportRepository.getAllDocumentReportSummary();
+        return reportRepository.getAllDocumentReportSummary();
     }
 
     @PreAuthorize("hasAuthority('REPORT')")
@@ -56,12 +57,21 @@ public class ReportService {
                 .documentTitle(doc.getTitle())
                 .createdAt(LocalDateTime.now()).build();
 
-        if (documentReportRepository.existsByUserIdAndDocumentId(userId, request.getDocumentId())) {
+        if (reportRepository.existsByUserIdAndDocumentId(userId, request.getDocumentId())) {
             throw AppException.builder().appError(AppError.ALREADY_REPORTED).build();
         }
-        Report saved = documentReportRepository.save(report);
+        Report saved = reportRepository.save(report);
         return reportMapper.documentReportToReportUserResponse(saved);
     }
 
 
+    public void changeUserInfo(UserProfileUpdatedEvent message) {
+        List<Report> reports = reportRepository.findByUserId(message.getUserId());
+        reports.forEach(r -> updateReportUserInfo(r, message));
+    }
+
+    private void updateReportUserInfo(Report r, UserProfileUpdatedEvent message) {
+        r.setFullName(message.getFullName());
+        reportRepository.save(r);
+    }
 }

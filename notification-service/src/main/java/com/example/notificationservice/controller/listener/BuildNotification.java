@@ -1,4 +1,4 @@
-package com.example.notificationservice.controller;
+package com.example.notificationservice.controller.listener;
 
 import com.example.SystemNotificationEvent;
 import com.example.notificationservice.dto.request.NotificationRequest;

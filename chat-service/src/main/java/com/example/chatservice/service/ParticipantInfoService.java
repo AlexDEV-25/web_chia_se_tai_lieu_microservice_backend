@@ -1,9 +1,7 @@
 package com.example.chatservice.service;
 
 
-import com.example.AppError;
-import com.example.ChatRole;
-import com.example.ConversationType;
+import com.example.*;
 import com.example.chatservice.dto.request.ParticipantInfoRequest;
 import com.example.chatservice.dto.response.ParticipantInfoResponse;
 import com.example.chatservice.mapper.ParticipantInfoMapper;
@@ -11,7 +9,6 @@ import com.example.chatservice.model.Conversation;
 import com.example.chatservice.model.ParticipantInfo;
 import com.example.chatservice.repository.ParticipantInfoRepository;
 import com.example.chatservice.repository.httpclient.ProfileClient;
-import com.example.AppException;
 import com.example.helper.GetUserIdByToken;
 import com.example.response.UserDetailInfoResponse;
 import jakarta.validation.Valid;
@@ -20,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -123,4 +121,14 @@ public class ParticipantInfoService {
                 .orElseThrow(() -> AppException.builder().appError(AppError.PARTICIPANT_INFO_NOT_FOUND).build());
     }
 
+    public void changeUserInfo(UserProfileUpdatedEvent message) {
+        List<ParticipantInfo> participantInfos = participantInfoRepository.findByUserId(message.getUserId());
+        participantInfos.forEach(participantInfo -> updateParticipantInfo(participantInfo, message));
+    }
+
+    public void updateParticipantInfo(ParticipantInfo participantInfo, UserProfileUpdatedEvent message) {
+        participantInfo.setFullName(message.getFullName());
+        participantInfo.setAvatarUrl(message.getAvatarUrl());
+        participantInfoRepository.save(participantInfo);
+    }
 }
